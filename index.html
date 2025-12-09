@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="./favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Administración de RH - Pallets Alfa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+
+    <!-- BARRA DE RELLENO SUPERIOR -->
+    <div id="top-bar">
+
+    </div>
+
+    <!-- BARRA DE NAVEGACIÓN -->
+    <nav id="site-navbar" class="navbar navbar-expand-lg">
+
+    </nav>
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <main>
+        <section id="banner" class="mb-5">
+            <div class="text-center">
+                <h1 id="banner-title">Administración del Personal</h1>
+            </div>
+        </section>
+
+        <!-- SECCIÓN DE RESUMEN -->
+        <section id="staff-resume" class="pt-4">
+            <div class="container">
+                <div id="staff-resume-container" class="row">
+                    <div class="col-md-4">
+                        <div class="card resume-card mt-2">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="icon-circle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+                                    </svg>
+                                </div>
+                                <div class="card-text ms-3">
+                                    <p>Personal total</p>
+                                    <p id="products-text" class="index-report-cant text-muted">-</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card resume-card mt-2">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="icon-circle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person-check" viewBox="0 0 16 16">
+                                        <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+                                        <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
+                                    </svg>
+                                </div>
+                                <div class="card-text ms-3">
+                                    <p>Personal activo</p>
+                                    <p id="diff-text" class="index-report-cant text-muted">-</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card resume-card mt-2">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="icon-circle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-activity" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M6 2a.5.5 0 0 1 .47.33L10 12.036l1.53-4.208A.5.5 0 0 1 12 7.5h3.5a.5.5 0 0 1 0 1h-3.15l-1.88 5.17a.5.5 0 0 1-.94 0L6 3.964 4.47 8.171A.5.5 0 0 1 4 8.5H.5a.5.5 0 0 1 0-1h3.15l1.88-5.17A.5.5 0 0 1 6 2"/>
+                                    </svg>
+                                </div>
+                                <div class="card-text ms-3">
+                                    <p>Expedientes completados</p>
+                                    <p id="rel-text" class="index-report-cant text-muted">-</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>            
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN DE ENVÍOS -->
+        <section id="movements-table">
+            <div id="movements-container" class="container pt-3">
+                <div class="row ps-3 pe-3 pb-3">
+                    <div class="col-6 col-md-9 col-lg-10">
+                        <h4>Últimas entradas</h4>
+                    </div>
+                </div>
+                <div id="movements-table-container" class="container table-responsive row justify-content-center p-0">
+                    <div class="col-lg-10">
+                        <table id="movements-table" class="table table-hover">
+                            <thead>
+                                <tr class="table-light">
+                                    <th class="p-3 ps-4">No</th>
+                                    <th class="p-3">NOMBRE</th>
+                                    <th class="p-3">PUESTO</th>
+                                    <th class="p-3">FECHA NACIMIENTO</th>
+                                    <th class="p-3">FECHA INGRESO</th>
+                                    <th class="p-3">CALZADO</th>
+                                    <th class="p-3">PLAYERA</th>
+                                    <th class="p-3">CAMISA</th>
+                                    <th class="p-3">PANTALÓN</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN DE ACCESOS DIRECTOS -->
+        <section id="direct-access" class="pb-5">
+            <div class="container mt-3">
+                <h4>Accesos directos</h4>
+                <div id="direct-access-container" class="mt-2">
+                    <a href="./staff.html" class="card access-card mt-3 text-decoration-none">
+                        <div id="client-access" class="card-body d-flex align-items-center">
+                            <div class="icon-square me-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person-gear" viewBox="0 0 16 16">
+                                    <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0"/>
+                                </svg>
+                            </div>
+                            <p class="fw-bold">Gestionar personal</p>
+                        </div>
+                    </a>
+                    <a href="./uniforms.html" class="card access-card mt-2 text-decoration-none">
+                        <div id="order-access" class="card-body d-flex align-items-center">
+                            <div class="icon-square me-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-briefcase" viewBox="0 0 16 16">
+                                    <path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5m1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0M1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5"/>
+                                </svg>
+                            </div>
+                            <p class="fw-bold">Gestionar uniformes</p>
+                        </div>
+                    </a>
+                    <a href="./vacations.html" class="card access-card mt-2 text-decoration-none">
+                        <div id="order-access" class="card-body d-flex align-items-center">
+                            <div class="icon-square me-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-luggage" viewBox="0 0 16 16">
+                                    <path d="M2.5 1a.5.5 0 0 0-.5.5V5h-.5A1.5 1.5 0 0 0 0 6.5v7a1.5 1.5 0 0 0 1 1.415v.335a.75.75 0 0 0 1.5 0V15H4v-1H1.5a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5V7h1v-.5A1.5 1.5 0 0 0 6.5 5H6V1.5a.5.5 0 0 0-.5-.5zM5 5H3V2h2z"/>
+                                    <path d="M3 7.5a.5.5 0 0 0-1 0v5a.5.5 0 0 0 1 0zM11 6a1.5 1.5 0 0 1 1.5 1.5V8h2A1.5 1.5 0 0 1 16 9.5v5a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 14.5v-5A1.5 1.5 0 0 1 6.5 8h2v-.5A1.5 1.5 0 0 1 10 6zM9.5 7.5V8h2v-.5A.5.5 0 0 0 11 7h-1a.5.5 0 0 0-.5.5M6 9.5v5a.5.5 0 0 0 .5.5H7V9h-.5a.5.5 0 0 0-.5.5m7 5.5V9H8v6zm1.5 0a.5.5 0 0 0 .5-.5v-5a.5.5 0 0 0-.5-.5H14v6z"/>
+                                </svg>
+                            </div>
+                            <p class="fw-bold">Gestionar vacaciones</p>
+                        </div>
+                    </a>
+                    <a href="./reports.html" class="card access-card mt-2 text-decoration-none">
+                        <div id="ship-access" class="card-body d-flex align-items-center">
+                            <div class="icon-square me-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-clipboard-data" viewBox="0 0 16 16">
+                                    <path d="M4 11a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0zm6-4a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0zM7 9a1 1 0 0 1 2 0v3a1 1 0 1 1-2 0z"/>
+                                    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+                                    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/>
+                                </svg>
+                            </div>
+                            <p class="fw-bold">Generar reportes</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer id="site-footer">
+
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+/* Estilos de la página y estructura */
+#staff-header {
+    margin-top: 0;
+}
+
+#staff-header-container {
+    background-color: var(--background-light) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#staff-form-container, #staff-filter-container, .table-responsive, #staff-pages-container {
+    background-color: var(--background-light) !important;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+th {
+    color: var(--secondary) !important;
+}
+
+/* Estilos de texto para la tabla */
+.staff-company {
+    font-weight: bold;
+}
+
+.staff-rfc, .staff-phone, .staff-cp, #staff-pages-results {
+    font-size: 13px;
+    color: var(--secondary) !important;
+}
