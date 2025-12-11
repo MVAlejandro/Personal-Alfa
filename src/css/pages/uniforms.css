@@ -1,0 +1,29 @@
+/* Estilos de la página y estructura */
+#uniforms-header {
+    margin-top: 0;
+}
+
+#uniforms-header-container {
+    background-color: var(--background-light) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#uniforms-form-container, #uniforms-filter-container, .table-responsive, #uniforms-pages-container {
+    background-color: var(--background-light) !important;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+th {
+    color: var(--secondary) !important;
+}
+
+/* Estilos de texto para la tabla */
+.uniforms-company {
+    font-weight: bold;
+}
+
+.uniforms-rfc, .uniforms-phone, .uniforms-cp, #uniforms-pages-results {
+    font-size: 13px;
+    color: var(--secondary) !important;
+}

@@ -1,0 +1,42 @@
+/* Estilos de la página y estructura */
+#reports-header {
+    margin-top: 0;
+}
+
+#reports-header-container {
+    background-color: var(--background-light) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#reports-filter-container, .table-responsive {
+    background-color: var(--background-light) !important;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+th {
+    color: var(--secondary) !important;
+}
+
+input:disabled {
+    background-color: var(--background-light) !important;
+    color: var(--primary-dark) !important;
+}
+
+/* Estilos de texto para la tabla */
+table {
+    margin-bottom: 0 !important;
+}
+
+#general-report-table tbody {
+    font-size: 13px;
+}
+
+.report-week {
+    font-weight: bold;
+}
+
+.report-year {
+    font-size: 13px;
+    color: var(--secondary) !important;
+}
