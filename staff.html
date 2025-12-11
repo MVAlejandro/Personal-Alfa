@@ -20,7 +20,7 @@
     </nav>
 
     <!-- CONTENEDOR PRINCIPAL -->
-    <main>
+    <main class="pb-3">
         <!-- SECCIÓN DEL ENCABEZADO -->
         <section id="staff-header">
             <div id="staff-header-container" class="container-fluid p-3">
@@ -50,126 +50,245 @@
             
         </section>
 
-        <!-- SECCIÓN DE FILTROS -->
-        <section id="staff-filter">
-            <div class="container pt-3 pb-3">
-                <h5>Listado de Empleados</h5>
-            </div>
-            <div id="staff-filter-container" class="container pt-4 pb-3">
-                <div class="row ms-2 me-2">
-                    <div class="col-md-4 col-lg-3 d-flex align-items-center label-over-border">
-                        <label for="status-filter" class="form-label m-2">Filtrar por Estatus</label>
-                        <select class="form-select" id="status-filter">
-                            <option value="0">Todos</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4 col-lg-3 d-flex align-items-center label-over-border">
-                        <label for="search-filter" class="form-label m-2">Buscar por empleado</label>    
-                        <input id="search-filter" class="form-control" type="search" placeholder="Buscar..." aria-label="Search"/>
-                    </div>
-                    <div class="col-md d-flex align-items-center justify-content-end">
-                        <button id="filter-btn" class="btn btn-primary d-flex align-items-center ps-3 pe-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                            </svg>
-                            <p class="ps-2">Filtrar</p>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <!-- SECCIÓN PRINCIPAL DE REGISTROS -->
+         <section id="staff-register">
+            <div id="staff-register-container" class="container">
+                <div class="row">
+                    <div id="staff-list" class="col-lg-4 pb-3">
+                        <div id="staff-list-container">
+                            <!-- SECCIÓN DE FILTROS -->
+                            <section id="staff-filter">
+                                <div class="pt-3 pb-2 ps-4">
+                                    <h5 class="ps-2">Listado de Empleados</h5>
+                                </div>
+                                <div id="staff-filter-container" class="container pt-4 pb-1">
+                                    <div class="row ms-2 me-2">
+                                        <div class="col-md-6 col-lg-12 d-flex align-items-center label-over-border">
+                                            <label for="search-filter" class="form-label m-2">Buscar por empleado</label>    
+                                            <input id="search-filter" class="form-control" type="search" placeholder="Buscar por No / Nombre" aria-label="Search"/>
+                                        </div>
+                                        <div class="col-md-6 col-lg-12 d-flex align-items-center label-over-border">
+                                            <label for="status-filter" class="form-label m-2">Filtrar por Estatus</label>
+                                            <select class="form-select" id="status-filter">
+                                                <option value="0">Todos</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <hr>
 
-        <!-- SECCIÓN DE REGISTROS -->
-        <section id="staff-register">
-            <div class="container table-responsive p-0">
-                <table id="staff-table" class="table table-hover align-middle">
-                    <thead>
-                        <tr class="table-light">
-                            <th class="p-3 ps-4">No</th>
-                            <th class="p-3">NOMBRE</th>
-                            <th class="p-3">PUESTO</th>
-                            <th class="p-3">FECHA NACIMIENTO</th>
-                            <th class="p-3">TELÉFONO</th>
-                            <th class="p-3">FECHA INGRESO</th>
-                            <th class="p-3">ESTATUS</th>
-                            <th class="p-3">NSS</th>
-                            <th class="p-3">RFC</th>
-                            <th class="p-3">CURP</th>
-                            <th class="p-3">DOMICILIO</th>
-                            <th class="p-3">CONTACTO</th>
-                            <th class="p-3">PARENTESCO</th>
-                            <th class="p-3">TELÉFONO CONTACTO</th>
-                            <th class="p-3">TIPO SANGRE</th>
-                            <th class="p-3">ENFERMEDAD</th>
-                            <th class="p-3">MEDICAMENTO</th>
-                            <th class="p-3">ALERGIA</th>
-                            <th class="p-3">CALZADO</th>
-                            <th class="p-3">PLAYERA</th>
-                            <th class="p-3">CAMISA</th>
-                            <th class="p-3">PANTALÓN</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
-                    </tbody>
-                </table>
-            </div>
-        </section>
+                            <!-- LISTA DE EMPLEADOS -->
+                            <section id="staff">
+                                <div id="staff-container" class="container pt-2 pb-4">
+                                    <div class="list-group ">
+                                        <button type="button" class="list-group-item list-group-item-action">
+                                            <div class="employee">
+                                                <p class="staff-name">Juan Pérez</p>
+                                                <p class="staff-id">No. 0001</p>
+                                            </div>
+                                        </button>
+                                        <button type="button" class="list-group-item list-group-item-action">
+                                            <div class="employee">
+                                                <p class="staff-name">María López</p>
+                                                <p class="staff-id">No. 0002</p>
+                                            </div>
+                                        </button>
+                                        <button type="button" class="list-group-item list-group-item-action">
+                                            <div class="employee">
+                                                <p class="staff-name">Carlos Ramírez</p>
+                                                <p class="staff-id">No. 0003</p>
+                                            </div>
+                                        </button>
+                                        <button type="button" class="list-group-item list-group-item-action">
+                                            <div class="employee">
+                                                <p class="staff-name">Ana Suárez</p>
+                                                <p class="staff-id">No. 0004</p>
+                                            </div>
+                                        </button>
+                                        <button type="button" class="list-group-item list-group-item-action">
+                                            <div class="employee">
+                                                <p class="staff-name">Luis Fernández</p>
+                                                <p class="staff-id">No. 0005</p>
+                                            </div>
+                                        </button>
+                                        <button type="button" class="list-group-item list-group-item-action">
+                                            <div class="employee">
+                                                <p class="staff-name">Sofía Martínez</p>
+                                                <p class="staff-id">No. 0006</p>
+                                            </div>
+                                        </button>
+                                        <button type="button" class="list-group-item list-group-item-action">
+                                            <div class="employee">
+                                                <p class="staff-name">Diego Navarro</p>
+                                                <p class="staff-id">No. 0007</p>
+                                            </div>
+                                        </button>
 
-        <!-- SECCIÓN DE PAGINACIÓN -->
-        <section id="staff-pages" class="pb-4">
-            <div id="staff-pages-container" class="container pt-3 pb-3">
-                <div class="row ms-2 align-items-center">
-                    <div class="col-6 col-lg-9">
-                        <p id="staff-pages-results"></p>
-                    </div>
-                    <div class="col-6 col-lg-3">
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination mb-0">
-                                <!-- Los botones se llenan dinámicamente desde JS -->
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Modal de edición para cada registro -->
-    <div class="modal fade" id="edit-modal" tabindex="-1" aria-labelledby="edit-modalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content pt-3 pb-3">
-                <div class="modal-header">
-                    <div class="row">
-                        <div class="col d-flex align-items-center">
-                            <div class="ms-4 me-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" style="color:var(--primary)">
-                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-                                </svg>
-                            </div>
-                            <h5 class="modal-title" id="edit-modalLabel">Editar empleado</h5>
+                                        <button type="button" class="list-group-item list-group-item-action">
+                                            <div class="employee">
+                                                <p class="staff-name">Valeria Campos</p>
+                                                <p class="staff-id">No. 0008</p>
+                                            </div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </section>
                         </div>
                     </div>
-                    <button type="button" class="btn-close me-3" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="container">
-                        <form id="staff-edit-form">
-                            <input type="hidden" id="edit-id-staff">
-                            <!-- Campos editables -->
-                            
-                        </form>
+                    <div id="staff-info" class="col-lg-8 pb-3">
+                        <div id="staff-info-container" class="container">
+                            <div class="pt-3 pb-3">
+                                <h5 class="ps-2">Información del Empleado</h5>
+                            </div>
+                            <form id="staff-form" class="pb-4">
+                                <input type="hidden" id="hidden-id-staff">
+                                <!-- Campos bles -->
+                                 <div class="row ms-2 me-2 pb-1">
+                                    <div class="col-md-3">
+                                        <label for="id-staff" class="form-label fw-semibold m-2">No Empleado</label>
+                                        <input type="text" class="form-control" id="id-staff" placeholder="0000">
+                                        <p class="error invalid-feedback" id="error-id-staff" style="color: red;"></p>
+                                    </div>
+                                </div>
+                                <p class="staff-title ms-4 fst-italic">Datos generales</p>
+                                <div class="row ms-2 me-2">
+                                    <div class="col-md-8">
+                                        <label for="name" class="form-label fw-semibold m-2">Nombre</label>
+                                        <input type="text" class="form-control" id="name" placeholder="Nombre y Apellidos">
+                                        <p class="error invalid-feedback" id="error-name" style="color: red;"></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="departament" class="form-label fw-semibold m-2">Puesto</label>
+                                        <input type="text" class="form-control" id="departament" placeholder="Puesto / Departamento">
+                                        <p class="error invalid-feedback" id="error-departament" style="color: red;"></p>
+                                    </div>
+                                </div>
+                                <div class="row ms-2 me-2">
+                                    <div class="col-md-4">
+                                        <label for="birth" class="form-label fw-semibold m-2">Fecha nacimiento</label>
+                                        <input type="text" class="form-control" id="birth" placeholder="AAAA-MM-DD">
+                                        <p class="error invalid-feedback" id="error-birth" style="color: red;"></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="phone" class="form-label fw-semibold m-2">Teléfono</label>
+                                        <input type="number" class="form-control no-arrows" id="phone" placeholder="5510203040">
+                                        <p class="error invalid-feedback" id="error-phone" style="color: red;"></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="entry" class="form-label fw-semibold m-2">Fecha ingreso</label>
+                                        <input type="text" class="form-control" id="entry" placeholder="AAAA-MM-DD">
+                                        <p class="error invalid-feedback" id="error-entry" style="color: red;"></p>
+                                    </div>
+                                </div>
+                                <div class="row ms-2 me-2">
+                                    <div class="col-md-3">
+                                        <label for="nss" class="form-label fw-semibold m-2">NSS</label>
+                                        <input type="number" class="form-control no-arrows" id="nss" placeholder="01234567891">
+                                        <p class="error invalid-feedback" id="error-nss" style="color: red;"></p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="rfc" class="form-label fw-semibold m-2">RFC</label>
+                                        <input type="text" class="form-control" id="rfc" placeholder="RFCX000000YY">
+                                        <p class="error invalid-feedback" id="error-rfc" style="color: red;"></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="curp" class="form-label fw-semibold m-2">CURP</label>
+                                        <input type="text" class="form-control" id="curp" placeholder="CURP000000AABBCC00">
+                                        <p class="error invalid-feedback" id="error-curp" style="color: red;"></p>
+                                    </div>
+                                </div>
+                                <div class="row ms-2 me-2 pb-3">
+                                    <div class="col-md-8">
+                                        <label for="direction" class="form-label fw-semibold m-2">Dirección</label>
+                                        <input type="text" class="form-control" id="direction" placeholder="Dirección completa">
+                                        <p class="error invalid-feedback" id="error-direction" style="color: red;"></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="status" class="form-label fw-semibold m-2">Estatus</label>
+                                        <select id="status" class="form-select" aria-label="Default select example">
+                                            <option value="0">Seleccione...</option>
+                                            <option value="Activo">Activo</option>
+                                            <option value="Inactivo">Inactivo </option>
+                                        </select>
+                                        <p class="error invalid-feedback" id="error-status" style="color: red;"></p>
+                                    </div>
+                                </div>
+                                <p class="staff-title ms-4 fst-italic">Datos de emergencia</p>
+                                <div class="row ms-2 me-2 pb-3">
+                                    <div class="col-md-6">
+                                        <label for="em-name" class="form-label fw-semibold m-2">Nombre</label>
+                                        <input type="text" class="form-control" id="em-name" placeholder="Nombre del contacto">
+                                        <p class="error invalid-feedback" id="error-em-name" style="color: red;"></p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="em-relation" class="form-label fw-semibold m-2">Parentesco</label>
+                                        <input type="text" class="form-control" id="em-relation" placeholder="Parentesco de la persona">
+                                        <p class="error invalid-feedback" id="error-em-relation" style="color: red;"></p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="em-phone" class="form-label fw-semibold m-2">Teléfono</label>
+                                        <input type="number" class="form-control no-arrows" id="em-phone" placeholder="Teléfono de emergencia">
+                                        <p class="error invalid-feedback" id="error-em-phone" style="color: red;"></p>
+                                    </div>
+                                </div>
+                                <p class="staff-title ms-4 fst-italic">Datos de salud</p>
+                                <div class="row ms-2 me-2 pb-3">
+                                    <div class="col-md-3">
+                                        <label for="type" class="form-label fw-semibold m-2">Tipo sangre</label>
+                                        <input type="text" class="form-control" id="type" placeholder="(Opcional)">
+                                        <p class="error invalid-feedback" id="error-type" style="color: red;"></p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="illness" class="form-label fw-semibold m-2">Enfermedad</label>
+                                        <input type="text" class="form-control" id="illness" placeholder="(Opcional)">
+                                        <p class="error invalid-feedback" id="error-illness" style="color: red;"></p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="medicament" class="form-label fw-semibold m-2">Medicamento</label>
+                                        <input type="text" class="form-control" id="medicament" placeholder="(Opcional)">
+                                        <p class="error invalid-feedback" id="error-medicament" style="color: red;"></p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="allergy" class="form-label fw-semibold m-2">Alergia</label>
+                                        <input type="text" class="form-control" id="allergy" placeholder="(Opcional)">
+                                        <p class="error invalid-feedback" id="error-allergy" style="color: red;"></p>
+                                    </div>
+                                </div>
+                                <p class="staff-title ms-4 fst-italic">Datos de uniforme</p>
+                                <div class="row ms-2 me-2">
+                                    <div class="col-md-3">
+                                        <label for="boots" class="form-label fw-semibold m-2">Calzado</label>
+                                        <input type="number" class="form-control no-arrows" id="boots" placeholder="Talla de calzado">
+                                        <p class="error invalid-feedback" id="error-boots" style="color: red;"></p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="tshirt" class="form-label fw-semibold m-2">Playera</label>
+                                        <input type="text" class="form-control" id="tshirt" placeholder="Talla de playera">
+                                        <p class="error invalid-feedback" id="error-tshirt" style="color: red;"></p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="shirt" class="form-label fw-semibold m-2">Camisa</label>
+                                        <input type="text" class="form-control" id="shirt" placeholder="Talla de camisa">
+                                        <p class="error invalid-feedback" id="error-shirt" style="color: red;"></p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="pants" class="form-label fw-semibold m-2">Pantalón</label>
+                                        <input type="text" class="form-control" id="pants" placeholder="Talla de pantalón">
+                                        <p class="error invalid-feedback" id="error-pants" style="color: red;"></p>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="form-buttons d-flex justify-content-end pb-4 me-3">
+                                <button class="btn btn-danger m-1" data-bs-target="#delete-modal" data-bs-toggle="modal">Eliminar registro</button>
+                                <button id="btn-edit-entry" class="btn btn-primary m-1">Guardar cambios</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer me-4">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button id="btn-edit-entry" class="btn btn-primary">Guardar cambios</button>
-                </div>
             </div>
-        </div>
-    </div>
+         </section>
+    </main>
 
     <!-- Modal de confirmación para eliminar registro -->
     <div class="modal fade" id="delete-modal" aria-hidden="true" aria-labelledby="delete-modalLabel" tabindex="-1">
