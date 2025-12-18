@@ -96,7 +96,6 @@ input::placeholder, textarea::placeholder, #default-option {
 
 .label-over-border {
     position: relative;
-    margin-bottom: 1.3rem;
 }
 
 .label-over-border label {
@@ -113,6 +112,13 @@ input::placeholder, textarea::placeholder, #default-option {
 @media (min-width: 500px) and (max-width: 768px) {
     .filter {
         margin-top: 1.5rem;
+    }
+}
+
+/* Estilos para filtros */
+@media (max-width: 430px) {
+    .label-over-border {
+        margin-bottom: 1.5rem;
     }
 }
 
@@ -140,6 +146,10 @@ input::placeholder, textarea::placeholder, #default-option {
 .btn-primary:focus {
     outline: none;
     box-shadow: 0 0 10px var(--primary-dark);
+}
+
+.btn-secondary {
+    border-radius: 11px;
 }
 
 .btn-danger {

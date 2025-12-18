@@ -1,21 +1,22 @@
 
 // Expresiones regulares para validación de datos
+const idRegex = /^\d+$/ // Id de empleado
 const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/; // Nombres y el apellidos
-const textRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s.,()\/\-–—]+$/; // Texto con algunos caracteres especiales
+const textRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s.,()\/\-–— +]+$/; // Texto con algunos caracteres especiales
+const curpRegex = /^[A-Z]{4}\d{6}[HM][A-Z]{5}[A-Z0-9]\d$/; // CURP
 const rfcRegex = /^([A-Z&Ñ]{3,4})\d{6}[A-Z0-9]{3}$/; // RFC
-const emailRegex = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+$/; // Email
+const nssRegex = /^\d{11}$/; // NSS
 const phoneRegex = /^[1-9]\d{9}$/; // Número telefónico
-const cpRegex = /^\d{5}$/ // Código postal
 const amountRegex = /^\d+([-\.]\d{1,2})?$/ // Cantidades y precios
 const passRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s.,()\/\-–—_!@#$%^&*+=?:;'"{}[\]<>\|~`]+$/; // Contraseñas con signos comunes
 
-// Función que valida que los campos sean solo letras, algunos caracteres especiales y que haya al menos 3 caracteres
+// Función que valida que los campos sean solo letras, algunos caracteres especiales y que haya al menos 2 caracteres
 export function textValidate(input, error) {
     error.textContent = '';
     input.classList.remove('is-invalid', 'is-valid');
 
-    if (input.value.length < 3) {
-        error.textContent = `El campo debe de tener al menos 3 caracteres`;
+    if (input.value.length < 2) {
+        error.textContent = `El campo debe de tener al menos 2 caracteres`;
         input.classList.add('is-invalid');
     } else if (!textRegex.test(input.value)) {
         error.textContent = `El campo no acepta esos caracteres especiales`;
@@ -43,8 +44,24 @@ export function nameValidate(input, error) {
     }
 }
 
+// Función que valida que la curp tenga un formato válido
+export function curpValidate(input, error) {
+    error.textContent = '';
+    input.classList.remove('is-invalid', 'is-valid');
+
+    if (!curpRegex.test(input.value)) {
+        error.textContent=`La CURP debe de cumplir con el formato válido`;
+        input.classList.add('is-invalid');
+        input.classList.remove('is-valid');
+    } else {
+        error.textContent = '';
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+    }
+}
+
 // Función que valida que el rfc tenga un formato válido
-export  function rfcValidate(input, error) {
+export function rfcValidate(input, error) {
     error.textContent = '';
     input.classList.remove('is-invalid', 'is-valid');
 
@@ -59,13 +76,13 @@ export  function rfcValidate(input, error) {
     }
 }
 
-// Función que valida que el correo tenga un formato válido
-export  function emailValidate(input, error) {
+// Función que valida que el nss tenga un formato válido
+export  function nssValidate(input, error) {
     error.textContent = '';
     input.classList.remove('is-invalid', 'is-valid');
 
-    if (!emailRegex.test(input.value)) {
-        error.textContent=`El correo debe de cumplir con el formato example@example.com`;
+    if (!nssRegex.test(input.value)) {
+        error.textContent=`El NSS debe de cumplir con el formato válido`;
         input.classList.add('is-invalid');
         input.classList.remove('is-valid');
     } else {
@@ -92,12 +109,12 @@ export function phoneValidate(input, error) {
 }
 
 // Función que valida que el código postal sea correcto
-export function cpValidate (input, error){
+export function idValidate (input, error){
     error.textContent = '';
     input.classList.remove('is-invalid', 'is-valid');
 
-    if(!cpRegex.test(input.value)){
-        error.textContent=`El código postal no es válido`;
+    if(!idRegex.test(input.value)){
+        error.textContent=`El ID no es válido`;
         input.classList.add('is-invalid');
         input.classList.remove('is-valid');
     } else {
@@ -116,28 +133,6 @@ export function amountValidate (input, error){
         error.textContent=`El dato no es válido`;
         input.classList.add('is-invalid');
         input.classList.remove('is-valid');
-    } else {
-        error.textContent = '';
-        input.classList.remove('is-invalid');
-        input.classList.add('is-valid');
-    }
-}
-
-// Función que valida que la cantidad sea menor al máximo establecido
-export function quantityValidate(input, error, maxValue) {
-    error.textContent = "";
-    input.classList.remove("is-invalid", "is-valid");
-
-    if(!amountRegex.test(input.value)){
-        error.textContent=`El dato no es válido`;
-        input.classList.add('is-invalid');
-        input.classList.remove('is-valid');
-    } else if (input.value > maxValue) {
-        error.textContent = `No puede exceder ${maxValue} unidades`;
-        input.classList.add("is-invalid");
-        input.classList.remove('is-valid');
-
-        input.value = maxValue;
     } else {
         error.textContent = '';
         input.classList.remove('is-invalid');
@@ -164,7 +159,7 @@ export function passValidate(data, error) {
     }
 }
 
-// Función que valida que los inputs no vayan vacíos
+// Función que valida que los inputs no sean inválidos
 export function inputValidate(campos) {
     for (let campo of campos) {
         if (campo.classList.contains('is-invalid')) {
@@ -175,22 +170,37 @@ export function inputValidate(campos) {
 } 
 
 // Función que valida la selección de una opción en selects
-export function selectValidate(selectElement, errorement) {
+export function selectValidate(selectElement, errorElement) {
     const valor = selectElement.value;
 
     if (valor === '0') {
         selectElement.classList.add('is-invalid');
         selectElement.classList.remove('is-valid');
-        if (errorement) {
-            errorement.textContent = 'Se debe seleccionar una opción';
+        if (errorElement) {
+            errorElement.textContent = 'Se debe seleccionar una opción';
         }
         return false;
     } else {
         selectElement.classList.remove('is-invalid');
         selectElement.classList.add('is-valid');
-        if (errorement) {
-            errorement.textContent = '';
+        if (errorElement) {
+            errorElement.textContent = '';
         }
         return true;
+    }
+}
+
+// Función que valida los inputs de fechas
+export function dateValidate(data, error) {
+    error.textContent = '';
+    data.classList.remove('is-invalid', 'is-valid');
+
+    if (data.value === "") {
+        error.textContent = `Debe seleccionar una fecha valida`;
+        data.classList.add('is-invalid');
+    } else {
+        error.textContent = '';
+        data.classList.remove('is-invalid');
+        data.classList.add('is-valid');
     }
 }
