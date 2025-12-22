@@ -148,7 +148,7 @@ input::placeholder, textarea::placeholder, #default-option {
     box-shadow: 0 0 10px var(--primary-dark);
 }
 
-.btn-secondary {
+.btn-secondary, .btn-outline-secondary {
     border-radius: 11px;
 }
 

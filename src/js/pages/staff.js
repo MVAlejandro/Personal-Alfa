@@ -11,17 +11,33 @@ import '../components/navbar.js';
 import { generateForm, restoreForm } from '../components/staff/generate-form.js';
 
 // Servicios Supabase
-import { addStaff } from '../components/staff/staff-form.js';
+import { addStaff } from '../components/staff/staff-add.js';
+import { editStaff } from '../components/staff/staff-edit.js';
+import { staffFilter } from '../components/staff/staff-filter.js';
 import { renderStaffList } from '../components/staff/staff-list.js';
-import { renderStaffEditForm } from '../components/staff/staff-edition.js';
+import { renderStaffEditForm } from '../components/staff/staff-edit.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     // await initPage()
-    renderStaffList();
+    await renderStaffList();
+});
+
+// Declarar el botón de filtrado
+document.addEventListener('click', function(e) {
+    if (e.target.id === 'filter-btn' || e.target.closest('#filter-btn')) {
+        staffFilter();
+    }
 });
 
 // Declarar los botones para manipulación del formulario
-document.getElementById("btn-add-staff").addEventListener("click", generateForm);
+document.getElementById("btn-add-staff").addEventListener("click", () => {
+    generateForm()
+    const container = document.getElementById('form-buttons-container');
+    container.innerHTML =
+        `<button id="btn-cancel-entry" class="btn btn-outline-secondary m-1">Cancelar</button>
+         <button id="btn-add-entry" class="btn btn-primary m-1">Añadir Empleado</button>`;
+});
+
 document.addEventListener("click", (e) => {
     if (e.target.id === "btn-cancel-entry") {
         restoreForm();
@@ -43,4 +59,16 @@ container.addEventListener('click', async function(e) {
     const staffData = JSON.parse(button.getAttribute('staff-data'));
     await generateForm();
     await renderStaffEditForm(staffData);
+    const container = document.getElementById('form-buttons-container');
+    container.innerHTML =
+        `<button id="btn-cancel-entry" class="btn btn-outline-secondary m-1">Cancelar</button>
+         <button id="btn-delete-entry" class="btn btn-danger m-1" data-bs-target="#delete-modal" data-bs-toggle="modal">Eliminar</button>
+         <button id="btn-update-entry" class="btn btn-primary m-1">Actualizar Empleado</button>`;
+});
+
+// Declarar el botón de edición del empleado
+document.addEventListener('click', function(e) {
+    if (e.target.id === 'btn-update-entry') {
+        editStaff(e);
+    }
 });

@@ -1,21 +1,7 @@
-import supabase from '../../supabase/supabase-client.js'
-// Servicios Supabase
-import { createStaff } from '../../services/staff-service.js';
-import { renderStaffList } from './staff-list.js';
 // Utilidades
 import { nameValidate, textValidate, curpValidate, rfcValidate, nssValidate, phoneValidate, idValidate, amountValidate, inputValidate, selectValidate, dateValidate } from '../../utils/form-validations.js';
 
-// Función para agregar un cliente de forma manual
-export async function addStaff(event) {
-    event.preventDefault()
-
-    // Capturar el botón que disparó el evento
-    const btn = event.target.closest('#btn-add-entry');
-    if (btn) {
-        btn.disabled = true;
-        btn.innerHTML = 'Subiendo...';
-    }
-
+export function validateForm() {
     const form = document.getElementById('staff-form');
     // Referencias para validación
     const numero_empleadoIn = document.getElementById("id-staff");
@@ -91,19 +77,11 @@ export async function addStaff(event) {
     const campos = form.querySelectorAll('input, select')
 
     if (!inputValidate(campos)) {
-        alert('Corrige los errores antes de guardar.')
-
-        // Restaurar estado del botón
-        if (btn) {
-            btn.disabled = false;
-            btn.innerHTML = 
-                `<p>Añadir Empleado</p>`;
-        }
-        return
+        return null;
     }
 
     // Guardar valores
-    const newStaffData = {
+    return {
         numero_empleado: numero_empleadoIn.value,
         nombre: nombreIn.value,
         puesto: puestoIn.value,
@@ -127,26 +105,4 @@ export async function addStaff(event) {
         camisa: camisaIn.value,
         pantalon: pantalonIn.value
     };
-
-    try {
-        await createStaff(newStaffData);
-        alert('Empleado agregado con éxito.');
-        form.reset();
-        form.querySelectorAll('.is-valid, .is-invalid').forEach(e => {
-            e.classList.remove('is-valid', 'is-invalid');
-        });
-        
-        // Recarga la tabla con los datos actualizados
-        await renderStaffList();
-    } catch (err) {
-        console.error('Error al agregar al empleado:', err);
-        alert('Ocurrió un error al agregar al empleado.');
-    } finally {
-        // Restaurar estado del botón
-        if (btn) {
-            btn.disabled = false;
-            btn.innerHTML = 
-                `<p>Añadir Empleado</p>`;
-        }
-    }
 }

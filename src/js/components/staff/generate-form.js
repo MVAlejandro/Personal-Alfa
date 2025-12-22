@@ -8,11 +8,11 @@ export async function generateForm() {
                 <h5 class="ps-2">Información del Empleado</h5>
             </div>
             <form id="staff-form" class="pb-4">
-                
+                <input type="hidden" id="hidden-id-staff">
                 <div class="row ms-2 me-2 pb-1">
                     <div class="col-md-3">
                         <label for="id-staff" class="form-label fw-semibold m-2">No Empleado</label>
-                        <input type="text" class="form-control" id="id-staff" placeholder="0000">
+                        <input type="text" class="form-control" id="id-staff" placeholder="0000" inputmode="numeric">
                         <p class="error invalid-feedback" id="error-id-staff" style="color: red;"></p>
                     </div>
                 </div>
@@ -49,7 +49,7 @@ export async function generateForm() {
                 <div class="row ms-2 me-2">
                     <div class="col-md-3">
                         <label for="staff-nss" class="form-label fw-semibold m-2">NSS</label>
-                        <input type="number" class="form-control no-arrows" id="staff-nss" placeholder="01234567891">
+                        <input type="number" class="form-control no-arrows" id="staff-nss" placeholder="01234567891" inputmode="numeric">
                         <p class="error invalid-feedback" id="error-staff-nss" style="color: red;"></p>
                     </div>
                     <div class="col-md-3">
@@ -144,9 +144,8 @@ export async function generateForm() {
                     </div>
                 </div>
             </form>
-            <div class="form-buttons d-flex justify-content-end pb-4 me-3">
-                <button id="btn-cancel-entry" class="btn btn-secondary m-1">Cancelar</button>
-                <button id="btn-add-entry" class="btn btn-primary m-1">Añadir Empleado</button>
+            <div id="form-buttons-container" class="form-buttons d-flex justify-content-end pb-4 me-3">
+                
             </div>
         </div>`;
 }

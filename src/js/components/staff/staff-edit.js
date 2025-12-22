@@ -2,12 +2,14 @@ import supabase from '../../supabase/supabase-client.js'
 // Servicios Supabase
 import { updateStaff, deleteStaff } from '../../services/staff-service.js'; 
 import { renderStaffList } from './staff-list.js'; 
+import { restoreForm } from './generate-form.js';
 // Utilidades
-import { nameValidate, textValidate, curpValidate, rfcValidate, nssValidate, phoneValidate, idValidate, amountValidate, inputValidate, selectValidate, dateValidate } from '../../utils/form-validations.js';
+import { validateForm } from './staff-form.js';
 
 // Función para cargar datos en el formulario
 export async function renderStaffEditForm(staff) {
     // Insertar valores en los inputs
+    document.getElementById("hidden-id-staff").value = staff.id_empleado;
     document.getElementById("id-staff").value = staff.numero_empleado;
     document.getElementById("staff-name").value = staff.nombre;
     document.getElementById("staff-departament").value = staff.puesto;
@@ -31,3 +33,58 @@ export async function renderStaffEditForm(staff) {
     document.getElementById("staff-shirt").value = staff.camisa;
     document.getElementById("staff-pants").value = staff.pantalon;
 }
+
+export async function editStaff(event) {
+    event.preventDefault()
+
+    // Capturar el botón que disparó el evento
+    const btn = event.target.closest('#btn-update-entry');
+    const id_staff = document.getElementById('hidden-id-staff').value;
+
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = 'Actualizando...';
+    }
+
+    const staffData = validateForm();
+
+    if (!staffData) {
+        alert('Corrige los errores antes de guardar.');
+        btn.disabled = false;
+        btn.innerHTML = `<p>Actualizar Empleado</p>`;
+        return;
+    }
+
+    try {
+        await updateStaff(id_staff, staffData);
+
+        const form = document.getElementById('staff-form');
+        form.querySelectorAll('.is-valid, .is-invalid').forEach(e => {
+            e.classList.remove('is-valid', 'is-invalid');
+        });
+        
+        // Mostrar alerta
+        alert('Empleado actualizado correctamente.');
+
+        // Recarga la tabla con los datos actualizados
+        await renderStaffEditForm(staffData);
+    } catch (err) {
+        console.error('Error al actualizar empleado:', err);
+        alert('Ocurrió un error al actualizar al empleado.');
+    }
+}
+
+// Eliminar entrada al dar click en el botón
+document.getElementById('btn-delete-entry').addEventListener('click', async () => {
+    const idStaff = document.getElementById('hidden-id-staff').value;
+    console.log("ID: "+idStaff);
+    
+    await deleteStaff(idStaff);
+
+    // Mostrar alerta
+    alert('Empleado eliminado correctamente.');
+
+    // Recarga la tabla con los datos actualizados
+    await renderStaffList();
+    await restoreForm();
+});
