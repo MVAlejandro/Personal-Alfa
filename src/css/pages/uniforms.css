@@ -25,11 +25,7 @@ th {
 }
 
 /* Estilos de texto para la tabla */
-.uniforms-company {
-    font-weight: bold;
-}
-
-.uniforms-rfc, .uniforms-phone, .uniforms-cp, #uniforms-pages-results {
+.uniform-departament, .uniform-quantity, #uniforms-pages-results {
     font-size: 13px;
     color: var(--secondary) !important;
 }

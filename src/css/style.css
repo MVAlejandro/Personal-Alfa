@@ -218,12 +218,12 @@ input::placeholder, textarea::placeholder, #default-option {
 }
 
 .btn-delete {
-    color: var(--table-red-dark);
+    color: var(--danger-dark);
     box-shadow: 0 2px 4px rgba(121, 17, 28, 0.3);
 }
 
 .btn-delete:hover {
-    background-color: var(--table-red-dark);
+    background-color: var(--danger-dark);
     color: var(--text-light);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }

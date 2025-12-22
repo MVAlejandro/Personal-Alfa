@@ -91,11 +91,9 @@
                     <thead>
                         <tr class="table-light">
                             <th class="p-3 ps-4">No</th>
-                            <th class="p-3">NOMBRE</th>
-                            <th class="p-3">PUESTO</th>
-                            <th class="p-3">TIPO</th>
+                            <th class="p-3">NOMBRE / PUESTO</th>
+                            <th class="p-3">TIPO / CANT</th>
                             <th class="p-3">TALLA</th>
-                            <th class="p-3">CANTIDAD</th>
                             <th class="p-3">FECHA ENTREGA</th>
                             <th class="p-3">OBSERVACIONES</th>
                             <th></th>
@@ -149,8 +147,42 @@
                     <div class="container">
                         <form id="uniforms-edit-form">
                             <input type="hidden" id="edit-id-uniform">
+                            <div class="row ms-2 me-2 pt-3 pb-3">
+                                <div class="col-md-4 ms-auto label-over-border">
+                                    <label for="edit-date" class="form-label m-2">Fecha</label>
+                                    <input type="text" class="form-control" id="edit-date" disabled>
+                                </div>
+                            </div>
                             <!-- Campos editables -->
-                            
+                            <div class="row ms-2 me-2 pt-3 pb-3">
+                                <div class="col-md-4 label-over-border">
+                                    <label for="edit-type" class="form-label m-2">Tipo</label>
+                                    <input type="text" class="form-control" id="edit-type" disabled>
+                                    <p class="error invalid-feedback" id="error-editType" style="color: red;"></p>
+                                </div>
+                                <div class="col-md-4 label-over-border">
+                                    <label for="edit-size" class="form-label m-2">Talla</label>
+                                    <input type="text" class="form-control" id="edit-size">
+                                    <p class="error invalid-feedback" id="error-editSize" style="color: red;"></p>
+                                </div>
+                                <div class="col-md-4 label-over-border">
+                                    <label for="edit-quantity" class="form-label m-2">Cantidad</label>
+                                    <input type="text" class="form-control" id="edit-quantity">
+                                    <p class="error invalid-feedback" id="error-editQuantity" style="color: red;"></p>
+                                </div>
+                            </div>
+                            <div class="row ms-2 me-2 pt-3 pb-3">
+                                <div class="col-md-6 label-over-border">
+                                    <label for="edit-staff" class="form-label m-2">Empleado</label>
+                                    <input type="text" class="form-control" id="edit-staff" disabled>
+                                    <p class="error invalid-feedback" id="error-editStaff" style="color: red;"></p>
+                                </div>
+                                <div class="col-md-6 label-over-border">
+                                    <label for="edit-observations" class="form-label m-2">Observaciones</label>
+                                    <input type="text" class="form-control" id="edit-observations">
+                                    <p class="error invalid-feedback" id="error-editObservations" style="color: red;"></p>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
