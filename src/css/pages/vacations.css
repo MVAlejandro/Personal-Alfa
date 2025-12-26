@@ -1,3 +1,14 @@
+/* Variables de colores generales */
+:root {
+    /* Colores para estados de las tablas */
+    --table-green-light: #3cb17c;
+    --table-green-dark: #0b5231;
+    --table-yellow-light: #fcebb9;
+    --table-yellow-dark: #7e6009;
+    --table-red-light: #dd989f;
+    --table-red-dark: #79111c;
+}
+
 /* Estilos de la página y estructura */
 #vacations-header {
     margin-top: 0;
@@ -18,12 +29,48 @@ th {
     color: var(--secondary) !important;
 }
 
+#vacation-dates {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: calc(100% - 12px) center;
+    background-size: 16px 16px;
+    padding-right: 24px;
+}
+
+#vacations-dates-container {
+    padding-left: 1rem;
+    margin-bottom: 0;
+}
+
+/* Estados de las tablas de planeación */
+.yellow {
+    background-color: var(--table-yellow-light) !important;
+    color: var(--table-yellow-dark) !important;
+}
+
+.green {
+    background-color: var(--table-green-light) !important;
+    color: var(--table-green-dark) !important;
+}
+
+.red {
+    background-color: var(--table-red-light) !important;
+    color: var(--table-red-dark) !important;
+}
+
 /* Estilos de texto para la tabla */
-.vacations-company {
+.vacation-entry-date {
     font-weight: bold;
 }
 
-.vacations-rfc, .vacations-phone, .vacations-cp, #vacations-pages-results {
+.vacation-departament, .vacation-antique, #vacations-pages-results {
     font-size: 13px;
     color: var(--secondary) !important;
+}
+
+.vacation-status {
+    padding: 5px 12px 5px 12px;
+    border-radius: 50px;
+    font-weight: bold;
+    display: inline-block;
 }
