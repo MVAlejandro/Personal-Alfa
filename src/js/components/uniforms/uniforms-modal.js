@@ -1,4 +1,3 @@
-import supabase from '../../supabase/supabase-client.js'
 // Servicios Supabase
 import { updateUniforms, deleteUniforms } from '../../services/uniforms-service.js'; 
 import { renderUniformsTable } from './uniforms-table.js'; 

@@ -60,6 +60,7 @@ function createNavbar(navbar) {
             <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item ms-2 me-2"><a class="nav-link nav-prin" href="./staff.html">Personal</a></li>
+                    <li class="nav-item ms-2 me-2"><a class="nav-link nav-prin" href="./attendance.html">Asistencia</a></li>
                     <li class="nav-item ms-2 me-2"><a class="nav-link nav-prin" href="./uniforms.html">Uniformes</a></li>
                     <li class="nav-item ms-2 me-2"><a class="nav-link nav-prin" href="./vacations.html">Vacaciones</a></li>
                     <li class="nav-item ms-2 me-2"><a class="nav-link nav-prin" href="./reports.html">Reportes</a></li>
@@ -80,7 +81,7 @@ function createFooter(footer) {
             <hr>
             <div class="row align-items-center">
                 <div id="footer-text" class="col text-center">
-                    <small>2025 Pallets Alfa Texcoco. Todos los derechos reservados.</small>
+                    <small>2026 Pallets Alfa Texcoco. Todos los derechos reservados.</small>
                 </div>
             </div>
             <br>

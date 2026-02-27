@@ -9,7 +9,7 @@ export async function requestsFilter() {
     const searchText = document.getElementById('search-filter').value.trim().toLowerCase();
     const statusFilter = document.getElementById('status-filter').value;
 
-    // Obtener entregas
+    // Obtener solicitudes
     allRequests = await getRequest();
         if (!allRequests) return;
 

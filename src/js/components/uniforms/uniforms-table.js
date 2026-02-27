@@ -1,7 +1,5 @@
-import supabase from '../../supabase/supabase-client.js'
 // Servicios Supabase
 import { getUniforms } from '../../services/uniforms-service.js'; 
-// import { validateUserRole } from '../../utils/session-validate.js';
 
 const perPage = 10;
 let currentPage = 1;
@@ -23,7 +21,7 @@ export async function renderUniformsTable(uniformsParam = null) {
     const pagination = document.querySelector('#uniforms-pages .pagination');
     const resultsText = document.getElementById('uniforms-pages-results');
 
-    // Calcular entregas de la página actual
+    // Calcular entradas de la página actual
     const pageStart = (currentPage - 1) * perPage;
     const pageEnd = pageStart + perPage;
     const uniforms = allUniforms.slice(pageStart, pageEnd);

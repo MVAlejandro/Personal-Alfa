@@ -3,7 +3,7 @@ import supabase from '../supabase/supabase-client.js'
 // Función para insertar nuevos uniformes
 export async function createUniforms(uniformsData) {
     const { data, error } = await supabase
-        .from('per_uniformes_entregados')
+        .from('rh_uniformes_entregados')
         .insert([uniformsData]);
 
     if (error) {
@@ -15,7 +15,7 @@ export async function createUniforms(uniformsData) {
 // Función para obtener uniformes
 export async function getUniforms() {
     const { data, error } = await supabase
-        .from('per_uniformes_entregados')
+        .from('rh_uniformes_entregados')
         .select(`
             id_uniforme,
             tipo_prenda,
@@ -24,7 +24,7 @@ export async function getUniforms() {
             fecha_entrega,
             observaciones,
             id_empleado,
-            per_empleados (numero_empleado, nombre, puesto)
+            rh_empleados (numero_empleado, nombre, puesto)
             `);
     
     if (error) {
@@ -40,16 +40,16 @@ export async function getUniforms() {
         fecha_entrega: uniforme.fecha_entrega,
         observaciones: uniforme.observaciones,
         id_empleado: uniforme.id_empleado,
-        numero_empleado: uniforme.per_empleados?.numero_empleado,
-        nombre: uniforme.per_empleados?.nombre,
-        puesto: uniforme.per_empleados?.puesto
+        numero_empleado: uniforme.rh_empleados?.numero_empleado,
+        nombre: uniforme.rh_empleados?.nombre,
+        puesto: uniforme.rh_empleados?.puesto
     }));
 }
 
 // Función para editar uniformes de la base
 export async function updateUniforms(id_uniforme, updatedData) {
     const { data, error } = await supabase
-        .from('per_uniformes_entregados')
+        .from('rh_uniformes_entregados')
         .update(updatedData)
         .eq('id_uniforme', id_uniforme);
 
@@ -67,7 +67,7 @@ export async function deleteUniforms(idUniforms) {
     }
 
     const { error } = await supabase
-        .from('per_uniformes_entregados')
+        .from('rh_uniformes_entregados')
         .delete()
         .eq('id_uniforme', idUniforms);
 

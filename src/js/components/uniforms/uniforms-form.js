@@ -1,4 +1,3 @@
-import supabase from '../../supabase/supabase-client.js'
 // Servicios Supabase
 import { createUniforms } from '../../services/uniforms-service.js'; 
 import { renderUniformsTable } from './uniforms-table.js'; 
@@ -6,9 +5,9 @@ import { renderUniformsTable } from './uniforms-table.js';
 import { loadOptions } from '../../utils/load-select.js';
 import { textValidate, amountValidate, inputValidate, selectValidate } from '../../utils/form-validations.js';
 
-// Cargar los clientes en los formularios al iniciar la página
+// Cargar los empleados en los formularios al iniciar la página
 document.addEventListener('DOMContentLoaded', async () => {
-    loadOptions('staff', 'per_empleados', 'id_empleado', 'nombre', 'Seleccione...')
+    loadOptions('staff', 'rh_empleados', 'id_empleado', 'nombre', 'Seleccione...')
 })
 
 // Función para agregar una nueva entrega de uniformes

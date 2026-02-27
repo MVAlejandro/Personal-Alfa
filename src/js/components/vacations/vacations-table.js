@@ -1,4 +1,3 @@
-import supabase from '../../supabase/supabase-client.js'
 // Servicios Supabase
 import { getRequest } from '../../services/vacations-service.js'; 
 // import { validateUserRole } from '../../utils/session-validate.js';
@@ -23,7 +22,7 @@ export async function renderRequestsTable(requestParam = null) {
     const pagination = document.querySelector('#vacations-pages .pagination');
     const resultsText = document.getElementById('vacations-pages-results');
 
-    // Calcular entregas de la página actual
+    // Calcular entradas de la página actual
     const pageStart = (currentPage - 1) * perPage;
     const pageEnd = pageStart + perPage;
     const requests = allRequests.slice(pageStart, pageEnd);
@@ -39,9 +38,6 @@ export async function renderRequestsTable(requestParam = null) {
     }
 
     for (const solicitud of requests) {
-        // Formatear el arreglo de las fechas
-        const fechasVacaciones = solicitud.vacaciones.join("<br>");
-
         // Determinar clase CSS para el estatus
         let statusClass = '';
         if (solicitud.estado == 'Pendiente') {
@@ -63,7 +59,9 @@ export async function renderRequestsTable(requestParam = null) {
                 <p class="vacation-entry-date">${solicitud.fecha_ingreso}</p>
                 <p class="vacation-antique">Ant: ${solicitud.antiguedad} años</p>
             </td>
-            <td class="vacation-dates text-center fst-italic p-3"> </td>
+            <td class="vacation-dates text-center fst-italic p-3"> 
+                ${solicitud.vacaciones.join("<br>")}
+            </td>
             <td class="text-center p-2">
                 <p class="vacation-status ${statusClass}">${solicitud.estado}</p>
             </td>
@@ -89,9 +87,6 @@ export async function renderRequestsTable(requestParam = null) {
                 </div>
             </td>
         </tr>`;
-
-        // Insertar el resultado en la celda de la tabla con la clase 'vacation-total'
-        document.querySelector(".vacation-dates").innerHTML = fechasVacaciones;
     };
 
     // Actualizar texto de resultados

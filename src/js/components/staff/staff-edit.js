@@ -1,4 +1,3 @@
-import supabase from '../../supabase/supabase-client.js'
 // Servicios Supabase
 import { updateStaff, deleteStaff } from '../../services/staff-service.js'; 
 import { renderStaffList } from './staff-list.js'; 
@@ -66,7 +65,7 @@ export async function editStaff(event) {
         // Mostrar alerta
         alert('Empleado actualizado correctamente.');
 
-        // Recarga la tabla con los datos actualizados
+        // Recarga el contenedor con los datos actualizados
         await renderStaffEditForm(staffData);
     } catch (err) {
         console.error('Error al actualizar empleado:', err);
@@ -84,7 +83,7 @@ document.getElementById('btn-delete-entry').addEventListener('click', async () =
     // Mostrar alerta
     alert('Empleado eliminado correctamente.');
 
-    // Recarga la tabla con los datos actualizados
+    // Recarga la página con los datos actualizados
     await renderStaffList();
     await restoreForm();
 });

@@ -3,7 +3,7 @@ import supabase from '../supabase/supabase-client.js'
 // Función para insertar nuevos empleados
 export async function createStaff(staffData) {
     const { data, error } = await supabase
-        .from('per_empleados')
+        .from('rh_empleados')
         .insert([staffData]);
 
     if (error) {
@@ -15,7 +15,7 @@ export async function createStaff(staffData) {
 // Función para obtener empleados
 export async function getStaff() {
     const { data, error } = await supabase
-        .from('per_empleados')
+        .from('rh_empleados')
         .select("*");
     
     if (error) {
@@ -23,37 +23,13 @@ export async function getStaff() {
         throw error;
     }
     
-    return data.map(empleado => ({
-        id_empleado: empleado.id_empleado,
-        numero_empleado: empleado.numero_empleado,
-        nombre: empleado.nombre,
-        puesto: empleado.puesto,
-        fecha_nacimiento: empleado.fecha_nacimiento,
-        telefono: empleado.telefono,
-        fecha_ingreso: empleado.fecha_ingreso,
-        nss: empleado.nss,
-        rfc: empleado.rfc,
-        curp: empleado.curp,
-        direccion: empleado.direccion,
-        estatus: empleado.estatus,
-        nombre_emergencia: empleado.nombre_emergencia,
-        parentesco_emergencia: empleado.parentesco_emergencia,
-        telefono_emergencia: empleado.telefono_emergencia,
-        tipo_sangre: empleado.tipo_sangre,
-        enfermedad: empleado.enfermedad,
-        medicamento: empleado.medicamento,
-        alergia: empleado.alergia,
-        calzado: empleado.calzado,
-        playera: empleado.playera,
-        camisa: empleado.camisa,
-        pantalon: empleado.pantalon
-    }));
+    return data;
 }
 
 // Función para editar empleados de la base
 export async function updateStaff(id_empleado, updatedData) {
     const { data, error } = await supabase
-        .from('per_empleados')
+        .from('rh_empleados')
         .update(updatedData)
         .eq('id_empleado', id_empleado);
 
@@ -71,7 +47,7 @@ export async function deleteStaff(idStaff) {
     }
 
     const { error } = await supabase
-        .from('per_empleados')
+        .from('rh_empleados')
         .delete()
         .eq('id_empleado', idStaff);
 
@@ -81,3 +57,24 @@ export async function deleteStaff(idStaff) {
         return;
     }
 };
+
+// Función para obtener empleados activos
+export async function getActiveStaff() {
+    const { data, error } = await supabase
+        .from('rh_empleados')
+        .select(`
+            id_empleado,
+            numero_empleado,
+            nombre,
+            puesto,
+            estatus
+            `)
+        .eq('estatus', 'Activo')
+    
+    if (error) {
+        console.error('Error obteniendo empleados activos:', error);
+        throw error;
+    }
+    
+    return data;
+}

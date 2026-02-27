@@ -2,7 +2,7 @@
 // Expresiones regulares para validación de datos
 const idRegex = /^\d+$/ // Id de empleado
 const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/; // Nombres y el apellidos
-const textRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s.,()\/\-–— +]+$/; // Texto con algunos caracteres especiales
+const textRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s.:,()\/\-–— +]+$/; // Texto con algunos caracteres especiales
 const curpRegex = /^[A-Z]{4}\d{6}[HM][A-Z]{5}[A-Z0-9]\d$/; // CURP
 const rfcRegex = /^([A-Z&Ñ]{3,4})\d{6}[A-Z0-9]{3}$/; // RFC
 const nssRegex = /^\d{11}$/; // NSS

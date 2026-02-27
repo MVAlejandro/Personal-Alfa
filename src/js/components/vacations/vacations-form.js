@@ -1,4 +1,3 @@
-import supabase from '../../supabase/supabase-client.js'
 // Servicios Supabase
 import { createRequest, createVacations } from '../../services/vacations-service.js'; 
 import { renderRequestsTable } from './vacations-table.js'; 
@@ -6,12 +5,12 @@ import { renderRequestsTable } from './vacations-table.js';
 import { loadOptions } from '../../utils/load-select.js';
 import { textValidate, inputValidate, selectValidate } from '../../utils/form-validations.js';
 
-// Cargar los clientes en los formularios al iniciar la página
+// Cargar los empleados en los formularios al iniciar la página
 document.addEventListener('DOMContentLoaded', async () => {
-    loadOptions('staff', 'per_empleados', 'id_empleado', 'nombre', 'Seleccione...')
+    loadOptions('staff', 'rh_empleados', 'id_empleado', 'nombre', 'Seleccione...')
 })
 
-// Función para agregar orden de forma manual
+// Función para agregar una nueva solicitud
 export async function addRequests(event) {
     event.preventDefault()
 
@@ -76,9 +75,9 @@ export async function addRequests(event) {
         } catch (err) {
             console.error(`Error insertando fecha ${fecha}`, err);
         }
-    }   
+    }
 
-    alert(`Solicitud de vacaciones agregado con éxito, se agregaron ${insertedVacations} días.`);
+    alert(`Solicitud de vacaciones generada con éxito, se agregaron ${insertedVacations} días.`);
     form.reset();
     form.querySelectorAll('.is-valid, .is-invalid').forEach(e => {
         e.classList.remove('is-valid', 'is-invalid');

@@ -82,3 +82,19 @@ export async function loadOptionsFilter(selectId, getFunction, displayFields, id
         select.appendChild(optionEl);
     });
 }
+
+// Función para cargar los días de la semana en el filtro
+export function loadDaysFilter() {
+    flatpickr("#day-filter", {
+        locale: {
+            ...flatpickr.l10ns.es,
+            firstDayOfWeek: 0
+        },
+        mode: "multiple",
+        dateFormat: "Y-m-d",
+        defaultDate: new Date(),
+        disable: [
+            date => date.getDay() === 0
+        ]
+    });
+}

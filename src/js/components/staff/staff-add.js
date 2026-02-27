@@ -1,12 +1,10 @@
-import supabase from '../../supabase/supabase-client.js'
 // Servicios Supabase
 import { createStaff } from '../../services/staff-service.js';
 import { renderStaffList } from './staff-list.js';
-
 // Utilidades
 import { validateForm } from './staff-form.js';
 
-// Función para agregar un cliente de forma manual
+// Función para agregar un nuevo empleado
 export async function addStaff(event) {
     event.preventDefault()
 
@@ -35,7 +33,7 @@ export async function addStaff(event) {
             e.classList.remove('is-valid', 'is-invalid');
         });
         
-        // Recarga la tabla con los datos actualizados
+        // Recarga la lista con los datos actualizados
         await renderStaffList();
     } catch (err) {
         console.error('Error al agregar al empleado:', err);

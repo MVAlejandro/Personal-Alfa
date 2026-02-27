@@ -1,4 +1,3 @@
-import supabase from '../../supabase/supabase-client.js'
 // Servicios Supabase
 import { updateRequest, deleteRequest } from '../../services/vacations-service.js'; 
 import { renderRequestsTable } from './vacations-table.js'; 

@@ -3,7 +3,7 @@ import supabase from '../supabase/supabase-client.js'
 // Función para insertar nuevas solicitudes
 export async function createRequest(requestData) {
     const { data, error } = await supabase
-        .from('per_solicitudes_vacaciones')
+        .from('rh_solicitudes_vacaciones')
         .insert([requestData])
         .select()
         .single();
@@ -19,17 +19,17 @@ export async function createRequest(requestData) {
 // Función para obtener solicitudes
 export async function getRequest() {
     const { data, error } = await supabase
-        .from('per_solicitudes_vacaciones')
+        .from('rh_solicitudes_vacaciones')
         .select(`
             id_solicitud,
             fecha_solicitud,
             estado,
             observaciones,
             id_empleado,
-            per_empleados (numero_empleado, nombre, puesto, fecha_ingreso),
-            per_vacaciones (fecha)
+            rh_empleados (numero_empleado, nombre, puesto, fecha_ingreso),
+            rh_vacaciones (fecha)
             `)
-        .order('fecha', { foreignTable: 'per_vacaciones' });
+        .order('fecha', { foreignTable: 'rh_vacaciones' });
     
     if (error) {
         console.error('Error obteniendo solicitudes de vacaciones:', error);
@@ -39,7 +39,7 @@ export async function getRequest() {
     const actualDate = new Date();
 
     return data.map(solicitud => {
-        const entryDate = new Date(solicitud.per_empleados.fecha_ingreso);
+        const entryDate = new Date(solicitud.rh_empleados.fecha_ingreso);
 
         let antiguedad = actualDate.getFullYear() - entryDate.getFullYear();
 
@@ -55,13 +55,13 @@ export async function getRequest() {
             estado: solicitud.estado,
             observaciones: solicitud.observaciones,
             id_empleado: solicitud.id_empleado,
-            numero_empleado: solicitud.per_empleados?.numero_empleado,
-            nombre: solicitud.per_empleados?.nombre,
-            puesto: solicitud.per_empleados?.puesto,
-            fecha_ingreso: solicitud.per_empleados?.fecha_ingreso,
+            numero_empleado: solicitud.rh_empleados?.numero_empleado,
+            nombre: solicitud.rh_empleados?.nombre,
+            puesto: solicitud.rh_empleados?.puesto,
+            fecha_ingreso: solicitud.rh_empleados?.fecha_ingreso,
             antiguedad,
-            vacaciones: solicitud.per_vacaciones?.map(v => v.fecha),
-            total_dias: solicitud.per_vacaciones?.length
+            vacaciones: solicitud.rh_vacaciones?.map(v => v.fecha),
+            total_dias: solicitud.rh_vacaciones?.length
         };
     });
 }
@@ -69,7 +69,7 @@ export async function getRequest() {
 // Función para editar solicitudes de la base
 export async function updateRequest(id_solicitud, updatedData) {
     const { data, error } = await supabase
-        .from('per_solicitudes_vacaciones')
+        .from('rh_solicitudes_vacaciones')
         .update(updatedData)
         .eq('id_solicitud', id_solicitud);
 
@@ -87,7 +87,7 @@ export async function deleteRequest(idRequest) {
     }
 
     const { error } = await supabase
-        .from('per_solicitudes_vacaciones')
+        .from('rh_solicitudes_vacaciones')
         .delete()
         .eq('id_solicitud', idRequest);
 
@@ -103,7 +103,7 @@ export async function deleteRequest(idRequest) {
 // Función para insertar nuevas vacaciones
 export async function createVacations(vacationsData) {
     const { data, error } = await supabase
-        .from('per_vacaciones')
+        .from('rh_vacaciones')
         .insert([vacationsData]);
 
     if (error) {
