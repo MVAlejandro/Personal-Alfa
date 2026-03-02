@@ -148,6 +148,7 @@
                     <div class="container">
                         <form id="vacations-edit-form">
                             <input type="hidden" id="edit-id-vacation">
+                            <input type="hidden" id="edit-requested-dates">
                             <div class="row ms-2 me-2 pt-3 pb-3">
                                 <div class="col-md-4 col-lg-6 label-over-border">
                                     <label for="edit-staff" class="form-label m-2">Empleado</label>
@@ -192,6 +193,7 @@
                     </div>
                 </div>
                 <div class="modal-footer me-4">
+                    <button id="btn-save" class="btn btn-secondary me-auto ms-4">Generar</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     <button id="btn-edit-entry" class="btn btn-primary">Guardar cambios</button>
                 </div>
@@ -238,6 +240,7 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script type="module" src="/src/js/pages/vacations.js"></script>
 </body>
 </html>

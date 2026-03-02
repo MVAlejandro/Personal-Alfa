@@ -1,6 +1,6 @@
 // Servicios Supabase
 import { getRequest } from '../../services/vacations-service.js'; 
-// import { validateUserRole } from '../../utils/session-validate.js';
+import { validateUserRole } from '../../utils/session-validate.js';
 
 const perPage = 10;
 let currentPage = 1;
@@ -48,6 +48,11 @@ export async function renderRequestsTable(requestParam = null) {
             statusClass = 'red';
         }
         
+        // Organizar las fechas de la solicitud para su inserción
+        const orderedDates = solicitud.fechas_solicitadas.split(', ')
+            .map(fecha => `<p class="request-days">${fecha}</p>`)
+            .join('');
+        
         tbody.innerHTML +=
         `<tr>
             <td class="vacation-employee-id fw-bold p-3 ps-4">${solicitud.numero_empleado}</td>
@@ -60,7 +65,7 @@ export async function renderRequestsTable(requestParam = null) {
                 <p class="vacation-antique">Ant: ${solicitud.antiguedad} años</p>
             </td>
             <td class="vacation-dates text-center fst-italic p-3"> 
-                ${solicitud.vacaciones.join("<br>")}
+                ${orderedDates}
             </td>
             <td class="text-center p-2">
                 <p class="vacation-status ${statusClass}">${solicitud.estado}</p>
@@ -163,5 +168,5 @@ export async function renderRequestsTable(requestParam = null) {
         });
     });
     
-    // validateUserRole()
+    validateUserRole()
 }

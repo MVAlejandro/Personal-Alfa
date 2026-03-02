@@ -23,13 +23,16 @@ export async function getRequest() {
         .select(`
             id_solicitud,
             fecha_solicitud,
+            fechas_solicitadas,
             estado,
             observaciones,
             id_empleado,
-            rh_empleados (numero_empleado, nombre, puesto, fecha_ingreso),
-            rh_vacaciones (fecha)
-            `)
-        .order('fecha', { foreignTable: 'rh_vacaciones' });
+            rh_empleados (
+                numero_empleado, 
+                nombre, 
+                puesto, 
+                fecha_ingreso)
+            `);
     
     if (error) {
         console.error('Error obteniendo solicitudes de vacaciones:', error);
@@ -52,6 +55,7 @@ export async function getRequest() {
         return {
             id_solicitud: solicitud.id_solicitud,
             fecha_solicitud: solicitud.fecha_solicitud,
+            fechas_solicitadas: solicitud.fechas_solicitadas,
             estado: solicitud.estado,
             observaciones: solicitud.observaciones,
             id_empleado: solicitud.id_empleado,
@@ -59,9 +63,7 @@ export async function getRequest() {
             nombre: solicitud.rh_empleados?.nombre,
             puesto: solicitud.rh_empleados?.puesto,
             fecha_ingreso: solicitud.rh_empleados?.fecha_ingreso,
-            antiguedad,
-            vacaciones: solicitud.rh_vacaciones?.map(v => v.fecha),
-            total_dias: solicitud.rh_vacaciones?.length
+            antiguedad
         };
     });
 }

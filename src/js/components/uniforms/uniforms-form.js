@@ -44,7 +44,12 @@ export async function addUniforms(event) {
 
     const campos = form.querySelectorAll('input, select')
     if (!inputValidate(campos)) {
-        alert('Corrige los errores antes de guardar.')
+        Swal.fire({
+            title: 'Atención',
+            text: 'Corrige los errores antes de guardar.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
 
         // Restaurar estado del botón
         if (btn) {
@@ -73,7 +78,11 @@ export async function addUniforms(event) {
 
     try {
         await createUniforms(newUniformData);
-        alert('Entrega de uniforme agregada con éxito.');
+        Swal.fire({
+            title: 'Entrega de uniforme agregada con éxito.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
         form.reset();
         form.querySelectorAll('.is-valid, .is-invalid').forEach(e => {
             e.classList.remove('is-valid', 'is-invalid');
@@ -83,7 +92,12 @@ export async function addUniforms(event) {
         await renderUniformsTable();
     } catch (err) {
         console.error('Error al agregar orden:', err);
-        alert('Ocurrió un error al agregar la entrega de uniformes.');
+        Swal.fire({
+            title: 'Oops...',
+            text: 'Ocurrió un error al agregar la entrega de uniformes.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
     } finally {
         // Restaurar estado del botón
         if (btn) {

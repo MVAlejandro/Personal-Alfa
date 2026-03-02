@@ -18,15 +18,27 @@ export async function addStaff(event) {
     const staffData = validateForm();
 
     if (!staffData) {
-        alert('Corrige los errores antes de guardar.');
-        btn.disabled = false;
-        btn.innerHTML = `<p>Añadir Empleado</p>`;
+        Swal.fire({
+            title: 'Atención',
+            text: 'Corrige los errores antes de guardar.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
+
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = `<p>Añadir Empleado</p>`;
+        }
         return;
     }
 
     try {
         await createStaff(staffData);
-        alert('Empleado agregado con éxito.');
+        Swal.fire({
+            title: 'Empleado agregado con éxito.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
         const form = document.getElementById('staff-form');
         form.reset();
         form.querySelectorAll('.is-valid, .is-invalid').forEach(e => {
@@ -37,7 +49,12 @@ export async function addStaff(event) {
         await renderStaffList();
     } catch (err) {
         console.error('Error al agregar al empleado:', err);
-        alert('Ocurrió un error al agregar al empleado.');
+        Swal.fire({
+            title: 'Oops...',
+            text: 'Ocurrió un error al agregar al empleado.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
     } finally {
         // Restaurar estado del botón
         if (btn) {

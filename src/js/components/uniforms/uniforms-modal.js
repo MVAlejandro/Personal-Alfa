@@ -35,7 +35,12 @@ document.getElementById('btn-edit-entry').addEventListener('click', async functi
 
     const campos = document.querySelectorAll('input')
     if (!inputValidate(campos)) {
-        alert('Corrige los errores antes de guardar.')
+        Swal.fire({
+            title: 'Atención',
+            text: 'Corrige los errores antes de guardar.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
         return
     }
 
@@ -55,13 +60,22 @@ document.getElementById('btn-edit-entry').addEventListener('click', async functi
         
         // Cerrar el modal y mostrar alerta
         bootstrap.Modal.getInstance(document.getElementById('edit-modal')).hide();
-        alert('Entrega de uniforme actualizada correctamente.');
+        Swal.fire({
+            title: 'Entrega de uniforme actualizada correctamente.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
 
         // Recarga la tabla con los datos actualizados
         await renderUniformsTable();
     } catch (err) {
         console.error('Error al actualizar la entrega de uniforme:', err);
-        alert('Ocurrió un error al actualizar la entrega de uniforme.');
+        Swal.fire({
+            title: 'Oops...',
+            text: 'Ocurrió un error al actualizar la entrega de uniforme..',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
     }
 });
 
@@ -72,7 +86,11 @@ document.getElementById('btn-delete-entry').addEventListener('click', async () =
 
     // Cerrar el modal y mostrar alerta
     bootstrap.Modal.getInstance(document.getElementById('delete-modal')).hide();
-    alert('Entrega de uniforme eliminada correctamente.');
+    Swal.fire({
+        title: 'Entrega de uniforme eliminada correctamente.',
+        icon: 'warning',
+        confirmButtonText: 'OK'
+    });
 
     // Recarga la tabla con los datos actualizados
     await renderUniformsTable();

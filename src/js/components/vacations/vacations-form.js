@@ -38,8 +38,12 @@ export async function addRequests(event) {
 
     const campos = form.querySelectorAll('input, select')
     if (!inputValidate(campos)) {
-        alert('Corrige los errores antes de guardar.')
-
+        Swal.fire({
+            title: 'Atención',
+            text: 'Corrige los errores antes de guardar.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
         // Restaurar estado del botón
         if (btn) {
             btn.disabled = false;
@@ -55,45 +59,48 @@ export async function addRequests(event) {
 
     const estado = "Pendiente";
     const fecha_solicitud = new Date().toISOString().split('T')[0];
-    const fechas = fechaIn.value.split(', ');
 
     // Guardar valores
-    const newRequestData = await createRequest({
+    const newRequestData = {
         id_empleado: id_empleadoIn.value,
         fecha_solicitud,
+        fechas_solicitadas: fechaIn.value,
         estado,
         observaciones: observacionesIn.value
-    });
+    };
 
-    const id_solicitud = newRequestData.id_solicitud;
-    let insertedVacations = 0;
-
-    for (const fecha of fechas) {
-        try {
-            await createVacations({ id_solicitud, fecha });
-            insertedVacations++;
-        } catch (err) {
-            console.error(`Error insertando fecha ${fecha}`, err);
+    try {
+        await createRequest(newRequestData);
+        Swal.fire({
+            title: 'Solicitud de vacaciones generada con éxito',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+        form.reset();
+        form.querySelectorAll('.is-valid, .is-invalid').forEach(e => {
+            e.classList.remove('is-valid', 'is-invalid');
+        });
+    
+        // Recarga la tabla con los datos actualizados
+       await renderRequestsTable();
+    } catch (err) {
+        console.error('Error al generar solicitud:', err);
+        Swal.fire({
+            title: 'Oops...',
+            text: 'Ocurrió un error al solicitar las vacaciones.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    } finally {
+        // Restaurar estado del botón
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = 
+                `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy pe-1" viewBox="0 0 16 16">
+                    <path d="M11 2H9v3h2z"/>
+                    <path d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0M1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5m3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4zM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5z"/>
+                </svg>
+                <p class="ps-2">Agregar</p>`;
         }
     }
-
-    alert(`Solicitud de vacaciones generada con éxito, se agregaron ${insertedVacations} días.`);
-    form.reset();
-    form.querySelectorAll('.is-valid, .is-invalid').forEach(e => {
-        e.classList.remove('is-valid', 'is-invalid');
-    });
-    
-    // Restaurar estado del botón
-    if (btn) {
-        btn.disabled = false;
-        btn.innerHTML = 
-            `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy pe-1" viewBox="0 0 16 16">
-                <path d="M11 2H9v3h2z"/>
-                <path d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0M1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5m3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4zM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5z"/>
-            </svg>
-            <p class="ps-2">Agregar</p>`;
-    }
-
-    // Recarga la tabla con los datos actualizados
-    await renderRequestsTable();
 }

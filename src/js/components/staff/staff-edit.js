@@ -48,7 +48,12 @@ export async function editStaff(event) {
     const staffData = validateForm();
 
     if (!staffData) {
-        alert('Corrige los errores antes de guardar.');
+        Swal.fire({
+            title: 'Atención',
+            text: 'Corrige los errores antes de guardar.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
         btn.disabled = false;
         btn.innerHTML = `<p>Actualizar Empleado</p>`;
         return;
@@ -63,13 +68,22 @@ export async function editStaff(event) {
         });
         
         // Mostrar alerta
-        alert('Empleado actualizado correctamente.');
+        Swal.fire({
+            title: 'Empleado actualizado correctamente.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
 
         // Recarga el contenedor con los datos actualizados
         await renderStaffEditForm(staffData);
     } catch (err) {
         console.error('Error al actualizar empleado:', err);
-        alert('Ocurrió un error al actualizar al empleado.');
+        Swal.fire({
+            title: 'Oops...',
+            text: 'Ocurrió un error al actualizar al empleado.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
     }
 }
 
@@ -81,7 +95,11 @@ document.getElementById('btn-delete-entry').addEventListener('click', async () =
     await deleteStaff(idStaff);
 
     // Mostrar alerta
-    alert('Empleado eliminado correctamente.');
+    Swal.fire({
+        title: 'Empleado eliminado correctamente.',
+        icon: 'warning',
+        confirmButtonText: 'OK'
+    });
 
     // Recarga la página con los datos actualizados
     await renderStaffList();

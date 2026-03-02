@@ -15,6 +15,7 @@ import { addRequests } from '../components/vacations/vacations-form.js';
 import { requestsFilter } from '../components/vacations/vacations-filter.js';
 import { renderRequestsTable } from '../components/vacations/vacations-table.js';
 import { renderRequestsEditModal } from '../components/vacations/vacations-modal.js';
+import { generatePDF } from '../components/vacations/vacations-print.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     await renderRequestsTable();
@@ -41,6 +42,14 @@ editModal.addEventListener('shown.bs.modal', event => {
     const button = event.relatedTarget;
     const vacationData = JSON.parse(button.getAttribute('vacation-data'));
     renderRequestsEditModal(vacationData);
+
+    // Declarar el botón de guardado
+    const btnSave = editModal.querySelector('#btn-save');
+    // Elimina eventos anteriores para evitar duplicados
+    btnSave.onclick = async function () {
+        const doc = await generatePDF(vacationData);
+        window.open(doc.output('bloburl'), '_blank');
+    };
 });
 // Al cerrar modal
 editModal.addEventListener('hidden.bs.modal', () => {
