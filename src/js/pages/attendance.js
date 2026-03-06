@@ -11,14 +11,14 @@ import '../components/navbar.js';
 import '../components/attendance/generate-form.js'
 
 // Servicios Supabase
-// import { initPage } from '../utils/session-validate.js';
+import { initPage } from '../utils/session-validate.js';
 import { addExcelAttendances } from '../components/attendance/attendance-form.js'; 
 import { attendanceFilter } from '../components/attendance/attendance-filter.js';
 
 let register = []
 
 document.addEventListener('DOMContentLoaded', async () => {
-    //await initPage()
+    await initPage()
     // Generar tabla con el día actual
     register = await attendanceFilter();
 });

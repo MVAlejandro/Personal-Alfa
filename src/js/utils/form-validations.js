@@ -8,6 +8,7 @@ const rfcRegex = /^([A-Z&Ñ]{3,4})\d{6}[A-Z0-9]{3}$/; // RFC
 const nssRegex = /^\d{11}$/; // NSS
 const phoneRegex = /^[1-9]\d{9}$/; // Número telefónico
 const amountRegex = /^\d+([-\.]\d{1,2})?$/ // Cantidades y precios
+const emailRegex = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+$/; // Email
 const passRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s.,()\/\-–—_!@#$%^&*+=?:;'"{}[\]<>\|~`]+$/; // Contraseñas con signos comunes
 
 // Función que valida que los campos sean solo letras, algunos caracteres especiales y que haya al menos 2 caracteres
@@ -131,6 +132,22 @@ export function amountValidate (input, error){
 
     if(!amountRegex.test(input.value)){
         error.textContent=`El dato no es válido`;
+        input.classList.add('is-invalid');
+        input.classList.remove('is-valid');
+    } else {
+        error.textContent = '';
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+    }
+}
+
+// Función que valida que el correo tenga un formato válido
+export  function emailValidate(input, error) {
+    error.textContent = '';
+    input.classList.remove('is-invalid', 'is-valid');
+
+    if (!emailRegex.test(input.value)) {
+        error.textContent=`El correo debe de cumplir con el formato example@example.com`;
         input.classList.add('is-invalid');
         input.classList.remove('is-valid');
     } else {

@@ -31,14 +31,14 @@ table {
     font-size: 13px !important;
 }
 
-#resume-container, .absences-statistics-container, .request-statistics-container {
+#resume-container, .absences-statistics-container, #requests-container {
     background-color: var(--background-light) !important;
     border-radius: 1rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
     animation: fadeInUp 1s ease-in-out;
 }
 
-#weekHeader {
+#dayHeader {
     color: var(--primary-dark);
 }
 
@@ -58,7 +58,7 @@ table {
     box-shadow: 0px -5px var(--primary);
 }
 
-.index-report-cant {
+.general-report-cant {
     font-size: 30px;
     font-weight: bold;
     padding-top: 0px;
@@ -68,6 +68,27 @@ table {
     #staff-resume {
         padding-top: 0px !important;
     }
+}
+
+/* Estilos de texto para la tabla */
+.vacation-controls {
+    display: none;
+}
+
+.vacation-entry-date {
+    font-weight: bold;
+}
+
+.vacation-departament, .vacation-antique, #vacations-pages-results {
+    font-size: 13px;
+    color: var(--secondary) !important;
+}
+
+.vacation-status {
+    padding: 5px 12px 5px 12px;
+    border-radius: 50px;
+    font-weight: bold;
+    display: inline-block;
 }
 
 /* Cards de sección de accesos directos */

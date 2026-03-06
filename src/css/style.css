@@ -11,6 +11,29 @@
     --text-light: #fff;
     --danger: #cf3342;
     --danger-dark: rgb(173, 56, 68);
+    /* Colores para estados de las tablas */
+    --table-green-light: #3cb17c;
+    --table-green-dark: #0b5231;
+    --table-yellow-light: #fcebb9;
+    --table-yellow-dark: #7e6009;
+    --table-red-light: #dd989f;
+    --table-red-dark: #79111c;
+}
+
+/* Estados de las tablas de planeación */
+.yellow {
+    background-color: var(--table-yellow-light) !important;
+    color: var(--table-yellow-dark) !important;
+}
+
+.green {
+    background-color: var(--table-green-light) !important;
+    color: var(--table-green-dark) !important;
+}
+
+.red {
+    background-color: var(--table-red-light) !important;
+    color: var(--table-red-dark) !important;
 }
 
 /* Estilos generales de la página y estructura */

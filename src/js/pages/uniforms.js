@@ -11,7 +11,7 @@ import '../components/navbar.js';
 import '../components/uniforms/generate-form.js'
 
 // Servicios Supabase
-// import { initPage } from '../utils/session-validate.js'; 
+import { initPage } from '../utils/session-validate.js'; 
 import { addUniforms } from '../components/uniforms/uniforms-form.js'; 
 import { uniformsFilter } from '../components/uniforms/uniforms-filter.js';
 import { renderUniformsTable } from '../components/uniforms/uniforms-table.js'; 
@@ -19,7 +19,7 @@ import { renderUniformsEditModal } from '../components/uniforms/uniforms-modal.j
 
 document.addEventListener('DOMContentLoaded', async () => {
     await renderUniformsTable();
-    // await initPage()
+    await initPage()
 });
 
 // Declarar el botón de filtrado

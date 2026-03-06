@@ -27,18 +27,18 @@ export async function createResumeCards(attendancesParam = null) {
     // Filtrar registros de checado con retardo
     lateAttendances = firstAttendances.filter(a => a.hora_asistencia > "08:05");
     
-    renderStaffCard()
-    renderPresentCard()
+    renderStaffCard(allStaff)
+    renderPresentCard(firstAttendances)
     renderLateCard()
     renderAbsentCard()
 }
 
 // Función para crear la card de empleados activos
-export async function renderStaffCard() {
+export async function renderStaffCard(allStaff) {
     const element = document.getElementById("total-text");
     // Limpiar elemento antes de insertar
     element.textContent = "";
-
+    
     if (!allStaff.length) {
         element.textContent = `-`;
         element.className = "general-report-cant text-muted";
@@ -51,7 +51,7 @@ export async function renderStaffCard() {
 }
 
 // Función para crear la card de empleados presentes
-export async function renderPresentCard() {
+export async function renderPresentCard(firstAttendances) {
     const element = document.getElementById("present-text");
     // Limpiar elemento antes de insertar
     element.textContent = "";
@@ -63,6 +63,7 @@ export async function renderPresentCard() {
     }
 
     element.textContent = `${firstAttendances.length.toLocaleString('en-US')}`;
+    element.className = "general-report-cant text-success";
 }
 
 // Función para crear la card de empleados con retardo

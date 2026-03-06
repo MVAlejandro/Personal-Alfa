@@ -11,6 +11,7 @@ import '../components/navbar.js';
 import { generateForm, restoreForm } from '../components/staff/generate-form.js';
 
 // Servicios Supabase
+import { initPage, validateUserRole } from '../utils/session-validate.js';
 import { addStaff } from '../components/staff/staff-add.js';
 import { editStaff } from '../components/staff/staff-edit.js';
 import { staffFilter } from '../components/staff/staff-filter.js';
@@ -18,7 +19,7 @@ import { renderStaffList } from '../components/staff/staff-list.js';
 import { renderStaffEditForm } from '../components/staff/staff-edit.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // await initPage()
+    await initPage()
     await renderStaffList();
 });
 
@@ -35,7 +36,8 @@ document.getElementById("btn-add-staff").addEventListener("click", () => {
     const container = document.getElementById('form-buttons-container');
     container.innerHTML =
         `<button id="btn-cancel-entry" class="btn btn-outline-secondary m-1">Cancelar</button>
-         <button id="btn-add-entry" class="btn btn-primary m-1">Añadir Empleado</button>`;
+         <button id="btn-add-entry" class="btn btn-primary m-1 d-none" data-rh-only>Añadir Empleado</button>`;
+    validateUserRole()
 });
 
 document.addEventListener("click", (e) => {
@@ -62,8 +64,9 @@ container.addEventListener('click', async function(e) {
     const container = document.getElementById('form-buttons-container');
     container.innerHTML =
         `<button id="btn-cancel-entry" class="btn btn-outline-secondary m-1">Cancelar</button>
-         <button id="btn-delete-entry" class="btn btn-danger m-1" data-bs-target="#delete-modal" data-bs-toggle="modal">Eliminar</button>
-         <button id="btn-update-entry" class="btn btn-primary m-1">Actualizar Empleado</button>`;
+         <button id="btn-delete-entry" class="btn btn-danger m-1 d-none" data-rh-only data-bs-target="#delete-modal" data-bs-toggle="modal">Eliminar</button>
+         <button id="btn-update-entry" class="btn btn-primary m-1 d-none" data-rh-only>Actualizar Empleado</button>`;
+    validateUserRole()
 });
 
 // Declarar el botón de edición del empleado

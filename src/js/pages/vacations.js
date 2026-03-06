@@ -11,6 +11,7 @@ import '../components/navbar.js';
 import '../components/vacations/generate-form.js'
 
 // Servicios Supabase
+import { initPage } from '../utils/session-validate.js'; 
 import { addRequests } from '../components/vacations/vacations-form.js';
 import { requestsFilter } from '../components/vacations/vacations-filter.js';
 import { renderRequestsTable } from '../components/vacations/vacations-table.js';
@@ -18,6 +19,7 @@ import { renderRequestsEditModal } from '../components/vacations/vacations-modal
 import { generatePDF } from '../components/vacations/vacations-print.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
+    await initPage()
     await renderRequestsTable();
 });
 

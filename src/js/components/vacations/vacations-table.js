@@ -71,7 +71,7 @@ export async function renderRequestsTable(requestParam = null) {
                 <p class="vacation-status ${statusClass}">${solicitud.estado}</p>
             </td>
             <td class="vacation-observations p-3">${solicitud.observaciones}</td>
-            <td class="vacation-controls text-end p-3 pe-4">
+            <td class="vacation-controls text-end p-3 pe-4 d-none" data-rh-only>
                 <div class="action-buttons">
                     <button class="btn btn-edit" 
                         data-bs-target="#edit-modal" 
@@ -96,77 +96,79 @@ export async function renderRequestsTable(requestParam = null) {
 
     // Actualizar texto de resultados
     const total = allRequests.length;
-    resultsText.textContent = `Mostrando ${Math.min(pageStart + 1, total)} a ${Math.min(pageEnd, total)} de ${total} resultados`;
+    if (resultsText) {
+        resultsText.textContent = `Mostrando ${Math.min(pageStart + 1, total)} a ${Math.min(pageEnd, total)} de ${total} resultados`;
 
-    // Crear paginación
-    const totalPages = Math.ceil(total / perPage);
-    pagination.innerHTML = '';
+        // Crear paginación
+        const totalPages = Math.ceil(total / perPage);
+        pagination.innerHTML = '';
 
-    const maxVisible = 4; // máximo de botones visibles
-    let startPage = Math.max(currentPage - Math.floor(maxVisible / 2), 1);
-    let endPage = startPage + maxVisible - 1;
-    if (endPage > totalPages) {
-        endPage = totalPages;
-        startPage = Math.max(endPage - maxVisible + 1, 1);
-    }
-
-    // Botón Anterior
-    pagination.innerHTML += 
-        `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}" data-page="prev">
-            <a class="page-link" href="#">&laquo;</a>
-        </li>`;
-
-    // Primera página + ...
-    if (startPage > 1) {
-        pagination.innerHTML += 
-            `<li class="page-item" data-page="1"><a class="page-link" href="#">1</a></li>`;
-        if (startPage > 2) {
-            pagination.innerHTML += 
-                `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+        const maxVisible = 4; // máximo de botones visibles
+        let startPage = Math.max(currentPage - Math.floor(maxVisible / 2), 1);
+        let endPage = startPage + maxVisible - 1;
+        if (endPage > totalPages) {
+            endPage = totalPages;
+            startPage = Math.max(endPage - maxVisible + 1, 1);
         }
-    }
 
-    // Botones centrales
-    for (let i = startPage; i <= endPage; i++) {
+        // Botón Anterior
         pagination.innerHTML += 
-            `<li class="page-item ${i === currentPage ? 'active' : ''}" data-page="${i}">
-                <a class="page-link" href="#">${i}</a>
+            `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}" data-page="prev">
+                <a class="page-link" href="#">&laquo;</a>
             </li>`;
-    }
 
-    // Última página + ...
-    if (endPage < totalPages) {
-        if (endPage < totalPages - 1) {
+        // Primera página + ...
+        if (startPage > 1) {
             pagination.innerHTML += 
-                `<li class="page-item disabled"><span class="page-link">...</span></li>`;
-        }
-        pagination.innerHTML += 
-            `<li class="page-item" data-page="${totalPages}"><a class="page-link" href="#">${totalPages}</a></li>`;
-    }
-
-    // Botón Siguiente
-    pagination.innerHTML += 
-        `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}" data-page="next">
-            <a class="page-link" href="#">&raquo;</a>
-        </li>`;
-
-    // Añadir los eventos de clic a la paginación
-    pagination.querySelectorAll('.page-item').forEach(item => {
-        item.addEventListener('click', e => {
-            e.preventDefault();
-            const type = item.dataset.page;
-
-            if (type === 'prev' && currentPage > 1) {
-                currentPage--;
-            } else if (type === 'next' && currentPage < totalPages) {
-                currentPage++;
-            } else if (!isNaN(parseInt(type))) {
-                currentPage = parseInt(type);
+                `<li class="page-item" data-page="1"><a class="page-link" href="#">1</a></li>`;
+            if (startPage > 2) {
+                pagination.innerHTML += 
+                    `<li class="page-item disabled"><span class="page-link">...</span></li>`;
             }
+        }
 
-            renderRequestsTable();
+        // Botones centrales
+        for (let i = startPage; i <= endPage; i++) {
+            pagination.innerHTML += 
+                `<li class="page-item ${i === currentPage ? 'active' : ''}" data-page="${i}">
+                    <a class="page-link" href="#">${i}</a>
+                </li>`;
+        }
+
+        // Última página + ...
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+                pagination.innerHTML += 
+                    `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+            }
+            pagination.innerHTML += 
+                `<li class="page-item" data-page="${totalPages}"><a class="page-link" href="#">${totalPages}</a></li>`;
+        }
+
+        // Botón Siguiente
+        pagination.innerHTML += 
+            `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}" data-page="next">
+                <a class="page-link" href="#">&raquo;</a>
+            </li>`;
+
+        // Añadir los eventos de clic a la paginación
+        pagination.querySelectorAll('.page-item').forEach(item => {
+            item.addEventListener('click', e => {
+                e.preventDefault();
+                const type = item.dataset.page;
+
+                if (type === 'prev' && currentPage > 1) {
+                    currentPage--;
+                } else if (type === 'next' && currentPage < totalPages) {
+                    currentPage++;
+                } else if (!isNaN(parseInt(type))) {
+                    currentPage = parseInt(type);
+                }
+
+                renderRequestsTable();
+            });
         });
-    });
+    }
     
     validateUserRole()
 }

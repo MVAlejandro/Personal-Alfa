@@ -41,10 +41,6 @@ export function validateForm() {
     const nombre_emergenciaError = document.getElementById("error-emergency-name");
     const parentesco_emergenciaError = document.getElementById("error-emergency-relation");
     const telefono_emergenciaError = document.getElementById("error-emergency-phone");
-    const tipo_sangreError = document.getElementById("error-staff-btype");
-    const enfermedadError = document.getElementById("error-staff-illness");
-    const medicamentoError = document.getElementById("error-staff-medicament");
-    const alergiaError = document.getElementById("error-staff-allergy");
     const calzadoError = document.getElementById("error-staff-boots");
     const playeraError = document.getElementById("error-staff-tshirt");
     const camisaError = document.getElementById("error-staff-shirt");
@@ -65,10 +61,6 @@ export function validateForm() {
     nameValidate(nombre_emergenciaIn, nombre_emergenciaError)
     textValidate(parentesco_emergenciaIn, parentesco_emergenciaError)
     phoneValidate(telefono_emergenciaIn, telefono_emergenciaError)
-    textValidate(tipo_sangreIn, tipo_sangreError)
-    textValidate(enfermedadIn, enfermedadError)
-    textValidate(medicamentoIn, medicamentoError)
-    textValidate(alergiaIn, alergiaError)
     amountValidate(calzadoIn, calzadoError)
     textValidate(playeraIn, playeraError)
     textValidate(camisaIn, camisaError)
