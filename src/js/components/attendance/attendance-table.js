@@ -1,10 +1,11 @@
 // Servicios Supabase
-import { getAttendances } from "../../services/attendance-service";
+import { getAttendances, getFullAttendances } from "../../services/attendance-service";
 import { validateUserRole } from '../../utils/session-validate.js';
 
 const perPage = 20;
 let currentPage = 1;
 let allAttendances = [];
+let attendancesList = [];
 
 // Función para crear la tabla y la paginación
 export async function renderAttendancesTable(attendancesParam = null) {
@@ -15,6 +16,9 @@ export async function renderAttendancesTable(attendancesParam = null) {
         allAttendances = await getAttendances();
     }
     
+    // Agrupar los registros de asistencia por empleado con sus horas de checado
+    attendancesList = await getFullAttendances(allAttendances)
+
     const tbody = document.querySelector('#attendance-table tbody');
     const pagination = document.querySelector('#attendance-pages .pagination');
     const resultsText = document.getElementById('attendance-pages-results');
@@ -22,14 +26,14 @@ export async function renderAttendancesTable(attendancesParam = null) {
     // Calcular entradas de la página actual
     const pageStart = (currentPage - 1) * perPage;
     const pageEnd = pageStart + perPage;
-    const attendance = allAttendances.slice(pageStart, pageEnd);
-
+    const attendance = attendancesList.slice(pageStart, pageEnd);
+    
     // Limpiar tabla antes de insertar
     tbody.innerHTML = '';
 
     if (!attendance || attendance.length === 0) {
         tbody.innerHTML = `<tr><td class="text-center" colspan="8">No hay asistencias registradas</td></tr>`;
-        resultsText.textContent = `Mostrando 0 de ${allAttendances.length} resultados`;
+        resultsText.textContent = `Mostrando 0 de ${attendancesList.length} resultados`;
         pagination.innerHTML = '';
         return;
     }
@@ -37,21 +41,20 @@ export async function renderAttendancesTable(attendancesParam = null) {
     for (const asistencia of attendance) {
         tbody.innerHTML +=
         `<tr>
-            <td class="p-3 ps-4">
-                <p class="attendance-date fw-bold">${asistencia.fecha_asistencia}</p>
-                <p class="attendance-time">${asistencia.hora_asistencia.slice(0, 5)}</p>
-            </td>
-            <td class="attendance-number p-3">${asistencia.numero_empleado}</td>
-            <td class="p-3">
+            <td class="attendance-number text-center p-2">${asistencia.numero_empleado}</td>
+            <td class="p-2">
                 <p class="attendance-employee">${asistencia.nombre}</p>
                 <p class="attendance-departament">${asistencia.puesto}</p>
             </td>
-            <td class="attendance-type p-3">${asistencia.verificación}</td>
+            <td class="attendance-date fw-bold text-center p-2">${asistencia.fecha || "Sin Registro"}</td>
+            <td class="attendance-entrance text-center p-2">${asistencia.entrada.slice(0, 5) || "Sin Registro"}</td>
+            <td class="attendance-exit text-center p-2">${asistencia.salida.slice(0, 5) || "Sin Registro"}</td>
+            <td class="attendance-type text-center p-2">${asistencia.verificacion || "Sin Registro"}</td>
         </tr>`;
     };
 
     // Actualizar texto de resultados
-    const total = allAttendances.length;
+    const total = attendancesList.length;
     resultsText.textContent = `Mostrando ${Math.min(pageStart + 1, total)} a ${Math.min(pageEnd, total)} de ${total} resultados`;
 
     // Crear paginación

@@ -136,10 +136,6 @@
             <div id="attendance-filter-container" class="container pt-4 pb-3">
                 <div class="row ms-2 me-2">
                     <div class="col-md-4 col-lg-3 d-flex align-items-center label-over-border">
-                        <label for="search-filter" class="form-label m-2">Buscar por empleado</label>    
-                        <input id="search-filter" class="form-control" type="search" placeholder="Buscar..." aria-label="Search" autocomplete="off"/>
-                    </div>
-                    <div class="col-md-4 col-lg-3 d-flex align-items-center label-over-border">
                         <label for="day-filter" class="form-label m-2">Filtrar por Día</label>
                         <input type="text" id="day-filter" class="form-control" placeholder="Fecha a mostrar" autocomplete="off">
                     </div>
@@ -161,10 +157,12 @@
                 <table id="attendance-table" class="table table-hover align-middle">
                     <thead>
                         <tr class="table-light">
-                            <th class="p-3 ps-4">TIEMPO</th>
-                            <th class="p-3">NÚM EMP</th>
-                            <th class="p-3">NOMBRE</th>
-                            <th class="p-3">VERIFICACIÓN</th>
+                            <th class="p-2 text-center">NÚM EMP</th>
+                            <th class="p-2">NOMBRE</th>
+                            <th class="p-2 text-center">FECHA</th>
+                            <th class="p-2 text-center">ENTRADA</th>
+                            <th class="p-2 text-center">SALIDA</th>
+                            <th class="p-2 text-center">VERIFICACIÓN</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -9,7 +9,7 @@ export async function createStaff(staffData) {
     if (error) {
         console.error(error);
         throw error;
-    } 
+    }
 }
 
 // Función para obtener empleados
