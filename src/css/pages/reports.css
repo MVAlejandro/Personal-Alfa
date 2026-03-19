@@ -102,10 +102,6 @@ input:disabled {
 }
 
 /* Estilos de texto para la tabla */
-table {
-    margin-bottom: 0 !important;
-}
-
 #general-report-table tbody {
     font-size: 13px;
 }
@@ -114,7 +110,7 @@ table {
     font-weight: bold;
 }
 
-.report-year {
+.sub-text {
     font-size: 13px;
     color: var(--secondary) !important;
 }

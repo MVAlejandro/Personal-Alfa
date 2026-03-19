@@ -99,7 +99,6 @@ export async function findEmployee(employeeNo) {
 // Función para obtener toda la lista de asistencia en base a empleados activos y registros de asistencia
 export async function getFullAttendances(allAttendances) {
     const activeStaff = await getActiveStaff();
-
     const grouped = {};
 
     // Agrupar asistencias por empleado + fecha

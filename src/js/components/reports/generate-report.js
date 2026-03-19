@@ -1,3 +1,5 @@
+import { renderAttendanceReportTable, renderStaffReportTable, renderUniformsReportTable, renderVacationsReportTable } from "./report-table";
+
 // Función de renderizado para personal
 export async function generateStaffReport() {
     const filterContainer = document.getElementById('reports-filter-container');
@@ -15,11 +17,17 @@ export async function generateStaffReport() {
             </select>
         </div>
         <div class="col-md d-flex align-items-center justify-content-end">
-            <button id="filter-btn" class="btn btn-primary d-flex align-items-center ps-3 pe-3">
+            <button id="filter-staff-btn" class="btn btn-primary d-flex align-items-center ps-3 pe-3 me-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
                 </svg>
                 <p class="ps-2">Filtrar</p>
+            </button>
+            <button id="export-staff-btn" class="btn btn-primary d-flex align-items-center ps-3 pe-3 ms-2 me-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
+                    <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 2h-4v3h4zm0 4h-4v3h4zm0 4h-4v3h3a1 1 0 0 0 1-1zm-5 3v-3H6v3zm-5 0v-3H1v2a1 1 0 0 0 1 1zm-4-4h4V8H1zm0-4h4V4H1zm5-3v3h4V4zm4 4H6v3h4z"/>
+                </svg>
+                <p class="ps-2">Exportar</p>
             </button>
         </div>
     </div>`;
@@ -29,19 +37,23 @@ export async function generateStaffReport() {
     `<table id="staff-table" class="table table-hover align-middle">
         <thead>
             <tr class="table-light">
-                <th class="p-2 text-center">NÚM EMP</th>
+                <th class="p-2 ps-4">No</th>
                 <th class="p-2">NOMBRE</th>
                 <th class="p-2">PUESTO</th>
-                <th class="p-2">INGRESO</th>
-                <th class="p-2">ESTATUS</th>
+                <th class="text-center p-2">NACIMIENTO</th>
+                <th class="text-center p-2">INGRESO</th>
+                <th class="text-center p-2">RFC</th>
+                <th class="text-center p-2">ESTATUS</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td class="text-center" colspan="8">No hay empleados registrados</td>
+                <td class="text-center" colspan="5">No hay empleados registrados</td>
             </tr>
         </tbody>
     </table>`;
+
+    renderStaffReportTable()
 }
 
 // Función de renderizado para asistencia
@@ -66,11 +78,17 @@ export async function generateAttendanceReport() {
             </select>
         </div>
         <div class="col-md d-flex align-items-center justify-content-end">
-            <button id="filter-btn" class="btn btn-primary d-flex align-items-center ps-3 pe-3">
+            <button id="filter-attendance-btn" class="btn btn-primary d-flex align-items-center ps-3 pe-3 me-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
                 </svg>
                 <p class="ps-2">Filtrar</p>
+            </button>
+            <button id="export-attendance-btn" class="btn btn-primary d-flex align-items-center ps-3 pe-3 ms-2 me-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
+                    <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 2h-4v3h4zm0 4h-4v3h4zm0 4h-4v3h3a1 1 0 0 0 1-1zm-5 3v-3H6v3zm-5 0v-3H1v2a1 1 0 0 0 1 1zm-4-4h4V8H1zm0-4h4V4H1zm5-3v3h4V4zm4 4H6v3h4z"/>
+                </svg>
+                <p class="ps-2">Exportar</p>
             </button>
         </div>
     </div>`;
@@ -80,7 +98,7 @@ export async function generateAttendanceReport() {
     `<table id="attendance-table" class="table table-hover align-middle">
         <thead>
             <tr class="table-light">
-                <th class="p-2 text-center">NÚM EMP</th>
+                <th class="p-2 ps-4">No</th>
                 <th class="p-2">NOMBRE</th>
                 <th class="p-2 text-center">FECHA</th>
                 <th class="p-2 text-center">ENTRADA</th>
@@ -90,10 +108,12 @@ export async function generateAttendanceReport() {
         </thead>
         <tbody>
             <tr>
-                <td class="text-center" colspan="8">No hay asistencias registradas</td>
+                <td class="text-center" colspan="6">No hay asistencias registradas</td>
             </tr>
         </tbody>
     </table>`;
+
+    renderAttendanceReportTable();
 }
 
 // Función de renderizado para uniformes
@@ -113,11 +133,17 @@ export async function generateUniformsReport() {
             </select>
         </div>
         <div class="col-md d-flex align-items-center justify-content-end">
-            <button id="filter-btn" class="btn btn-primary d-flex align-items-center ps-3 pe-3">
+            <button id="filter-uniforms-btn" class="btn btn-primary d-flex align-items-center ps-3 pe-3 me-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
                 </svg>
                 <p class="ps-2">Filtrar</p>
+            </button>
+            <button id="export-uniforms-btn" class="btn btn-primary d-flex align-items-center ps-3 pe-3 ms-2 me-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
+                    <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 2h-4v3h4zm0 4h-4v3h4zm0 4h-4v3h3a1 1 0 0 0 1-1zm-5 3v-3H6v3zm-5 0v-3H1v2a1 1 0 0 0 1 1zm-4-4h4V8H1zm0-4h4V4H1zm5-3v3h4V4zm4 4H6v3h4z"/>
+                </svg>
+                <p class="ps-2">Exportar</p>
             </button>
         </div>
     </div>`;
@@ -129,18 +155,20 @@ export async function generateUniformsReport() {
             <tr class="table-light">
                 <th class="p-2 ps-4">No</th>
                 <th class="p-2">NOMBRE</th>
-                <th class="p-2">CALZADO</th>
-                <th class="p-2">PLAYERA</th>
-                <th class="p-2">CAMISA</th>
-                <th class="p-2">PANTALÓN</th>
+                <th class="text-center p-2">CALZADO</th>
+                <th class="text-center p-2">PLAYERA</th>
+                <th class="text-center p-2">CAMISA</th>
+                <th class="text-center p-2">PANTALÓN</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td class="text-center" colspan="8">No hay entregas registradas</td>
+                <td class="text-center" colspan="6">No hay entregas registradas</td>
             </tr>
         </tbody>
     </table>`;
+
+    renderUniformsReportTable();
 }
 
 // Función de renderizado para vacaciones
@@ -160,11 +188,17 @@ export async function generateVacationsReport() {
             </select>
         </div>
         <div class="col-md d-flex align-items-center justify-content-end">
-            <button id="filter-btn" class="btn btn-primary d-flex align-items-center ps-3 pe-3">
+            <button id="filter-vacations-btn" class="btn btn-primary d-flex align-items-center ps-3 pe-3 me-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
                 </svg>
                 <p class="ps-2">Filtrar</p>
+            </button>
+            <button id="export-vacations-btn" class="btn btn-primary d-flex align-items-center ps-3 pe-3 ms-2 me-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
+                    <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 2h-4v3h4zm0 4h-4v3h4zm0 4h-4v3h3a1 1 0 0 0 1-1zm-5 3v-3H6v3zm-5 0v-3H1v2a1 1 0 0 0 1 1zm-4-4h4V8H1zm0-4h4V4H1zm5-3v3h4V4zm4 4H6v3h4z"/>
+                </svg>
+                <p class="ps-2">Exportar</p>
             </button>
         </div>
     </div>`;
@@ -177,15 +211,17 @@ export async function generateVacationsReport() {
                 <th class="p-2 ps-4">No</th>
                 <th class="p-2">NOMBRE</th>
                 <th class="p-2">INGRESO</th>
-                <th class="p-2">TOMADOS</th>
-                <th class="p-2">RESTANTES</th>
-                <th class="p-2">PENDIENTES</th>
+                <th class="text-center p-2">TOTAL</th>
+                <th class="text-center p-2">TOMADOS</th>
+                <th class="text-center p-2">RESTANTES</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td class="text-center" colspan="8">No hay registros de vacaciones</td>
+                <td class="text-center" colspan="6">No hay registros de vacaciones</td>
             </tr>
         </tbody>
     </table>`;
+
+    renderVacationsReportTable();
 }
