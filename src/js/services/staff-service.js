@@ -72,6 +72,7 @@ export async function getActiveStaff() {
             estatus
             `)
         .eq('estatus', 'Activo')
+        .order('id_empleado', { ascending: true });
     
     if (error) {
         console.error('Error obteniendo empleados activos:', error);

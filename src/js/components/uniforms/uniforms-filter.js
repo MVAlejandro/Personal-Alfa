@@ -22,7 +22,7 @@ export async function uniformsFilter() {
 
     if (filterClean) {
         renderUniformsTable(allUniforms);
-        return;
+        return allUniforms;
     }
 
     // Aplicar filtros
@@ -37,4 +37,6 @@ export async function uniformsFilter() {
     });
 
     renderUniformsTable(filtered);
+
+    return filtered;
 }

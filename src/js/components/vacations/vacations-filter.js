@@ -21,7 +21,7 @@ export async function requestsFilter() {
 
     if (filterClean) {
         renderRequestsTable(allRequests);
-        return;
+        return allRequests;
     }
 
     // Aplicar filtros
@@ -33,4 +33,6 @@ export async function requestsFilter() {
     });
 
     renderRequestsTable(filtered);
+
+    return allRequests;
 }

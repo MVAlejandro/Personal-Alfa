@@ -1,7 +1,7 @@
 // Servicios Supabase
 import { getUniforms } from '../../services/uniforms-service.js'; 
 
-const perPage = 10;
+const perPage = 50;
 let currentPage = 1;
 let allUniforms = [];
 

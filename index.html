@@ -23,7 +23,14 @@
     <main>
         <header>
             <div class="container">
-                <h3 id="index-title">Administración del Personal</h3>
+                <div id="index-title" class="row">
+                    <div class="col-6 col-md-9 col-lg-10 ps-0">
+                        <h3 class="fw-bold">Administración del Personal</h3>
+                    </div>
+                    <div class="col-6 col-md-3 col-lg-2 d-flex justify-content-end pe-0">
+                        <h3 id="dayHeader" class="fw-bold">- / - / -</h3>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -85,38 +92,6 @@
         </section>
 
         <!-- SECCIÓN DE ESTADISTICAS GENERALES -->
-        <section id="last-requests" >
-            <div id="requests-container" class="container pt-3">
-                <div class="row ps-3 pe-3 pb-3">
-                    <div class="col-6 col-md-9 col-lg-10">
-                        <h4><a href="./vacations.html">Últimas solicitudes</a></h4>
-                    </div>
-                    <!-- Filtro de semana -->
-                    <div class="col-6 col-md-3 col-lg-2 d-flex justify-content-end">
-                        <h5 id="dayHeader" class="fw-bold">- / - / -</h5>
-                    </div>
-                </div>
-                <div id="vacations-table-container" class="container table-responsive row justify-content-center p-0">
-                    <div class="col-lg-10">
-                        <table id="vacations-table" class="table">
-                            <thead>
-                                <tr class="table-light">
-                                    <th class="p-3 ps-4">No</th>
-                                    <th class="p-3">NOMBRE / PUESTO</th>
-                                    <th class="p-3">INGRESO</th>
-                                    <th class="text-center p-3">DÍAS SOLICITADOS</th>
-                                    <th class="text-center p-3">ESTADO</th>
-                                    <th class="p-3">OBSERVACIONES</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div> 
-        </section>
 
         <!-- SECCIÓN DE ACCESOS DIRECTOS -->
         <section id="direct-access" class="pb-5 pt-3">
@@ -163,18 +138,6 @@
                             </svg>
                         </div>
                         <p class="fw-bold">Gestionar vacaciones</p>
-                    </div>
-                </a>
-                <a href="./reports.html" class="card access-card mt-2 text-decoration-none">
-                    <div id="report-access" class="card-body d-flex align-items-center">
-                        <div class="icon-square me-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-clipboard-data" viewBox="0 0 16 16">
-                                <path d="M4 11a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0zm6-4a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0zM7 9a1 1 0 0 1 2 0v3a1 1 0 1 1-2 0z"/>
-                                <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
-                                <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/>
-                            </svg>
-                        </div>
-                        <p class="fw-bold">Generar reportes</p>
                     </div>
                 </a>
             </div>

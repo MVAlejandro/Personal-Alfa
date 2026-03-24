@@ -14,7 +14,6 @@ import '../components/attendance/generate-form.js'
 import { initPage } from '../utils/session-validate.js';
 import { addExcelAttendances } from '../components/attendance/attendance-form.js'; 
 import { attendanceFilter } from '../components/attendance/attendance-filter.js';
-import { getFullAttendances } from '../services/attendance-service.js';
 
 let register = []
 
@@ -50,7 +49,7 @@ document.getElementById("export-btn").addEventListener('click', async function()
         return;
     }
 
-    const dataForExcel = await getFullAttendances(register)
+    const dataForExcel = register
 
     const formattedData = dataForExcel.map(r => ({
         "No. Empleado": r.numero_empleado,

@@ -15,18 +15,19 @@ import { initPage, validateUserRole } from '../utils/session-validate.js';
 import { addStaff } from '../components/staff/staff-add.js';
 import { editStaff } from '../components/staff/staff-edit.js';
 import { staffFilter } from '../components/staff/staff-filter.js';
-import { renderStaffList } from '../components/staff/staff-list.js';
 import { renderStaffEditForm } from '../components/staff/staff-edit.js';
+
+let register = []
 
 document.addEventListener('DOMContentLoaded', async () => {
     await initPage()
-    await renderStaffList();
+    register = await staffFilter();
 });
 
 // Declarar el botón de filtrado
-document.addEventListener('click', function(e) {
+document.addEventListener('click', async function(e) {
     if (e.target.id === 'filter-btn' || e.target.closest('#filter-btn')) {
-        staffFilter();
+        register = await staffFilter();
     }
 });
 
@@ -74,4 +75,23 @@ document.addEventListener('click', function(e) {
     if (e.target.id === 'btn-update-entry') {
         editStaff(e);
     }
+});
+
+// Declarar el botón de exportación a Excel
+document.getElementById("export-btn").addEventListener('click', async function() {
+    if (!register.length) {
+        Swal.fire({
+            title: 'Atención',
+            text: 'No hay datos para exportar.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
+    const ws = XLSX.utils.json_to_sheet(register);
+    const wb = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(wb, ws, `Kardex`);
+    XLSX.writeFile(wb, `reporte_empleados_${new Date().toISOString().split('T')[0]}.xlsx`);
 });

@@ -48,7 +48,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
                                 <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 2h-4v3h4zm0 4h-4v3h4zm0 4h-4v3h3a1 1 0 0 0 1-1zm-5 3v-3H6v3zm-5 0v-3H1v2a1 1 0 0 0 1 1zm-4-4h4V8H1zm0-4h4V4H1zm5-3v3h4V4zm4 4H6v3h4z"/>
                             </svg>
-                            <p class="ps-2">Exportar</p>
+                            <p class="ps-2">Reporte</p>
                         </button>
                     </div>
                 </div>
@@ -135,9 +135,18 @@
         <section id="attendance-filter pt-3 pb-3">
             <div id="attendance-filter-container" class="container pt-4 pb-3">
                 <div class="row ms-2 me-2">
-                    <div class="col-md-4 col-lg-3 d-flex align-items-center label-over-border">
+                    <div class="col-lg-3 col-md-4 d-flex align-items-center label-over-border">
                         <label for="day-filter" class="form-label m-2">Filtrar por Día</label>
                         <input type="text" id="day-filter" class="form-control" placeholder="Fecha a mostrar" autocomplete="off">
+                    </div>
+                    <div class="col-lg-3 col-md-4 d-flex align-items-center label-over-border">
+                        <label for="status-filter" class="form-label m-2">Filtrar por Tipo</label>
+                        <select class="form-select" id="status-filter">
+                            <option value="0">Todos</option>
+                            <option value="Presentes">Presentes</option>
+                            <option value="Retardos">Retardos</option>
+                            <option value="Faltas">Faltas</option>
+                        </select>
                     </div>
                     <div class="col-md d-flex align-items-center justify-content-end">
                         <button id="filter-btn" class="btn btn-primary d-flex align-items-center ps-3 pe-3">
@@ -154,11 +163,13 @@
         <!-- SECCIÓN DE REPORTE GENERAL -->
         <section id="attendance" class="pb-4">
             <div id="attendance-container" class="container table-responsive p-0">
-                <table id="attendance-table" class="table table-hover align-middle">
+                <p id="attendance-pages-results" class="text-end p-2 pe-4"></p>
+                <table id="attendance-table" class="table table-striped align-middle">
                     <thead>
                         <tr class="table-light">
                             <th class="p-2 text-center">NÚM EMP</th>
                             <th class="p-2">NOMBRE</th>
+                            <th class="p-2">DEPARTAMENTO</th>
                             <th class="p-2 text-center">FECHA</th>
                             <th class="p-2 text-center">ENTRADA</th>
                             <th class="p-2 text-center">SALIDA</th>
@@ -171,24 +182,6 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-        </section>
-
-        <!-- SECCIÓN DE PAGINACIÓN -->
-        <section id="attendance-pages" class="pb-4">
-            <div id="attendance-pages-container" class="container pt-3 pb-3">
-                <div class="row ms-2 align-items-center">
-                    <div class="col-6 col-lg-9">
-                        <p id="attendance-pages-results"></p>
-                    </div>
-                    <div class="col-6 col-lg-3">
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination mb-0">
-                                <!-- Los botones se llenan dinámicamente desde JS -->
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
             </div>
         </section>
     </main>

@@ -12,8 +12,7 @@ export default defineConfig({
                 staff: resolve(__dirname, 'staff.html'),
                 attendance: resolve(__dirname, 'attendance.html'),
                 uniforms: resolve(__dirname, 'uniforms.html'),
-                vacations: resolve(__dirname, 'vacations.html'),
-                reports: resolve(__dirname, 'reports.html'),
+                vacations: resolve(__dirname, 'vacations.html')
             }
         },
     },

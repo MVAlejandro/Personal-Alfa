@@ -18,7 +18,7 @@ export async function staffFilter() {
     // Si no hay filtros activos, mostrar todo
     if (filterClean) {
         renderStaffList(allStaff);
-        return;
+        return allStaff;
     }
 
     // Aplicar filtros
@@ -31,4 +31,6 @@ export async function staffFilter() {
     });
 
     renderStaffList(filtered);
+
+    return filtered;
 }

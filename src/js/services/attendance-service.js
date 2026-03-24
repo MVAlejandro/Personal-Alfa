@@ -9,13 +9,19 @@ export async function createAttendance(attendanceData) {
         .insert([attendanceData]);
 
     if (error) {
+        if (error.code === '23505' || error.code === 23505) {
+            // Si el registro está duplicado ignorarlo
+            return { inserted: false, duplicate: true };
+        }
         console.error(error);
         throw error;
-    } 
+    }
+
+    return { inserted: true, duplicate: false, data };
 }
 
 // Función para obtener asistencias
-export async function getAttendances() {
+export async function getSingleAttendances(date) {
     const { data, error } = await supabase
         .from('rh_asistencias')
         .select(`
@@ -27,9 +33,10 @@ export async function getAttendances() {
             id_empleado,
             rh_empleados (numero_empleado, nombre, puesto)
             `)
-        .order('id_empleado', { ascending: true })  
+        .eq('fecha_asistencia', date)
         .order('fecha_asistencia', { ascending: true })
-        .order('hora_asistencia', { ascending: true });
+        .order('hora_asistencia', { ascending: true })
+        .order('id_empleado', { ascending: true });
     
     if (error) {
         console.error('Error obteniendo asistencias:', error);

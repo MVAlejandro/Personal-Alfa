@@ -2,7 +2,7 @@
 import { getRequest } from '../../services/vacations-service.js'; 
 import { validateUserRole } from '../../utils/session-validate.js';
 
-const perPage = 10;
+const perPage = 50;
 let currentPage = 1;
 let allRequests = [];
 

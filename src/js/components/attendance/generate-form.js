@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="row ms-2 me-2 pb-3">
                     <div class="col label-over-border">
                         <label for="excel-data" class="m-2">Datos del registro</label>
-                        <textarea id="excel-data" class="form-control" rows="4" placeholder="Ingrese los datos desde Excel con formato:  'Tiempo, ID, Nombre, Verificación'"></textarea>
+                        <textarea id="excel-data" class="form-control" rows="4" placeholder="Ingrese los datos desde Excel con formato:  'Tiempo, ID, Verificación'"></textarea>
                         <p class="error invalid-feedback" id="error-excel-data" style="color: red;"></p>
                     </div>
                 </div>

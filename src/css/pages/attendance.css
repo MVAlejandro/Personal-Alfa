@@ -52,16 +52,20 @@ input:disabled {
 }
 
 /* Estilos de texto para la tabla */
+#attendance-pages-results{
+    font-size: 13px;
+}
+
+#attendance-table {
+    font-size: 14px !important;
+}
+
 th {
     color: var(--secondary) !important;
 }
 
 .attendance-departament, .attendance-entrance, .attendance-exit {
     color: var(--secondary) !important;
-}
-
-.attendance-departament {
-    font-size: 13px;
 }
 
 /* Estilos para impresión */

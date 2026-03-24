@@ -1,6 +1,6 @@
 // Servicios Supabase
-import { createAttendance, findEmployee } from '../../services/attendance-service.js'; 
-import { renderAttendancesTable } from './attendance-table.js'; 
+import { createAttendance, findEmployee } from '../../services/attendance-service.js';
+import { attendanceFilter } from './attendance-filter.js';
 // Utilidades
 import { textValidate, inputValidate } from '../../utils/form-validations.js';
 
@@ -67,20 +67,22 @@ export async function addExcelAttendances(event) {
     const rows = excelData.split('\n');
     let insertedAttendances = 0;
 
-    for (let row of rows) {
+    for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
         const columns = row.split('\t');
-        if (columns.length < 4) continue;
+        if (columns.length !== 3) {
+            continue;
+        }
 
         const tiempo_asistencia = columns[0].trim();
         const numero_empleado = columns[1].trim();
-        const nombre = columns[2].trim();
-        const verificación = columns[3].trim();
+        const verificación = columns[2].trim();
 
         const time = splitDateTime(tiempo_asistencia);
         const id_empleado = await findEmployee(numero_empleado);
 
         if (id_empleado == null) {
-            console.warn(`Empleado con número ${numero_empleado} no encontrado`)
+            console.warn(`Fila ${i + 1} ignorada: empleado con número ${numero_empleado} no encontrado`)
             continue
         }
 
@@ -89,15 +91,23 @@ export async function addExcelAttendances(event) {
             fecha_asistencia: time.date,
             hora_asistencia: time.hour,
             id_empleado,
-            nombre,
             verificación
         };
 
         try {
-            await createAttendance(newAssistanceData);
-            insertedAttendances++;
+            const result = await createAttendance(newAssistanceData);
+
+            if (result.duplicate) {
+                console.warn(`Fila ${i + 1} ignorada: registro duplicado para empleado ${numero_empleado} en ${time.date} ${time.hour}`);
+                continue;
+            }
+
+            if (result.inserted) {
+                insertedAttendances++;
+            }
+
         } catch (err) {
-            console.error('Error al insertar registro:', newAssistanceData, err);
+            console.error(`Error al insertar fila ${i + 1}:`, newAssistanceData, err);
             Swal.fire({
                 title: 'Oops...',
                 text: 'Ocurrió un error al registrar la asistencia.',
@@ -131,5 +141,5 @@ export async function addExcelAttendances(event) {
     }
 
     // Recarga la tabla con los datos actualizados
-    await renderAttendancesTable();
+    await attendanceFilter();
 };

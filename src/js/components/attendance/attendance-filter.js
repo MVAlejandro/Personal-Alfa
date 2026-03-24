@@ -1,5 +1,5 @@
 // Servicios Supabase
-import { getAttendances } from '../../services/attendance-service.js'; 
+import { getFullAttendances, getSingleAttendances } from '../../services/attendance-service.js'; 
 import { createResumeCards } from './attendance-cards.js';
 import { renderAttendancesTable } from './attendance-table.js';
 
@@ -22,31 +22,40 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Función de filtrado por valores seleccionados
 export async function attendanceFilter() {
-    // Verificar que existen los elementos
+    // Obtener valores de filtros
     const dayFilterEl = document.getElementById('day-filter');
+    const statusFilterEl = document.getElementById('status-filter');
 
-    if (!dayFilterEl) return;
+    const dayFilter = dayFilterEl?.value ? dayFilterEl.value.split(', ').map(d => d.trim()) : [];
 
-    // Tomar valores de los selects
-    const dayFilter = dayFilterEl.value ? dayFilterEl.value.split(', ').map(d => d.trim()) : [];
+    const statusFilter = statusFilterEl?.value || '0';
 
-    // Si no se selecciona un día generar tabla vacía
-    if (dayFilter.length === 0) {
-        renderAttendancesTable([]);
-        return;
-    }
+    // Obtener todos los registros de asistencia filtrados por día
+    allAttendances = await getSingleAttendances(dayFilter);
+    // Agrupar los registros de asistencia por empleado con sus horas de checado
+    const fullAttendances = await getFullAttendances(allAttendances);
 
-    // Obtener registros
-    allAttendances = await getAttendances();
-        if (!allAttendances) return;
+    // Generar las cards con los registros ya filtrados
+    createResumeCards(fullAttendances);
 
-    // Filtrar por día y empleado seleccionado
-    const filtered = allAttendances.filter(a => 
-        (dayFilter.length === 0 || dayFilter.includes(a.fecha_asistencia)));
+    // Filtrar el nuevo arreglo por tipo
+    const typeFiltered = fullAttendances.filter(a => {
+        if (statusFilter === '0') return true;
 
-    // Generar tabla y cards con los registros filtrados
-    renderAttendancesTable(filtered);
-    createResumeCards(filtered)
-    
-    return filtered
+        const entrada = a.entrada;
+
+        if (statusFilter === 'Faltas') return !entrada;
+        if (statusFilter === 'Presentes') return !!entrada;
+        if (statusFilter === 'Retardos') {
+            if (!entrada) return false;
+            return entrada > "08:05";
+        }
+
+        return true;
+    });
+
+    // Generar la tabla con los valores filtrados
+    renderAttendancesTable(typeFiltered);
+
+    return typeFiltered;
 }

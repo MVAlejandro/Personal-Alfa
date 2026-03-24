@@ -33,7 +33,8 @@ export async function getRequest() {
                 nombre, 
                 puesto, 
                 fecha_ingreso)
-            `);
+            `)
+        .order('id_solicitud', { ascending: true });
     
     if (error) {
         console.error('Error obteniendo solicitudes de vacaciones:', error);
@@ -134,6 +135,24 @@ function calculateVacation(antiguedad) {
 
     return 0;
 }
+// Función para determinar a qué período laboral pertenece una fecha de vacación
+function getVacationPeriod(fechaIngreso, fechaVacacion) {
+    const ingreso = new Date(fechaIngreso);
+    const vacacion = new Date(fechaVacacion);
+    
+    let anosCompletos = vacacion.getFullYear() - ingreso.getFullYear();
+    const mesIngreso = ingreso.getMonth();
+    const diaIngreso = ingreso.getDate();
+    const mesVacacion = vacacion.getMonth();
+    const diaVacacion = vacacion.getDate();
+    
+    if (mesVacacion < mesIngreso || (mesVacacion === mesIngreso && diaVacacion < diaIngreso)) {
+        anosCompletos--;
+    }
+    
+    // El período es años completos
+    return anosCompletos;
+}
 
 // Función para insertar nuevas vacaciones
 export async function createVacations(vacationsData) {
@@ -163,7 +182,8 @@ export async function getVacations() {
                     puesto, 
                     fecha_ingreso)
             )
-            `);
+            `)
+        .order('numero_empleado', { foreignTable: 'rh_solicitudes_vacaciones.rh_empleados', ascending: true });
     
     if (error) {
         console.error('Error obteniendo vacaciones:', error);
@@ -193,56 +213,88 @@ export async function getVacationsResume(allVacations) {
 
     for (const vacation of allVacations) {
         const key = vacation.id_empleado;
-
-        // Si no existe el empleado inicializarlo en 0
+        
         if (!grouped[key]) {
-            const antiguedad = calculateAntique(vacation.fecha_ingreso);
-            const dias_total = calculateVacation(antiguedad);
             grouped[key] = {
                 id_empleado: vacation.id_empleado,
                 numero_empleado: vacation.numero_empleado,
                 nombre: vacation.nombre,
                 puesto: vacation.puesto,
                 fecha_ingreso: vacation.fecha_ingreso,
-                antiguedad,
-                dias_tomados: [],
-                dias_total,
-                dias_pendientes: 0
+                periodos: {}
             };
         }
-        // Guardar los días que ya han sido aprovados
-        grouped[key].dias_tomados.push(vacation.fecha);
+        
+        // Determinar a qué período pertenece esta vacación
+        const periodo = getVacationPeriod(vacation.fecha_ingreso, vacation.fecha);
+        
+        if (!grouped[key].periodos[periodo]) {
+            // Obtener los días asignados para ese período
+            const diasAsignados = calculateVacation(periodo);
+            grouped[key].periodos[periodo] = {
+                periodo,
+                dias_asignados: diasAsignados,
+                dias_tomados: [],
+                dias_pendientes: diasAsignados
+            };
+        }
+        
+        grouped[key].periodos[periodo].dias_tomados.push(vacation.fecha);
+        grouped[key].periodos[periodo].dias_pendientes = 
+            grouped[key].periodos[periodo].dias_asignados - 
+            grouped[key].periodos[periodo].dias_tomados.length;
     }
 
-    // Convertir a arreglo
-    const formattedVacations = Object.values(grouped).map(emp => ({
-        ...emp,
-        dias_pendientes: emp.dias_total - emp.dias_tomados.length
-    }));
-
-    // Crear mapa para búsqueda rápida
-    const vacationMap = {};
-    formattedVacations.forEach(v => { vacationMap[v.id_empleado] = v; });
-
-    // Construir lista final incluyendo empleados sin registros
-    const fullList = activeStaff.map(emp => {
-        if (vacationMap[emp.id_empleado]) {
-            return vacationMap[emp.id_empleado];
-        }
-
-        // empleado sin vacaciones
-        const antiguedad = calculateAntique(emp.fecha_ingreso);
-        const dias_total = calculateVacation(antiguedad);
+    const formattedVacations = Object.values(grouped).map(emp => {
+        // Obtener los años cumplidos hasta hoy
+        const periodoActual = calculateAntique(emp.fecha_ingreso);
+        // Obtener días asignados para el período actual
+        const diasTotalActual = calculateVacation(periodoActual);
+        
+        const periodoActualInfo = emp.periodos[periodoActual] || {
+            dias_asignados: diasTotalActual,
+            dias_tomados: [],
+            dias_pendientes: diasTotalActual
+        };
+        
         return {
             id_empleado: emp.id_empleado,
             numero_empleado: emp.numero_empleado,
             nombre: emp.nombre,
             puesto: emp.puesto,
             fecha_ingreso: emp.fecha_ingreso,
-            antiguedad,
-            dias_tomados: [],
-            dias_total,
-            dias_pendientes: dias_total
+            antiguedad: periodoActual, // Período en el que está actualmente
+            dias_total: diasTotalActual,
+            dias_tomados_actual: periodoActualInfo.dias_tomados.length,
+            dias_pendientes_actual: periodoActualInfo.dias_pendientes,
+            historial_periodos: Object.values(emp.periodos)
+        };
+    });
+
+    const vacationMap = {};
+    formattedVacations.forEach(v => { vacationMap[v.id_empleado] = v; });
+
+    const fullList = activeStaff.map(emp => {
+        if (vacationMap[emp.id_empleado]) {
+            return vacationMap[emp.id_empleado];
+        }
+        
+        const aniosCumplidos = calculateAntique(emp.fecha_ingreso);
+        const periodoActual = aniosCumplidos + 1;
+        const diasTotalActual = calculateVacation(periodoActual);
+        
+        return {
+            id_empleado: emp.id_empleado,
+            numero_empleado: emp.numero_empleado,
+            nombre: emp.nombre,
+            puesto: emp.puesto,
+            fecha_ingreso: emp.fecha_ingreso,
+            antiguedad: periodoActual,
+            anos_cumplidos: aniosCumplidos,
+            dias_total: diasTotalActual,
+            dias_tomados_actual: 0,
+            dias_pendientes_actual: diasTotalActual,
+            historial_periodos: []
         };
     });
 

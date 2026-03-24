@@ -13,20 +13,23 @@ import '../components/vacations/generate-form.js'
 // Servicios Supabase
 import { initPage } from '../utils/session-validate.js'; 
 import { addRequests } from '../components/vacations/vacations-form.js';
+import { getVacationsResume } from '../services/vacations-service.js';
 import { requestsFilter } from '../components/vacations/vacations-filter.js';
-import { renderRequestsTable } from '../components/vacations/vacations-table.js';
 import { renderRequestsEditModal } from '../components/vacations/vacations-modal.js';
 import { generatePDF } from '../components/vacations/vacations-print.js';
 
+let register = []
+
 document.addEventListener('DOMContentLoaded', async () => {
     await initPage()
-    await renderRequestsTable();
+    // Generar tabla con todos los registros
+    register = await requestsFilter();
 });
 
 // Declarar el botón de filtrado
-document.addEventListener('click', function(e) {
+document.addEventListener('click', async function(e) {
     if (e.target.id === 'filter-btn' || e.target.closest('#filter-btn')) {
-        requestsFilter();
+        register = await requestsFilter();
     }
 });
 
@@ -75,4 +78,25 @@ deleteModal.addEventListener('shown.bs.modal', event => {
 // Al cerrar modal
 deleteModal.addEventListener('hidden.bs.modal', () => {
     document.getElementById('delete-id-vacation').value = '';
+});
+
+// Declarar el botón de exportación a Excel
+document.getElementById("export-btn").addEventListener('click', async function() {
+    if (!register.length) {
+        Swal.fire({
+            title: 'Atención',
+            text: 'No hay datos para exportar.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
+    const vacationsList = await getVacationsResume(register);
+
+    const ws = XLSX.utils.json_to_sheet(vacationsList);
+    const wb = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(wb, ws, `Vacaciones`);
+    XLSX.writeFile(wb, `reporte_vacaciones_${new Date().toISOString().split('T')[0]}.xlsx`);
 });

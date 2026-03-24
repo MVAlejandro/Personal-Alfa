@@ -13,19 +13,22 @@ import '../components/uniforms/generate-form.js'
 // Servicios Supabase
 import { initPage } from '../utils/session-validate.js'; 
 import { addUniforms } from '../components/uniforms/uniforms-form.js'; 
+import { getUniformsResume } from '../services/uniforms-service.js';
 import { uniformsFilter } from '../components/uniforms/uniforms-filter.js';
-import { renderUniformsTable } from '../components/uniforms/uniforms-table.js'; 
 import { renderUniformsEditModal } from '../components/uniforms/uniforms-modal.js';
 
+let register = []
+
 document.addEventListener('DOMContentLoaded', async () => {
-    await renderUniformsTable();
     await initPage()
+    // Generar tabla con todos los registros
+    register = await uniformsFilter();
 });
 
 // Declarar el botón de filtrado
-document.addEventListener('click', function(e) {
+document.addEventListener('click', async function(e) {
     if (e.target.id === 'filter-btn' || e.target.closest('#filter-btn')) {
-        uniformsFilter();
+        register = await uniformsFilter();
     }
 });
 
@@ -66,4 +69,25 @@ deleteModal.addEventListener('shown.bs.modal', event => {
 // Al cerrar modal
 deleteModal.addEventListener('hidden.bs.modal', () => {
     document.getElementById('delete-id-uniform').value = '';
+});
+
+// Declarar el botón de exportación a Excel
+document.getElementById("export-btn").addEventListener('click', async function() {
+    if (!register.length) {
+        Swal.fire({
+            title: 'Atención',
+            text: 'No hay datos para exportar.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
+    const uniformsList = await getUniformsResume(register);
+
+    const ws = XLSX.utils.json_to_sheet(uniformsList);
+    const wb = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(wb, ws, `Uniformes`);
+    XLSX.writeFile(wb, `reporte_uniformes_${new Date().toISOString().split('T')[0]}.xlsx`);
 });
