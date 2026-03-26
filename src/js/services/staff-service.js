@@ -27,6 +27,22 @@ export async function getStaff() {
     return data;
 }
 
+//Función para obtener la información de un empleado por id
+export async function findStaff(idStaff) {
+    const { data, error } = await supabase
+        .from('rh_empleados')
+        .select("*")
+        .eq('id_empleado', idStaff)
+        .maybeSingle();
+    
+    if (error) {
+        console.error('Error obteniendo empleados:', error);
+        throw error;
+    }
+    
+    return data;
+}
+
 // Función para editar empleados de la base
 export async function updateStaff(id_empleado, updatedData) {
     const { data, error } = await supabase

@@ -16,6 +16,7 @@ import { addStaff } from '../components/staff/staff-add.js';
 import { editStaff } from '../components/staff/staff-edit.js';
 import { staffFilter } from '../components/staff/staff-filter.js';
 import { renderStaffEditForm } from '../components/staff/staff-edit.js';
+import { findStaff } from '../services/staff-service.js';
 
 let register = []
 
@@ -32,8 +33,9 @@ document.addEventListener('click', async function(e) {
 });
 
 // Declarar los botones para manipulación del formulario
-document.getElementById("btn-add-staff").addEventListener("click", () => {
-    generateForm()
+document.getElementById("btn-add-staff").addEventListener("click", async () => {
+    await generateForm()
+
     const container = document.getElementById('form-buttons-container');
     container.innerHTML =
         `<button id="btn-cancel-entry" class="btn btn-outline-secondary m-1">Cancelar</button>
@@ -57,9 +59,13 @@ document.addEventListener('click', function(e) {
 // Llenar formulario con información del empleado
 const container = document.getElementById('staff-list');
 container.addEventListener('click', async function(e) {
-    const button = e.target.closest('button[staff-data]');
+    // Obtener el id del empleado del botón
+    const button = e.target.closest('button[staff-id]');
     if (!button) return;
-    const staffData = JSON.parse(button.getAttribute('staff-data'));
+    const staffId = JSON.parse(button.getAttribute('staff-id'));
+    // Bajar la información del empleado encontrado con su id
+    const staffData = await findStaff(staffId)
+    
     await generateForm();
     await renderStaffEditForm(staffData);
     const container = document.getElementById('form-buttons-container');

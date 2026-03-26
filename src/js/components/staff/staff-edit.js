@@ -7,19 +7,20 @@ import { validateForm } from './staff-form.js';
 
 // Función para cargar datos en el formulario
 export async function renderStaffEditForm(staff) {
-    // Insertar valores en los inputs
     document.getElementById("hidden-id-staff").value = staff.id_empleado;
     document.getElementById("id-staff").value = staff.numero_empleado;
     document.getElementById("staff-name").value = staff.nombre;
-    document.getElementById("staff-departament").value = staff.puesto;
-    document.getElementById("staff-birth").value = staff.fecha_nacimiento;
-    document.getElementById("staff-phone").value = staff.telefono;
+    document.getElementById("staff-departament").value = staff.id_departamento;
+    document.getElementById("staff-position").value = staff.puesto;
+    document.getElementById("staff-status").value = staff.estatus;
     document.getElementById("staff-entry").value = staff.fecha_ingreso;
+    document.getElementById("staff-removed").value = staff.fecha_baja || "";
+    document.getElementById("staff-birth").value = staff.fecha_nacimiento;
     document.getElementById("staff-nss").value = staff.nss;
     document.getElementById("staff-rfc").value = staff.rfc;
     document.getElementById("staff-curp").value = staff.curp;
+    document.getElementById("staff-phone").value = staff.telefono;
     document.getElementById("staff-direction").value = staff.direccion;
-    document.getElementById("staff-status").value = staff.estatus;
     document.getElementById("emergency-name").value = staff.nombre_emergencia;
     document.getElementById("emergency-relation").value = staff.parentesco_emergencia;
     document.getElementById("emergency-phone").value = staff.telefono_emergencia;
@@ -31,6 +32,10 @@ export async function renderStaffEditForm(staff) {
     document.getElementById("staff-tshirt").value = staff.playera;
     document.getElementById("staff-shirt").value = staff.camisa;
     document.getElementById("staff-pants").value = staff.pantalon;
+
+    if(document.getElementById("staff-status").value == "Inactivo") {
+        document.getElementById("staff-status").disabled = true;
+    }
 }
 
 export async function editStaff(event) {
@@ -46,6 +51,12 @@ export async function editStaff(event) {
     }
 
     const staffData = validateForm();
+
+    // Verificar que no haya fecha de baja al estar inactivo para registrar la fecha del cambio
+    if (staffData.estatus == "Inactivo" && staffData.fecha_baja == "") {
+        const today = new Date().toISOString().split('T')[0]
+        staffData.fecha_baja = today;
+    }
 
     if (!staffData) {
         Swal.fire({
@@ -73,6 +84,7 @@ export async function editStaff(event) {
             icon: 'success',
             confirmButtonText: 'OK'
         });
+console.log(staffData);
 
         // Recarga el contenedor con los datos actualizados
         await renderStaffEditForm(staffData);
@@ -84,6 +96,12 @@ export async function editStaff(event) {
             icon: 'error',
             confirmButtonText: 'OK'
         });
+    } finally {
+        // Restaurar estado del botón
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = `<p>Actualizar Empleado</p>`;
+        }
     }
 }
 

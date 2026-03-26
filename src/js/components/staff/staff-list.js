@@ -12,9 +12,6 @@ export async function renderStaffList(staffParam = null) {
         allStaff = await getStaff();
     }
 
-    // Ordenar el arreglo completo antes de paginar
-    allStaff.sort((a, b) => a.id_empleado - b.id_empleado);
-
     const container = document.getElementById('staff-list');
     // Limpiar lista antes de insertar
     container.innerHTML = '';
@@ -25,10 +22,18 @@ export async function renderStaffList(staffParam = null) {
     }
 
     allStaff.forEach(staff => {
+        // Determinar el color del nombre en base a su estado
+        let statusClass = '';
+        if (staff.estatus == "Activo") {
+            statusClass = 'black';
+        } else if (staff.estatus == 'Inactivo') {
+            statusClass = 'red';
+        }
+
         container.innerHTML += 
-        `<button type="button" class="list-group-item list-group-item-action" staff-data='${JSON.stringify(staff)}'>
+        `<button type="button" class="list-group-item list-group-item-action" staff-id='${staff.id_empleado}'>
             <div class="employee">
-                <p class="staff-name">${staff.nombre}</p>
+                <p class="staff-name" style="color:${statusClass} !important">${staff.nombre}</p>
                 <p class="staff-id">Num Empleado: ${staff.numero_empleado}</p>
             </div>
         </button>`;
