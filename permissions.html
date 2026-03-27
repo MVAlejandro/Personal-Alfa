@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <link rel="icon" type="image/png" href="./favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vacaciones - Pallets Alfa</title>
+    <title>Permisos - Pallets Alfa</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -24,24 +24,25 @@
     <!-- CONTENEDOR PRINCIPAL -->
     <main>
         <!-- SECCIÓN DEL ENCABEZADO -->
-        <section id="vacations-header">
-            <div id="vacations-header-container" class="container-fluid p-3">
+        <section id="permissions-header">
+            <div id="permissions-header-container" class="container-fluid p-3">
                 <div class="row">
                     <div class="col d-flex align-items-center">
                         <div class="icon-square ms-3 me-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-luggage" viewBox="0 0 16 16">
-                                <path d="M2.5 1a.5.5 0 0 0-.5.5V5h-.5A1.5 1.5 0 0 0 0 6.5v7a1.5 1.5 0 0 0 1 1.415v.335a.75.75 0 0 0 1.5 0V15H4v-1H1.5a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5V7h1v-.5A1.5 1.5 0 0 0 6.5 5H6V1.5a.5.5 0 0 0-.5-.5zM5 5H3V2h2z"/>
-                                <path d="M3 7.5a.5.5 0 0 0-1 0v5a.5.5 0 0 0 1 0zM11 6a1.5 1.5 0 0 1 1.5 1.5V8h2A1.5 1.5 0 0 1 16 9.5v5a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 14.5v-5A1.5 1.5 0 0 1 6.5 8h2v-.5A1.5 1.5 0 0 1 10 6zM9.5 7.5V8h2v-.5A.5.5 0 0 0 11 7h-1a.5.5 0 0 0-.5.5M6 9.5v5a.5.5 0 0 0 .5.5H7V9h-.5a.5.5 0 0 0-.5.5m7 5.5V9H8v6zm1.5 0a.5.5 0 0 0 .5-.5v-5a.5.5 0 0 0-.5-.5H14v6z"/>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-clipboard2-check" viewBox="0 0 16 16">
+                                <path d="M9.5 0a.5.5 0 0 1 .5.5.5.5 0 0 0 .5.5.5.5 0 0 1 .5.5V2a.5.5 0 0 1-.5.5h-5A.5.5 0 0 1 5 2v-.5a.5.5 0 0 1 .5-.5.5.5 0 0 0 .5-.5.5.5 0 0 1 .5-.5z"/>
+                                <path d="M3 2.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 0 0-1h-.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1H12a.5.5 0 0 0 0 1h.5a.5.5 0 0 1 .5.5v12a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5z"/>
+                                <path d="M10.854 7.854a.5.5 0 0 0-.708-.708L7.5 9.793 6.354 8.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"/>
                             </svg>
                         </div>
-                        <h4 class="fw-bold">Solicitudes de Vacaciones</h4>
+                        <h4 class="fw-bold">Permisos de Ausencia</h4>
                     </div>
                     <div class="col-md d-flex align-items-center justify-content-end d-none" data-rh-only>
-                        <button id="btn-add-vacations" class="btn btn-primary d-flex align-items-center ps-3 pe-3 me-2">
+                        <button id="btn-add-permission" class="btn btn-primary d-flex align-items-center ps-3 pe-3 me-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
                             </svg>
-                            <p class="ps-1">Solicitar Vacaciones</p>
+                            <p class="ps-1">Solicitar Permiso</p>
                         </button>
                         <button id="export-btn" class="btn btn-primary d-flex align-items-center ps-3 pe-3 ms-2 me-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
@@ -55,16 +56,16 @@
         </section>
 
         <!-- SECCIÓN DE FORMULARIO PARA AGREGAR REGISTRO -->
-        <section id="vacations-form">
+        <section id="permissions-form">
             
         </section>
 
         <!-- SECCIÓN DE FILTROS -->
-        <section id="vacations-filter">
+        <section id="permissions-filter">
             <div class="container pt-3 pb-3">
-                <h5>Relación de Solicitudes</h5>
+                <h5>Relación de Permisos</h5>
             </div>
-            <div id="vacations-filter-container" class="container pt-4 pb-3">
+            <div id="permissions-filter-container" class="container pt-4 pb-3">
                 <div class="row ms-2 me-2">
                     <div class="col-md-4 col-lg-3 d-flex align-items-center label-over-border">
                         <label for="search-filter" class="form-label m-2">Buscar por empleado</label>    
@@ -75,8 +76,8 @@
                         <select class="form-select" id="status-filter">
                             <option value="0">Todos</option>
                             <option value="Pendiente">Pendiente</option>
-                            <option value="Aceptada">Aceptada</option>
-                            <option value="Rechazada">Rechazada</option>
+                            <option value="Aceptado">Aceptado</option>
+                            <option value="Rechazado">Rechazado</option>
                         </select>
                     </div>
                     <div class="col-md d-flex align-items-center justify-content-end">
@@ -92,17 +93,18 @@
         </section>
 
         <!-- SECCIÓN DE REGISTROS -->
-        <section id="vacations-register">
+        <section id="permissions-register">
             <div class="container table-responsive p-0">
-                <table id="vacations-table" class="table table-hover align-middle">
+                <table id="permissions-table" class="table table-hover align-middle">
                     <thead>
                         <tr class="table-light">
-                            <th class="p-3 ps-4">No</th>
-                            <th class="p-3">NOMBRE / PUESTO</th>
-                            <th class="p-3">INGRESO</th>
-                            <th class="text-center p-3">DÍAS SOLICITADOS</th>
-                            <th class="text-center p-3">ESTADO</th>
-                            <th class="p-3">OBSERVACIONES</th>
+                            <th class="px-1 py-2 text-center">No</th>
+                            <th class="px-1 py-2">NOMBRE</th>
+                            <th class="px-1 py-2">INGRESO</th>
+                            <th class="px-1 py-2">TIPO</th>
+                            <th class="px-1 py-2 text-center">DÍAS SOLICITADOS</th>
+                            <th class="px-1 py-2 text-center">ESTADO</th>
+                            <th class="px-1 py-2">OBSERVACIONES</th>
                             <th class="d-none" data-rh-only></th>
                         </tr>
                     </thead>
@@ -114,11 +116,11 @@
         </section>
 
         <!-- SECCIÓN DE PAGINACIÓN -->
-        <section id="vacations-pages" class="pb-4">
-            <div id="vacations-pages-container" class="container pt-3 pb-3">
+        <section id="permissions-pages" class="pb-4">
+            <div id="permissions-pages-container" class="container pt-3 pb-3">
                 <div class="row ms-2 align-items-center">
                     <div class="col-6 col-lg-9">
-                        <p id="vacations-pages-results"></p>
+                        <p id="permissions-pages-results"></p>
                     </div>
                     <div class="col-6 col-lg-3">
                         <nav aria-label="Page navigation example">
@@ -152,28 +154,35 @@
                 </div>
                 <div class="modal-body">
                     <div class="container">
-                        <form id="vacations-edit-form">
-                            <input type="hidden" id="edit-id-vacation">
+                        <form id="permissions-edit-form">
+                            <input type="hidden" id="edit-id-permission">
+                            <input type="hidden" id="edit-id-staff">
                             <input type="hidden" id="edit-requested-dates">
+                            <div class="row ms-2 me-2 pt-3 pb-3">
+                                <div class="col-md-4 ms-auto label-over-border">
+                                    <label for="edit-date" class="form-label m-2">Fecha solicitud</label>
+                                    <input type="text" class="form-control" id="edit-date" disabled>
+                                </div>
+                            </div>
                             <div class="row ms-2 me-2 pt-3 pb-3">
                                 <div class="col-md-4 col-lg-6 label-over-border">
                                     <label for="edit-staff" class="form-label m-2">Empleado</label>
                                     <input type="text" class="form-control" id="edit-staff" disabled>
                                 </div>
                                 <div class="col-md-4 col-lg-3 label-over-border">
-                                    <label for="edit-entry" class="form-label m-2">Ingreso</label>
-                                    <input type="text" class="form-control" id="edit-entry" disabled>
-                                </div>
-                                <div class="col-md-4 col-lg-3 label-over-border">
                                     <label for="edit-antique" class="form-label m-2">Antigüedad</label>
                                     <input type="text" class="form-control" id="edit-antique" disabled>
+                                </div>
+                                <div class="col-md-4 col-lg-3 label-over-border">
+                                    <label for="edit-type" class="form-label m-2">Tipo Permiso</label>
+                                    <input type="text" class="form-control" id="edit-type" disabled>
                                 </div>
                             </div>
                             <!-- Campos editables -->
                             <div class="row ms-2 me-2 pt-2 pb-3">
                                 <div class="col-md-6 ps-4 label-over-border">
                                     <p class="fw-bold">Fechas solicitadas</p>
-                                    <ul id="vacations-dates-container">
+                                    <ul id="permissions-dates-container">
 
                                     </ul>
                                 </div>
@@ -182,8 +191,8 @@
                                     <select id="edit-status" class="form-select" aria-label="Default select example">
                                         <option value="0">Seleccione...</option>
                                         <option value="Pendiente">Pendiente</option>
-                                        <option value="Aceptada">Aceptada</option>
-                                        <option value="Rechazada">Rechazada</option>
+                                        <option value="Aceptado">Aceptado</option>
+                                        <option value="Rechazado">Rechazado</option>
                                     </select>
                                     <p class="error invalid-feedback" id="error-editStatus" style="color: red;"></p>
                                 </div>
@@ -226,7 +235,7 @@
                     <button type="button" class="btn-close me-3" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body m-auto pt-4 pb-4">
-                    <input type="hidden" id="delete-id-vacation">
+                    <input type="hidden" id="delete-id-permission">
                     <p>¿Está seguro de querer eliminar el registro seleccionado?</p>
                 </div>
                 <div class="modal-footer me-4">
@@ -248,6 +257,6 @@
     <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script type="module" src="/src/js/pages/vacations.js"></script>
+    <script type="module" src="/src/js/pages/permissions.js"></script>
 </body>
 </html>

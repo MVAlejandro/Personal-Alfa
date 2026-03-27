@@ -1,14 +1,8 @@
 // Servicios Supabase
-import { createUniforms } from '../../services/uniforms-service.js'; 
-import { renderUniformsTable } from './uniforms-table.js'; 
+import { createUniformsDeliver } from '../../services/uniforms-deliver-service.js'; 
+import { renderUniformsDeliverTable } from './uniforms-table.js'; 
 // Utilidades
-import { loadOptions } from '../../utils/load-select.js';
 import { textValidate, amountValidate, inputValidate, selectValidate } from '../../utils/form-validations.js';
-
-// Cargar los empleados en los formularios al iniciar la página
-document.addEventListener('DOMContentLoaded', async () => {
-    loadOptions('staff', 'rh_empleados', 'id_empleado', 'nombre', 'Seleccione...')
-})
 
 // Función para agregar una nueva entrega de uniformes
 export async function addUniforms(event) {
@@ -24,19 +18,22 @@ export async function addUniforms(event) {
     const form = document.getElementById('form-uniforms');
     // Referencias para validación
     const id_empleadoIn = document.getElementById("staff");
-    const tipo_prendaIn = document.getElementById("type");
+    const tipo_entregaIn = document.getElementById("type");
+    const tipo_prendaIn = document.getElementById("cloth");
     const tallaIn = document.getElementById("size");
     const cantidadIn = document.getElementById("quantity");
     const observacionesIn = document.getElementById("observations");
     // Referencias para errores
     const id_empleadoError = document.getElementById('error-staff');
-    const tipo_prendaError = document.getElementById('error-type');
+    const tipo_entregaError = document.getElementById('error-type');
+    const tipo_prendaError = document.getElementById('error-cloth');
     const tallaError = document.getElementById('error-size');
     const cantidadError = document.getElementById('error-quantity');
     const observacionesError = document.getElementById('error-observations');
 
     // Validaciones
     selectValidate(id_empleadoIn, id_empleadoError)
+    selectValidate(tipo_entregaIn, tipo_entregaError)
     selectValidate(tipo_prendaIn, tipo_prendaError)
     textValidate(tallaIn, tallaError)
     amountValidate(cantidadIn, cantidadError)
@@ -67,8 +64,9 @@ export async function addUniforms(event) {
     const fecha_entrega = new Date().toISOString().split('T')[0];
 
     // Guardar valores
-    const newUniformData = {
+    const newUDeliverData = {
         id_empleado: id_empleadoIn.value,
+        tipo_entrega: tipo_entregaIn.value,
         tipo_prenda: tipo_prendaIn.value,
         talla: tallaIn.value,
         cantidad: cantidadIn.value,
@@ -77,9 +75,9 @@ export async function addUniforms(event) {
     };
 
     try {
-        await createUniforms(newUniformData);
+        await createUniformsDeliver(newUDeliverData);
         Swal.fire({
-            title: 'Entrega de uniforme agregada con éxito.',
+            title: 'Entrega de uniforme registrada con éxito.',
             icon: 'success',
             confirmButtonText: 'OK'
         });
@@ -89,12 +87,12 @@ export async function addUniforms(event) {
         });
     
         // Recarga la tabla con los datos actualizados
-        await renderUniformsTable();
+        await renderUniformsDeliverTable();
     } catch (err) {
-        console.error('Error al agregar orden:', err);
+        console.error('Error al agregar entrega:', err);
         Swal.fire({
             title: 'Oops...',
-            text: 'Ocurrió un error al agregar la entrega de uniformes.',
+            text: 'Ocurrió un error al registrar la entrega de uniformes.',
             icon: 'error',
             confirmButtonText: 'OK'
         });

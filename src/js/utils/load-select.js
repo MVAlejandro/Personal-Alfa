@@ -9,7 +9,9 @@ export async function loadOptions(selectId, table, valueKey, textKey, selectedVa
         select.innerHTML = '';
     }
     
-    const { data, error } = await supabase.from(table).select(`${valueKey}, ${textKey}`)
+    const { data, error } = await supabase.from(table)
+        .select(`${valueKey}, ${textKey}`)
+        .order(`${textKey}`, { ascending: true }) 
 
     if (error) {
         console.error(`Error cargando ${table}:`, error)

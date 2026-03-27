@@ -1,6 +1,6 @@
 // Servicios Supabase
-import { getUniforms } from '../../services/uniforms-service.js'; 
-import { renderUniformsTable } from './uniforms-table.js'; 
+import { getUniformsDeliver } from '../../services/uniforms-deliver-service.js'; 
+import { renderUniformsDeliverTable } from './uniforms-table.js'; 
 
 let allUniforms = [];
 
@@ -11,7 +11,7 @@ export async function uniformsFilter() {
     const dateEnd = document.getElementById('date-end').value;
 
     // Obtener entregas
-    allUniforms = await getUniforms();
+    allUniforms = await getUniformsDeliver();
         if (!allUniforms) return;
 
     // Ordenar por fecha
@@ -21,7 +21,7 @@ export async function uniformsFilter() {
     const filterClean = dateStart === '' && dateEnd === '' && searchText === '';
 
     if (filterClean) {
-        renderUniformsTable(allUniforms);
+        renderUniformsDeliverTable(allUniforms);
         return allUniforms;
     }
 
@@ -36,7 +36,7 @@ export async function uniformsFilter() {
         return searchOk && startOk && endOk;
     });
 
-    renderUniformsTable(filtered);
+    renderUniformsDeliverTable(filtered);
 
     return filtered;
 }

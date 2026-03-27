@@ -1,22 +1,25 @@
 // Servicios Supabase
-import { updateRequest, deleteRequest, createVacations } from '../../services/vacations-service.js'; 
-import { renderRequestsTable } from './vacations-table.js'; 
+import { updatePermission, deletePermission } from '../../services/permissions-service.js'; 
+import { createAbsence } from '../../services/absences-service.js';
+import { renderPermissionsTable } from './permissions-table.js'; 
 // Utilidades
 import { textValidate, inputValidate, selectValidate } from '../../utils/form-validations.js';
 
 // Función para cargar datos en el modal
-export async function renderRequestsEditModal(solicitud) {
+export async function renderPermissionsEditModal(permiso) {
     // Insertar valores en los inputs
-    document.getElementById('edit-id-vacation').value = solicitud.id_solicitud;
-    document.getElementById('edit-requested-dates').value = solicitud.fechas_solicitadas;
-    document.getElementById('edit-staff').value = solicitud.nombre;
-    document.getElementById('edit-entry').value = solicitud.fecha_ingreso;
-    document.getElementById('edit-antique').value = `${solicitud.antiguedad} años`
-    document.getElementById('edit-status').value = solicitud.estado;
-    document.getElementById('edit-observations').value = solicitud.observaciones;
+    document.getElementById('edit-id-permission').value = permiso.id_permiso;
+    document.getElementById('edit-id-staff').value = permiso.id_empleado;
+    document.getElementById('edit-requested-dates').value = permiso.fechas_solicitadas;
+    document.getElementById('edit-date').value = permiso.fecha_solicitud;
+    document.getElementById('edit-staff').value = permiso.nombre;
+    document.getElementById('edit-antique').value = `${permiso.antiguedad} años`;
+    document.getElementById('edit-type').value = permiso.tipo;
+    document.getElementById('edit-status').value = permiso.estado;
+    document.getElementById('edit-observations').value = permiso.observaciones;
 
-    // Bloquear actualización de estado si no está pendiente la solicitud
-    if (solicitud.estado !== "Pendiente") {
+    // Bloquear actualización de estado si no está pendiente la permiso
+    if (permiso.estado !== "Pendiente") {
         document.getElementById('edit-status').disabled = true;
         document.getElementById('btn-edit-entry').disabled = true;
     } else {
@@ -25,11 +28,11 @@ export async function renderRequestsEditModal(solicitud) {
     }
 
     // Limpiar filas anteriores
-    const container = document.getElementById("vacations-dates-container");
+    const container = document.getElementById("permissions-dates-container");
     container.innerHTML = '';
 
-    // Obtener las fechs de la solicitud
-    const fechas = solicitud.fechas_solicitadas.split(', ');
+    // Obtener las fechs de la permiso
+    const fechas = permiso.fechas_solicitadas.split(', ');
 
     // Agregar una fila por cada producto
     for (const fecha of fechas) {
@@ -37,9 +40,9 @@ export async function renderRequestsEditModal(solicitud) {
     }
 }
 
-// Función para agregar campos de productos
+// Función para agregar una fecha visualmente en la lista
 async function addDateRow(dateValue = '') {
-    const container = document.getElementById("vacations-dates-container");
+    const container = document.getElementById("permissions-dates-container");
     const newDate = document.createElement("div");
     newDate.className = "ms-2 me-2 pb-1 date-item";
     newDate.innerHTML = 
@@ -49,9 +52,12 @@ async function addDateRow(dateValue = '') {
 
 // Función para guardar cambios
 document.getElementById('btn-edit-entry').addEventListener('click', async function() {
-    const form = document.getElementById('vacations-edit-form');
+    const id_permiso = document.getElementById('edit-id-permission').value;
+    const id_empleado = document.getElementById('edit-id-staff').value;
+    const dates = document.getElementById('edit-requested-dates').value;
+    const tipo = document.getElementById('edit-type').value;
+    const form = document.getElementById('permissions-edit-form');
     // Referencias para validación
-    const datesIn = document.getElementById('edit-requested-dates');
     const statusIn = document.getElementById('edit-status');
     const observacionesIn = document.getElementById('edit-observations');
 
@@ -73,24 +79,23 @@ document.getElementById('btn-edit-entry').addEventListener('click', async functi
         return
     }
 
-    const id_solicitud = document.getElementById('edit-id-vacation').value;
     const updatedData = {
         estado: statusIn.value,
         observaciones: observacionesIn.value
     };
 
     try {
-        await updateRequest(id_solicitud, updatedData);
+        await updatePermission(id_permiso, updatedData);
 
-        // Si se aprueba la solicitud, generar vacaciones
-        if (statusIn.value === "Aceptada") {
-            const fechas = datesIn.value.split(', ');
-            let insertedVacations = 0;
+        // Si se aprueba el permiso, generar ausencia
+        if (statusIn.value === "Aceptado") {
+            const fechas = dates.split(', ');
+            let insertedAbsences = 0;
 
             for (const fecha of fechas) {
                 try {
-                    await createVacations({ id_solicitud, fecha });
-                    insertedVacations++;
+                    await createAbsence({ id_permiso, id_empleado, fecha, tipo });
+                    insertedAbsences++;
                 } catch (err) {
                     console.error(`Error insertando fecha ${fecha}`, err);
                 }
@@ -99,8 +104,8 @@ document.getElementById('btn-edit-entry').addEventListener('click', async functi
             // Cerrar el modal y mostrar alerta
             bootstrap.Modal.getInstance(document.getElementById('edit-modal')).hide();
             Swal.fire({
-                title: 'Solicitud de vacaciones aprobada correctamente.',
-                text: `Se agregaron ${insertedVacations} días.`,
+                title: 'Permiso de ausencia aprobado correctamente.',
+                text: `Se agregaron ${insertedAbsences} días.`,
                 icon: 'success',
                 confirmButtonText: 'OK'
             });
@@ -108,7 +113,7 @@ document.getElementById('btn-edit-entry').addEventListener('click', async functi
             // Cerrar el modal y mostrar alerta
             bootstrap.Modal.getInstance(document.getElementById('edit-modal')).hide();
             Swal.fire({
-                title: 'Solicitud de vacaciones actualizada correctamente.',
+                title: 'Permiso de ausencia actualizado correctamente.',
                 icon: 'success',
                 confirmButtonText: 'OK'
             });
@@ -119,12 +124,12 @@ document.getElementById('btn-edit-entry').addEventListener('click', async functi
         });
 
         // Recarga la tabla con los datos actualizados
-        await renderRequestsTable();
+        await renderPermissionsTable();
     } catch (err) {
-        console.error('Error al actualizar la solicitud:', err);
+        console.error('Error al actualizar la permiso:', err);
         Swal.fire({
             title: 'Oops...',
-            text: 'Ocurrió un error al actualizar la solicitud de vacaciones.',
+            text: 'Ocurrió un error al actualizar el permiso de ausencia.',
             icon: 'error',
             confirmButtonText: 'OK'
         });
@@ -133,17 +138,17 @@ document.getElementById('btn-edit-entry').addEventListener('click', async functi
 
 // Eliminar entrada al dar click en el botón del modal
 document.getElementById('btn-delete-entry').addEventListener('click', async () => {
-    const idRequest = document.getElementById('delete-id-vacation').value;
-    await deleteRequest(idRequest);
+    const idPermission = document.getElementById('delete-id-permission').value;
+    await deletePermission(idPermission);
 
     // Cerrar el modal y mostrar alerta
     bootstrap.Modal.getInstance(document.getElementById('delete-modal')).hide();
     Swal.fire({
-        title: 'Solicitud de vacaciones eliminada correctamente.',
+        title: 'Permiso de ausencia eliminado correctamente.',
         icon: 'warning',
         confirmButtonText: 'OK'
     });
 
     // Recarga la tabla con los datos actualizados
-    await renderRequestsTable();
+    await renderPermissionsTable();
 });

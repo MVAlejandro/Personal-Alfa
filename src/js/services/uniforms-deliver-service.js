@@ -1,11 +1,11 @@
 import supabase from '../supabase/supabase-client.js'
 import { getActiveStaff } from './staff-service.js';
 
-// Función para insertar nuevos uniformes
-export async function createUniforms(uniformsData) {
+// Función para insertar nuevas entregas de uniformes
+export async function createUniformsDeliver(deliversData) {
     const { data, error } = await supabase
-        .from('rh_uniformes_entregados')
-        .insert([uniformsData]);
+        .from('rh_entregas_uniformes')
+        .insert([deliversData]);
 
     if (error) {
         console.error(error);
@@ -13,12 +13,13 @@ export async function createUniforms(uniformsData) {
     } 
 }
 
-// Función para obtener uniformes
-export async function getUniforms() {
+// Función para obtener las entregas de uniformes
+export async function getUniformsDeliver() {
     const { data, error } = await supabase
-        .from('rh_uniformes_entregados')
+        .from('rh_entregas_uniformes')
         .select(`
-            id_uniforme,
+            id_entrega,
+            tipo_entrega,
             tipo_prenda,
             talla,
             cantidad,
@@ -27,33 +28,34 @@ export async function getUniforms() {
             id_empleado,
             rh_empleados (numero_empleado, nombre, puesto)
             `)
-        .order('id_empleado', { ascending: true })  
+        .order('id_entrega', { ascending: true })  
     
     if (error) {
         console.error('Error obteniendo entregas de uniformes:', error);
         throw error;
     }
     
-    return data.map(uniforme => ({
-        id_uniforme: uniforme.id_uniforme,
-        tipo_prenda: uniforme.tipo_prenda,
-        talla: uniforme.talla,
-        cantidad: uniforme.cantidad,
-        fecha_entrega: uniforme.fecha_entrega,
-        observaciones: uniforme.observaciones,
-        id_empleado: uniforme.id_empleado,
-        numero_empleado: uniforme.rh_empleados?.numero_empleado,
-        nombre: uniforme.rh_empleados?.nombre,
-        puesto: uniforme.rh_empleados?.puesto
+    return data.map(entrega => ({
+        id_entrega: entrega.id_entrega,
+        tipo_entrega: entrega.tipo_entrega,
+        tipo_prenda: entrega.tipo_prenda,
+        talla: entrega.talla,
+        cantidad: entrega.cantidad,
+        fecha_entrega: entrega.fecha_entrega,
+        observaciones: entrega.observaciones,
+        id_empleado: entrega.id_empleado,
+        numero_empleado: entrega.rh_empleados?.numero_empleado,
+        nombre: entrega.rh_empleados?.nombre,
+        puesto: entrega.rh_empleados?.puesto
     }));
 }
 
-// Función para editar uniformes de la base
-export async function updateUniforms(id_uniforme, updatedData) {
+// Función para editar entregas de uniformes de la base
+export async function updateUniformsDeliver(id_entrega, updatedData) {
     const { data, error } = await supabase
-        .from('rh_uniformes_entregados')
+        .from('rh_entregas_uniformes')
         .update(updatedData)
-        .eq('id_uniforme', id_uniforme);
+        .eq('id_entrega', id_entrega);
 
     if (error) {
         console.error('Error al actualizar:', error);
@@ -61,17 +63,17 @@ export async function updateUniforms(id_uniforme, updatedData) {
     }
 }
 
-// Función para eliminar uniformes de la base
-export async function deleteUniforms(idUniforms) {
+// Función para eliminar entregas de uniformes de la base
+export async function deleteUniformsDeliver(idUniforms) {
     if (!idUniforms) {
         alert('No se pudo obtener el ID de la entrega de uniforme a eliminar.');
         return;
     }
 
     const { error } = await supabase
-        .from('rh_uniformes_entregados')
+        .from('rh_entregas_uniformes')
         .delete()
-        .eq('id_uniforme', idUniforms);
+        .eq('id_entrega', idUniforms);
 
     if (error) {
         console.error('Error eliminando uniforme:', error);

@@ -1,62 +1,61 @@
 // Servicios Supabase
-import { getUniforms } from '../../services/uniforms-service.js'; 
+import { getUniformsDeliver } from '../../services/uniforms-deliver-service.js'; 
+import { validateUserRole } from '../../utils/session-validate.js';
 
 const perPage = 50;
 let currentPage = 1;
-let allUniforms = [];
+let allDelivers = [];
 
 // Función para crear la tabla y la paginación
-export async function renderUniformsTable(uniformsParam = null) {
+export async function renderUniformsDeliverTable(uniformsDeliverParam = null) {
     // Obtener uniformes si no se pasa una lista filtrada
-    if (uniformsParam) {
-        allUniforms = uniformsParam;
+    if (uniformsDeliverParam) {
+        allDelivers = uniformsDeliverParam;
     } else {
-        allUniforms = await getUniforms();
+        allDelivers = await getUniformsDeliver();
     }
-
-    // Ordenar el arreglo completo antes de paginar
-    allUniforms.sort((a, b) => a.id_uniforme - b.id_uniforme);
     
-    const tbody = document.querySelector('#uniforms-table tbody');
+    const tbody = document.querySelector('#uniforms-deliver-table tbody');
     const pagination = document.querySelector('#uniforms-pages .pagination');
     const resultsText = document.getElementById('uniforms-pages-results');
 
     // Calcular entradas de la página actual
     const pageStart = (currentPage - 1) * perPage;
     const pageEnd = pageStart + perPage;
-    const uniforms = allUniforms.slice(pageStart, pageEnd);
+    const delivers = allDelivers.slice(pageStart, pageEnd);
 
     // Limpiar tabla antes de insertar
     tbody.innerHTML = '';
 
-    if (!uniforms || uniforms.length === 0) {
+    if (!delivers || delivers.length === 0) {
         tbody.innerHTML = `<tr><td class="text-center" colspan="8">No hay entregas de uniformes registradas</td></tr>`;
-        resultsText.textContent = `Mostrando 0 de ${allUniforms.length} resultados`;
+        resultsText.textContent = `Mostrando 0 de ${allDelivers.length} resultados`;
         pagination.innerHTML = '';
         return;
     }
 
-    for (const uniforme of uniforms) {
+    for (const entrega of delivers) {
         tbody.innerHTML +=
         `<tr>
-            <td class="uniform-employee-id fw-bold p-3 ps-4">${uniforme.numero_empleado}</td>
-            <td class="p-3">
-                <p class="uniform-employee">${uniforme.nombre}</p>
-                <p class="uniform-departament">${uniforme.puesto}</p>
+            <td class="uniform-employee-id text-center fw-bold p-2">${entrega.numero_empleado}</td>
+            <td class="p-1">
+                <p class="uniform-employee">${entrega.nombre}</p>
+                <p class="uniform-departament">${entrega.puesto}</p>
             </td>
-            <td class="p-3">
-                <p class="uniform-type">${uniforme.tipo_prenda}</p>
-                <p class="uniform-quantity">Cant ${uniforme.cantidad}</p>
+            <td class="uniform-type p-1">${entrega.tipo_entrega}</td>
+            <td class="p-1">
+                <p class="uniform-cloth">${entrega.tipo_prenda}</p>
+                <p class="uniform-quantity">Cant ${entrega.cantidad}</p>
             </td>
-            <td class="uniform-size p-3">${uniforme.talla}</td>
-            <td class="uniform-date p-3">${uniforme.fecha_entrega}</td>
-            <td class="uniform-observations p-3">${uniforme.observaciones}</td>
-            <td class="uniform-controls text-end p-3 pe-4 d-none" data-rh-only>
+            <td class="uniform-size p-1">${entrega.talla}</td>
+            <td class="uniform-date p-1">${entrega.fecha_entrega}</td>
+            <td class="uniform-observations p-1">${entrega.observaciones}</td>
+            <td class="uniform-controls text-end p-2 pe-4 d-none" data-rh-only>
                 <div class="action-buttons">
                     <button class="btn btn-edit" 
                         data-bs-target="#edit-modal" 
                         data-bs-toggle="modal"
-                        uniform-data='${JSON.stringify(uniforme)}'>
+                        uniform-data='${JSON.stringify(entrega)}'>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
                             <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
                         </svg>
@@ -64,7 +63,7 @@ export async function renderUniformsTable(uniformsParam = null) {
                     <button class="btn btn-delete" 
                         data-bs-target="#delete-modal" 
                         data-bs-toggle="modal"
-                        data-id='${uniforme.id_uniforme}'>
+                        data-id='${entrega.id_entrega}'>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
                             <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
                         </svg>
@@ -75,7 +74,7 @@ export async function renderUniformsTable(uniformsParam = null) {
     };
 
     // Actualizar texto de resultados
-    const total = allUniforms.length;
+    const total = allDelivers.length;
     resultsText.textContent = `Mostrando ${Math.min(pageStart + 1, total)} a ${Math.min(pageEnd, total)} de ${total} resultados`;
 
     // Crear paginación
@@ -144,9 +143,9 @@ export async function renderUniformsTable(uniformsParam = null) {
                 currentPage = parseInt(type);
             }
 
-            renderUniformsTable();
+            renderUniformsDeliverTable();
         });
     });
     
-    // validateUserRole()
+    validateUserRole()
 }

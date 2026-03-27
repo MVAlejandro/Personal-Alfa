@@ -94,15 +94,16 @@
         <!-- SECCIÓN DE REGISTROS -->
         <section id="uniforms-register">
             <div class="container table-responsive p-0">
-                <table id="uniforms-table" class="table table-hover align-middle">
+                <table id="uniforms-deliver-table" class="table table-hover align-middle">
                     <thead>
                         <tr class="table-light">
-                            <th class="p-3 ps-4">No</th>
-                            <th class="p-3">NOMBRE / PUESTO</th>
-                            <th class="p-3">TIPO / CANT</th>
-                            <th class="p-3">TALLA</th>
-                            <th class="p-3">FECHA ENTREGA</th>
-                            <th class="p-3">OBSERVACIONES</th>
+                            <th class="px-1 py-2 text-center">No</th>
+                            <th class="px-1 py-2">NOMBRE</th>
+                            <th class="px-1 py-2">TIPO</th>
+                            <th class="px-1 py-2">PRENDA</th>
+                            <th class="px-1 py-2">TALLA</th>
+                            <th class="px-1 py-2">FECHA</th>
+                            <th class="px-1 py-2">OBSERVACIONES</th>
                             <th class="d-none" data-rh-only></th>
                         </tr>
                     </thead>
@@ -152,20 +153,32 @@
                 </div>
                 <div class="modal-body">
                     <div class="container">
-                        <form id="uniforms-edit-form">
-                            <input type="hidden" id="edit-id-uniform">
+                        <form id="delivers-edit-form">
+                            <input type="hidden" id="edit-id-deliver">
                             <div class="row ms-2 me-2 pt-3 pb-3">
                                 <div class="col-md-4 ms-auto label-over-border">
                                     <label for="edit-date" class="form-label m-2">Fecha</label>
                                     <input type="text" class="form-control" id="edit-date" disabled>
                                 </div>
                             </div>
-                            <!-- Campos editables -->
                             <div class="row ms-2 me-2 pt-3 pb-3">
-                                <div class="col-md-4 label-over-border">
+                                <div class="col-md-8 label-over-border">
+                                    <label for="edit-staff" class="form-label m-2">Empleado</label>
+                                    <input type="text" class="form-control" id="edit-staff" disabled>
+                                    <p class="error invalid-feedback" id="error-editStaff" style="color: red;"></p>
+                                </div>
+                                <div class="col-md-4 ms-auto label-over-border">
                                     <label for="edit-type" class="form-label m-2">Tipo</label>
                                     <input type="text" class="form-control" id="edit-type" disabled>
                                     <p class="error invalid-feedback" id="error-editType" style="color: red;"></p>
+                                </div>
+                            </div>
+                            <!-- Campos editables -->
+                            <div class="row ms-2 me-2 pt-3 pb-3">
+                                <div class="col-md-4 label-over-border">
+                                    <label for="edit-cloth" class="form-label m-2">Prenda</label>
+                                    <input type="text" class="form-control" id="edit-cloth" disabled>
+                                    <p class="error invalid-feedback" id="error-editCloth" style="color: red;"></p>
                                 </div>
                                 <div class="col-md-4 label-over-border">
                                     <label for="edit-size" class="form-label m-2">Talla</label>
@@ -179,12 +192,7 @@
                                 </div>
                             </div>
                             <div class="row ms-2 me-2 pt-3 pb-3">
-                                <div class="col-md-6 label-over-border">
-                                    <label for="edit-staff" class="form-label m-2">Empleado</label>
-                                    <input type="text" class="form-control" id="edit-staff" disabled>
-                                    <p class="error invalid-feedback" id="error-editStaff" style="color: red;"></p>
-                                </div>
-                                <div class="col-md-6 label-over-border">
+                                <div class="col label-over-border">
                                     <label for="edit-observations" class="form-label m-2">Observaciones</label>
                                     <input type="text" class="form-control" id="edit-observations">
                                     <p class="error invalid-feedback" id="error-editObservations" style="color: red;"></p>
@@ -220,7 +228,7 @@
                     <button type="button" class="btn-close me-3" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body m-auto pt-4 pb-4">
-                    <input type="hidden" id="delete-id-uniform">
+                    <input type="hidden" id="delete-id-deliver">
                     <p>¿Está seguro de querer eliminar el registro seleccionado?</p>
                 </div>
                 <div class="modal-footer me-4">

@@ -13,7 +13,7 @@ import '../components/uniforms/generate-form.js'
 // Servicios Supabase
 import { initPage } from '../utils/session-validate.js'; 
 import { addUniforms } from '../components/uniforms/uniforms-form.js'; 
-import { getUniformsResume } from '../services/uniforms-service.js';
+import { getUniformsResume } from '../services/uniforms-deliver-service.js';
 import { uniformsFilter } from '../components/uniforms/uniforms-filter.js';
 import { renderUniformsEditModal } from '../components/uniforms/uniforms-modal.js';
 
@@ -63,12 +63,12 @@ const deleteModal = document.getElementById('delete-modal');
 // Al abrir modal
 deleteModal.addEventListener('shown.bs.modal', event => {
     const button = event.relatedTarget;
-    const idUniform = button.dataset.id;
-    document.getElementById('delete-id-uniform').value = idUniform;
+    const idDeliver = button.dataset.id;
+    document.getElementById('delete-id-deliver').value = idDeliver;
 });
 // Al cerrar modal
 deleteModal.addEventListener('hidden.bs.modal', () => {
-    document.getElementById('delete-id-uniform').value = '';
+    document.getElementById('delete-id-deliver').value = '';
 });
 
 // Declarar el botón de exportación a Excel

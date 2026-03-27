@@ -2,24 +2,25 @@
 import { loadOptions } from "../../utils/load-select";
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const container = document.getElementById('uniforms-form');
+    const container = document.getElementById('permissions-form');
 
     container.innerHTML = 
-        `<div id="uniforms-form-container" class="container pt-4 pb-3 collapse">
+        `<div id="permissions-form-container" class="container pt-4 pb-3 collapse">
             <div class="row pb-3">
                 <div class="col d-flex align-items-center">
                     <div class="ms-4 me-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
-                            <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"/>
-                            <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-clipboard2-minus" viewBox="0 0 16 16">
+                            <path d="M9.5 0a.5.5 0 0 1 .5.5.5.5 0 0 0 .5.5.5.5 0 0 1 .5.5V2a.5.5 0 0 1-.5.5h-5A.5.5 0 0 1 5 2v-.5a.5.5 0 0 1 .5-.5.5.5 0 0 0 .5-.5.5.5 0 0 1 .5-.5z"/>
+                            <path d="M3 2.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 0 0-1h-.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1H12a.5.5 0 0 0 0 1h.5a.5.5 0 0 1 .5.5v12a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5z"/>
+                            <path d="M6 8a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1z"/>
                         </svg>
                     </div>
-                    <h5>Nueva Entrega de Uniformes</h5>
+                    <h5>Nuevo Permiso de Ausencia</h5>
                 </div>
             </div>
-            <form id="form-uniforms">
+            <form id="form-permissions">
                 <div class="row ms-2 me-2 pt-3 pb-3">
-                    <div class="col-md-3 col-lg-3 label-over-border">
+                    <div class="col-3 label-over-border">
                         <label for="staff" class="form-label m-2">Empleado</label>
                         <select id="staff" class="form-select" aria-label="Default select example">
                             <option value="0">Seleccione...</option>
@@ -27,39 +28,23 @@ document.addEventListener("DOMContentLoaded", async () => {
                         </select>
                         <p class="error invalid-feedback" id="error-staff" style="color: red;"></p>
                     </div>
-                    <div class="col-md-3 col-lg-3 label-over-border">
-                        <label for="type" class="form-label m-2">Tipo Entrega</label>
+                    <div class="col-md-3 col-lg-2 label-over-border">
+                        <label for="type" class="form-label m-2">Tipo Permiso</label>
                         <select id="type" class="form-select" aria-label="Default select example">
                             <option value="0">Seleccione...</option>
-                            <option value="Entrega">Entrega</option>
-                            <option value="Devolución">Devolución</option>
+                            <option value="Permiso">Permiso</option>
+                            <option value="Vacaciones">Vacaciones</option>
+                            <option value="Incapacidad">Incapacidad</option>
+                            <option value="Falta">Falta</option>
                         </select>
                         <p class="error invalid-feedback" id="error-type" style="color: red;"></p>
                     </div>
-                    <div class="col-md-3 col-lg-3 label-over-border">
-                        <label for="cloth" class="form-label m-2">Tipo Prenda</label>
-                        <select id="cloth" class="form-select" aria-label="Default select example">
-                            <option value="0">Seleccione...</option>
-                            <option value="Calzado">Calzado</option>
-                            <option value="Playera">Playera</option>
-                            <option value="Camisa">Camisa</option>
-                            <option value="Pantalón">Pantalón</option>
-                        </select>
-                        <p class="error invalid-feedback" id="error-cloth" style="color: red;"></p>
+                    <div class="col-3 label-over-border">
+                        <label for="permission-dates" class="form-label m-2">Periodo</label>
+                        <input type="text" id="permission-dates" class="form-control" placeholder="Periodo a tomar">
+                        <p class="error invalid-feedback" id="error-permission-dates" style="color: red;"></p>
                     </div>
-                    <div class="col-md-3 col-lg-3 label-over-border">
-                        <label for="size" class="form-label m-2">Talla</label>
-                        <input type="text" id="size" class="form-control" placeholder="Número o texto">
-                        <p class="error invalid-feedback" id="error-size" style="color: red;"></p>
-                    </div>
-                </div>
-                <div class="row ms-2 me-2 pt-3 pb-3">
-                    <div class="col-md-3 col-lg-2 label-over-border ms-auto">
-                        <label for="quantity" class="form-label m-2">Cantidad</label>
-                        <input type="number" id="quantity" class="form-control no-arrows" placeholder="Cant.">
-                        <p class="error invalid-feedback" id="error-quantity" style="color: red;"></p>
-                    </div>
-                    <div class="col-md-9 col-lg-4 label-over-border">
+                    <div class="col-md-3 col-lg-4 label-over-border">
                         <label for="observations" class="form-label m-2">Observaciones</label>
                         <input type="text" id="observations" class="form-control" placeholder="Observaciones adicionales">
                         <p class="error invalid-feedback" id="error-observations" style="color: red;"></p>
@@ -81,13 +66,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Cargar los empleados en el formulario
     await loadOptions('staff', 'rh_empleados', 'id_empleado', 'nombre')
 
-    const uniformsContainer = document.getElementById('uniforms-form-container');
+    const permissionsContainer = document.getElementById('permissions-form-container');
 
     // Crear instancia única de Collapse
-    const collapseInstance = new bootstrap.Collapse(uniformsContainer, { toggle: false });
-    const form = document.getElementById('form-uniforms');
+    const collapseInstance = new bootstrap.Collapse(permissionsContainer, { toggle: false });
+    const form = document.getElementById('form-permissions');
 
-    document.getElementById('btn-add-uniforms').addEventListener('click', () => {
+    document.getElementById('btn-add-permission').addEventListener('click', () => {
         collapseInstance.show();
     });
 
@@ -97,5 +82,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         form.querySelectorAll('.is-valid, .is-invalid').forEach(e => {
             e.classList.remove('is-valid', 'is-invalid');
         });
+    });
+
+    flatpickr("#permission-dates", {
+        locale: {
+            ...flatpickr.l10ns.es,
+            firstDayOfWeek: 0
+        },
+        mode: "multiple",
+        dateFormat: "Y-m-d",
+        disable: [
+            date => date.getDay() === 0 || date.getDay() === 6
+        ]
     });
 });

@@ -1,17 +1,11 @@
 // Servicios Supabase
-import { createRequest, createVacations } from '../../services/vacations-service.js'; 
-import { renderRequestsTable } from './vacations-table.js'; 
+import { createPermission } from '../../services/permissions-service.js';
+import { renderPermissionsTable } from './permissions-table.js'; 
 // Utilidades
-import { loadOptions } from '../../utils/load-select.js';
 import { textValidate, inputValidate, selectValidate } from '../../utils/form-validations.js';
 
-// Cargar los empleados en los formularios al iniciar la página
-document.addEventListener('DOMContentLoaded', async () => {
-    loadOptions('staff', 'rh_empleados', 'id_empleado', 'nombre', 'Seleccione...')
-})
-
 // Función para agregar una nueva solicitud
-export async function addRequests(event) {
+export async function addPermission(event) {
     event.preventDefault()
 
     // Capturar el botón que disparó el evento
@@ -21,18 +15,21 @@ export async function addRequests(event) {
         btn.innerHTML = 'Subiendo...';
     }
 
-    const form = document.getElementById('form-vacations');
+    const form = document.getElementById('form-permissions');
     // Referencias para validación
     const id_empleadoIn = document.getElementById("staff");
-    const fechaIn = document.getElementById("vacation-dates");
+    const tipoIn = document.getElementById("type");
+    const fechaIn = document.getElementById("permission-dates");
     const observacionesIn = document.getElementById("observations");
     // Referencias para errores
     const id_empleadoError = document.getElementById('error-staff');
-    const fechaError = document.getElementById('error-vacation-dates');
+    const tipoError = document.getElementById("error-type");
+    const fechaError = document.getElementById('error-permission-dates');
     const observacionesError = document.getElementById('error-observations');
 
     // Validaciones
     selectValidate(id_empleadoIn, id_empleadoError)
+    selectValidate(tipoIn, tipoError)
     textValidate(fechaIn, fechaError)
     textValidate(observacionesIn, observacionesError)
 
@@ -61,8 +58,9 @@ export async function addRequests(event) {
     const fecha_solicitud = new Date().toISOString().split('T')[0];
 
     // Guardar valores
-    const newRequestData = {
+    const newPermissionData = {
         id_empleado: id_empleadoIn.value,
+        tipo: tipoIn.value,
         fecha_solicitud,
         fechas_solicitadas: fechaIn.value,
         estado,
@@ -70,9 +68,9 @@ export async function addRequests(event) {
     };
 
     try {
-        await createRequest(newRequestData);
+        await createPermission(newPermissionData);
         Swal.fire({
-            title: 'Solicitud de vacaciones generada con éxito',
+            title: 'Solicitud de permiso generada con éxito',
             icon: 'success',
             confirmButtonText: 'OK'
         });
@@ -82,12 +80,12 @@ export async function addRequests(event) {
         });
     
         // Recarga la tabla con los datos actualizados
-       await renderRequestsTable();
+       await renderPermissionsTable();
     } catch (err) {
         console.error('Error al generar solicitud:', err);
         Swal.fire({
             title: 'Oops...',
-            text: 'Ocurrió un error al solicitar las vacaciones.',
+            text: 'Ocurrió un error al solicitar el permiso.',
             icon: 'error',
             confirmButtonText: 'OK'
         });

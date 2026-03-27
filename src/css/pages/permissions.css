@@ -1,15 +1,15 @@
 
 /* Estilos de la página y estructura */
-#vacations-header {
+#permissions-header {
     margin-top: 0;
 }
 
-#vacations-header-container {
+#permissions-header-container {
     background-color: var(--background-light) !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-#vacations-form-container, #vacations-filter-container, .table-responsive, #vacations-pages-container {
+#permissions-form-container, #permissions-filter-container, .table-responsive, #permissions-pages-container {
     background-color: var(--background-light) !important;
     border-radius: 1rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -19,7 +19,7 @@ th {
     color: var(--secondary) !important;
 }
 
-#vacation-dates {
+#permission-dates {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: calc(100% - 12px) center;
@@ -27,22 +27,22 @@ th {
     padding-right: 24px;
 }
 
-#vacations-dates-container {
+#permissions-dates-container {
     padding-left: 1rem;
     margin-bottom: 0;
 }
 
 /* Estilos de texto para la tabla */
-.vacation-entry-date {
+.permission-entry-date {
     font-weight: bold;
 }
 
-.vacation-departament, .vacation-antique, #vacations-pages-results {
+.permission-departament, .permission-antique, #permissions-pages-results {
     font-size: 13px;
     color: var(--secondary) !important;
 }
 
-.vacation-status {
+.permission-status {
     padding: 5px 12px 5px 12px;
     border-radius: 50px;
     font-weight: bold;

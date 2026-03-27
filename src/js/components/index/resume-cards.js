@@ -1,7 +1,7 @@
 // Servicios Supabase
 import { getActiveStaff } from "../../services/staff-service";
 import { renderPresentCard, renderStaffCard } from "../attendance/attendance-cards";
-import { getRequest } from "../../services/vacations-service";
+import { getRequest } from "../../services/permissions-service";
 
 let allStaff = [];
 let allRequests = [];
