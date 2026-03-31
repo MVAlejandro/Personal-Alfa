@@ -30,6 +30,10 @@ th {
     color: var(--secondary) !important;
 }
 
+.extra-date, .extra-time {
+    color: var(--secondary) !important;
+}
+
 /* Estilos para modal */
 @media (max-width: 768px) {
     .date-item {

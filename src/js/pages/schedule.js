@@ -12,7 +12,8 @@ import '../components/navbar.js';
 // Servicios Supabase
 import { initPage } from '../utils/session-validate.js';
 import { schedulesFilter } from '../components/schedule/schedule-filter.js';
-import { renderScheduleEditModal } from '../components/schedule/schedule-modal.js'; 
+import { renderScheduleEditModal } from '../components/schedule/schedule-modal.js';
+import { renderExtraTimeModal } from '../components/extra-time/extra-modal.js';
 
 let register = []
 
@@ -44,6 +45,26 @@ editModal.addEventListener('hidden.bs.modal', () => {
     });
 
     editModal.querySelectorAll('input, select').forEach(el => {
+        el.value = '';
+    });
+});
+
+// Acciones del modal de horas extra
+const extraModal = document.getElementById('extra-modal');
+// Al abrir modal
+extraModal.addEventListener('shown.bs.modal', event => {
+    const button = event.relatedTarget;
+    const idData = button.getAttribute('staff-id');
+    const staffData = button.getAttribute('staff-data');
+    renderExtraTimeModal(idData, staffData);
+});
+// Al cerrar modal
+extraModal.addEventListener('hidden.bs.modal', () => {
+    extraModal.querySelectorAll('.is-valid, .is-invalid').forEach(e => {
+        e.classList.remove('is-valid', 'is-invalid');
+    });
+
+    extraModal.querySelectorAll('input, select').forEach(el => {
         el.value = '';
     });
 });

@@ -103,7 +103,7 @@
         </section>
     </main>
 
-    <!-- Modal de edición para cada registro -->
+    <!-- Modal de edición para los horarios del empleado -->
     <div class="modal fade" id="edit-modal" tabindex="-1" aria-labelledby="edit-modalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content pt-3 pb-3">
@@ -144,6 +144,81 @@
                 <div class="modal-footer me-4">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     <button id="btn-edit-entry" class="btn btn-primary">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para el registro de horas extra -->
+    <div class="modal fade" id="extra-modal" tabindex="-1" aria-labelledby="extra-modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content pt-3 pb-3">
+                <div class="modal-header">
+                    <div class="row">
+                        <div class="col d-flex align-items-center">
+                            <div class="ms-4 me-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-clock-history" viewBox="0 0 16 16">
+                                    <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z"/>
+                                    <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z"/>
+                                    <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5"/>
+                                </svg>
+                            </div>
+                            <h5 class="modal-title" id="extra-modalLabel">Registro de Horas Extra</h5>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close me-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <form id="extra-time-form" class="pb-3">
+                            <input type="hidden" id="extra-id-staff">
+                            <div class="row ms-2 me-2 mt-3">
+                                <div class="col-md-12 col-lg-6 label-over-border">
+                                    <label for="extra-staff" class="form-label m-2">Empleado</label>
+                                    <input type="text" class="form-control" id="extra-staff" disabled>
+                                </div>
+                                <div class="col-md-6 col-lg-3 label-over-border filter">
+                                    <label for="extra-date" class="form-label m-2">Día</label>
+                                    <input type="date" class="form-control" id="extra-date">
+                                    <p class="error invalid-feedback" id="error-extra-date" style="color: red;"></p>
+                                </div>
+                                <div class="col-md-6 col-lg-3 label-over-border filter">
+                                    <label for="extra-time" class="form-label m-2">Tiempo</label>
+                                    <input type="text" class="form-control" id="extra-time" placeholder="HH : MM" autocomplete="off">
+                                    <p class="error invalid-feedback" id="error-extra-time" style="color: red;"></p>
+                                </div>
+                            </div>
+                            <div class="row ms-2 me-2 mt-4">
+                                <div class="col-md-12 col-lg-6 ms-auto label-over-border">
+                                    <label for="extra-observations" class="form-label m-2">Observaciones</label>
+                                    <input type="text" class="form-control" id="extra-observations" placeholder="Observaciones adicionales">
+                                    <p class="error invalid-feedback" id="error-extra-observations" style="color: red;"></p>
+                                </div>
+                            </div>
+                        </form>
+                        <hr>
+                        <div id="extra-table-container" class="container pt-3">
+                            <table id="extra-table" class="table table-hover align-middle">
+                                <thead>
+                                    <tr class="table-light">
+                                        <th class="p-1 pt-2 text-center">No</th>
+                                        <th class="p-1 pt-2">FECHA</th>
+                                        <th class="p-1 pt-2">TIEMPO</th>
+                                        <th class="p-1 pt-2">OBSERVACIONES</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-center" colspan="4">Sin horas extra registradas</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer me-4">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button id="btn-add-extra" class="btn btn-primary">Registrar</button>
                 </div>
             </div>
         </div>

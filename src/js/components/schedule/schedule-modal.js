@@ -1,4 +1,3 @@
-import supabase from '../../supabase/supabase-client.js';
 // Servicios Supabase
 import { updateSchedule, createSchedule } from '../../services/schedule-service.js'; 
 import { renderSchedulesTable } from './schedule-table.js';

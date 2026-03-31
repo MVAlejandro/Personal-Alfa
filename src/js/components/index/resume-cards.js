@@ -1,10 +1,10 @@
 // Servicios Supabase
 import { getActiveStaff } from "../../services/staff-service";
 import { renderPresentCard, renderStaffCard } from "../attendance/attendance-cards";
-import { getRequest } from "../../services/permissions-service";
+import { getPermission } from "../../services/permissions-service";
 
 let allStaff = [];
-let allRequests = [];
+let allPermissions = [];
 
 export async function createResumeCards(fullAttendances) {
     // Obtener empleados
@@ -14,28 +14,28 @@ export async function createResumeCards(fullAttendances) {
     const presentAttendances = fullAttendances.filter(a => !!a.entrada);
 
     // Obtener solicitudes de vacaciones
-    allRequests = await getRequest();
-    allRequests = allRequests.filter(r => r.estado == "Pendiente")
+    allPermissions = await getPermission();
+    allPermissions = allPermissions.filter(r => r.estado == "Pendiente")
 
     renderStaffCard(allStaff)
     renderPresentCard(presentAttendances)
-    renderRequestCard(allRequests)
+    renderRequestCard(allPermissions)
 }
 
 // Función para crear la card de solicitudes pendientes
-export async function renderRequestCard(allRequests) {
+export async function renderRequestCard(allPermissions) {
     const element = document.getElementById("request-text");
     // Limpiar elemento antes de insertar
     element.textContent = "";
     
-    if (!allRequests.length) {
+    if (!allPermissions.length) {
         element.textContent = `-`;
         element.className = "general-report-cant text-muted";
         return;
     }
 
     // Generar el contenido
-    element.textContent = `${allRequests.length.toLocaleString('en-US')}`;
+    element.textContent = `${allPermissions.length.toLocaleString('en-US')}`;
     element.className = `general-report-cant text-danger`;
 }
 
