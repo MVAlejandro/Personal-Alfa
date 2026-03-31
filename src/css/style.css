@@ -242,7 +242,7 @@ input::placeholder, textarea::placeholder, #default-option {
     justify-content: flex-end;
 }
 
-.btn-edit, .btn-delete{
+.btn-edit, .btn-delete, .btn-add{
     border-radius: 12px;
     border: 1px solid var(--secondary-light);
 }
@@ -254,6 +254,17 @@ input::placeholder, textarea::placeholder, #default-option {
 
 .btn-edit:hover {
     background-color: var(--primary-dark);
+    color: var(--text-light);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn-add {
+    color: var(--secondary);
+    box-shadow: 0 2px 4px rgba(121, 17, 28, 0.3);
+}
+
+.btn-add:hover {
+    background-color: var(--secondary-light);
     color: var(--text-light);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }

@@ -6,18 +6,8 @@ import { renderAttendancesTable } from './attendance-table.js';
 let allAttendances = [];
 
 document.addEventListener('DOMContentLoaded', async () => { 
-    flatpickr("#day-filter", {
-        locale: {
-            ...flatpickr.l10ns.es,
-            firstDayOfWeek: 0
-        },
-        mode: "single",
-        dateFormat: "Y-m-d",
-        defaultDate: new Date(),
-        disable: [
-            date => date.getDay() === 0
-        ]
-    });
+    const today = new Date().toISOString().split("T")[0]
+    document.getElementById('day-filter').value = today;
  })
 
 // Función de filtrado por valores seleccionados

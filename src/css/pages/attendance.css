@@ -42,6 +42,7 @@
 
 @media (max-width: 770px) {
     .resume-card {
+        margin-top: .75rem;
         font-size: 15px !important;
     }
 }

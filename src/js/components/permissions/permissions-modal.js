@@ -31,10 +31,10 @@ export async function renderPermissionsEditModal(permiso) {
     const container = document.getElementById("permissions-dates-container");
     container.innerHTML = '';
 
-    // Obtener las fechs de la permiso
+    // Obtener las fechs del permiso
     const fechas = permiso.fechas_solicitadas.split(', ');
 
-    // Agregar una fila por cada producto
+    // Agregar una fila por cada fecha
     for (const fecha of fechas) {
         await addDateRow(fecha);
     }
@@ -126,7 +126,7 @@ document.getElementById('btn-edit-entry').addEventListener('click', async functi
         // Recarga la tabla con los datos actualizados
         await renderPermissionsTable();
     } catch (err) {
-        console.error('Error al actualizar la permiso:', err);
+        console.error('Error al actualizar el permiso:', err);
         Swal.fire({
             title: 'Oops...',
             text: 'Ocurrió un error al actualizar el permiso de ausencia.',

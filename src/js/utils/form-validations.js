@@ -221,3 +221,18 @@ export function dateValidate(data, error) {
         data.classList.add('is-valid');
     }
 }
+
+export function timeValidate(input, error) {
+    error.textContent = '';
+    input.classList.remove('is-invalid', 'is-valid');
+
+    if (input.value === "") {
+        error.textContent = `Se debe indicar un horario`;
+        input.classList.add('is-invalid');
+        return false;
+    } else {
+        error.textContent = '';
+        input.classList.add('is-valid');
+        return true;
+    }
+}

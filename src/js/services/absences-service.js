@@ -89,8 +89,6 @@ export async function getVacations() {
     }
 
     return data.map(vacacion => {
-        
-
         return {
             id_vacacion: vacacion.id_vacacion,
             fecha: vacacion.fecha,

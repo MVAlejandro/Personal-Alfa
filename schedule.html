@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="./favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Horarios - Pallets Alfa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+<body>
+
+    <!-- BARRA DE RELLENO SUPERIOR -->
+    <div id="top-bar">
+
+    </div>
+
+    <!-- BARRA DE NAVEGACIÓN -->
+    <nav id="site-navbar" class="navbar navbar-expand-lg">
+
+    </nav>
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <main>
+        <!-- SECCIÓN DEL ENCABEZADO -->
+        <section id="schedule-header">
+            <div id="schedule-header-container" class="container-fluid p-3">
+                <div class="row">
+                    <div class="col d-flex align-items-center">
+                        <div class="icon-square ms-3 me-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
+                                <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
+                                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
+                            </svg>
+                        </div>
+                        <h4 class="fw-bold">Gestión de Horarios</h4>
+                    </div>
+                    <div class="col-md d-flex align-items-center justify-content-end d-none" data-rh-only>
+                        <button id="export-btn" class="btn btn-primary d-flex align-items-center ps-3 pe-3 ms-2 me-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
+                                <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 2h-4v3h4zm0 4h-4v3h4zm0 4h-4v3h3a1 1 0 0 0 1-1zm-5 3v-3H6v3zm-5 0v-3H1v2a1 1 0 0 0 1 1zm-4-4h4V8H1zm0-4h4V4H1zm5-3v3h4V4zm4 4H6v3h4z"/>
+                            </svg>
+                            <p class="ps-2">Reporte</p>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN DE FILTROS GENERALES -->
+        <section id="schedule-filter pt-3">
+            <div id="schedule-filter-container" class="container pt-4 pb-3">
+                <div class="row ms-2 me-2">
+                    <div class="col-lg-3 col-md-4 d-flex align-items-center label-over-border">
+                        <label for="search-filter" class="form-label m-2">Buscar por empleado</label>    
+                        <input id="search-filter" class="form-control" type="search" placeholder="Buscar por No / Nombre" aria-label="Search"/>
+                    </div>
+                    <div class="col-lg-3 col-md-4 d-flex align-items-center label-over-border">
+                        <label for="status-filter" class="form-label m-2">Filtrar por Estatus</label>
+                        <select class="form-select" id="status-filter">
+                            <option value="0">Todos</option>
+                            <option value="Asignado">Asignado</option>
+                            <option value="Pendiente">Pendiente</option>
+                        </select>
+                    </div>
+                    <div class="col-md d-flex align-items-center justify-content-end">
+                        <button id="filter-btn" class="btn btn-primary d-flex align-items-center ps-3 pe-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                            </svg>
+                            <p class="ps-2">Filtrar</p>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN DE REPORTE GENERAL -->
+        <section id="schedule" class="pt-1 pb-4">
+            <div id="schedule-container" class="container table-responsive p-0">
+                <table id="schedule-table" class="table table-hover align-middle">
+                    <thead>
+                        <tr class="table-light">
+                            <th class="p-1 pt-2 text-center">No</th>
+                            <th class="p-1 pt-2">NOMBRE</th>
+                            <th class="p-1 pt-2 text-center">LUNES</th>
+                            <th class="p-1 pt-2 text-center">MARTES</th>
+                            <th class="p-1 pt-2 text-center">MIÉRCOLES</th>
+                            <th class="p-1 pt-2 text-center">JUEVES</th>
+                            <th class="p-1 pt-2 text-center">VIERNES</th>
+                            <th class="p-1 pt-2 text-center">SÁBADO</th>
+                            <th class="p-1 pt-2 text-center">DOMINGO</th>
+                            <th class="d-none" data-rh-only></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center" colspan="10">No hay horarios registrados</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal de edición para cada registro -->
+    <div class="modal fade" id="edit-modal" tabindex="-1" aria-labelledby="edit-modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content pt-3 pb-3">
+                <div class="modal-header">
+                    <div class="row">
+                        <div class="col d-flex align-items-center">
+                            <div class="ms-4 me-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" style="color:var(--primary)">
+                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                                </svg>
+                            </div>
+                            <h5 class="modal-title" id="edit-modalLabel">Editar horario</h5>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close me-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <form id="schedule-edit-form">
+                            <input type="hidden" id="edit-id-staff">
+                            <div class="row ms-2 me-2 mt-3">
+                                <div class="col-md-4 col-lg-3 ms-auto label-over-border">
+                                    <label for="edit-id" class="form-label m-2">Num Empleado</label>
+                                    <input type="text" class="form-control" id="edit-id" disabled>
+                                </div>
+                                <div class="col-md-8 col-lg-9 label-over-border">
+                                    <label for="edit-staff" class="form-label m-2">Empleado</label>
+                                    <input type="text" class="form-control" id="edit-staff" disabled>
+                                </div>
+                            </div>
+                            <div id="schedule-days-container" class="row ms-2 me-2 pt-5">
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer me-4">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button id="btn-edit-entry" class="btn btn-primary">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- FOOTER -->
+    <footer id="site-footer">
+
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src="/src/js/pages/schedule.js"></script>
+</body>
+</html>

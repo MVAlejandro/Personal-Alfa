@@ -1,0 +1,42 @@
+/* Estilos de la página y estructura */
+#schedule-header {
+    margin-top: 0;
+}
+
+#schedule-header-container {
+    background-color: var(--background-light) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#schedule-form-container, #schedule-filter-container, .table-responsive, #schedule-pages-container {
+    background-color: var(--background-light) !important;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+th {
+    color: var(--secondary) !important;
+}
+
+@media (min-width: 500px) and (max-width: 768px) {
+    #filter-btn {
+        margin-top: 1rem;
+    }
+}
+
+/* Estilos de texto para la tabla */
+.schedule-departament, .schedule-day {
+    font-size: 13px;
+    color: var(--secondary) !important;
+}
+
+/* Estilos para modal */
+@media (max-width: 768px) {
+    .date-item {
+        margin-bottom: 0 !important;
+    }
+
+    #schedule-days-container {
+        padding-top: 1rem !important;
+    }
+}
