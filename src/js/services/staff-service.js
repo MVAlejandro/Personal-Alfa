@@ -27,7 +27,30 @@ export async function getStaff() {
     return data;
 }
 
-//Función para obtener la información de un empleado por id
+// Función para obtener empleados activos
+export async function getActiveStaff() {
+    const { data, error } = await supabase
+        .from('rh_empleados')
+        .select(`
+            id_empleado,
+            numero_empleado,
+            nombre,
+            puesto,
+            fecha_ingreso,
+            estatus
+            `)
+        .eq('estatus', 'Activo')
+        .order('id_empleado', { ascending: true });
+    
+    if (error) {
+        console.error('Error obteniendo empleados activos:', error);
+        throw error;
+    }
+    
+    return data;
+}
+
+//Función para obtener toda la información de un empleado por id
 export async function findStaff(idStaff) {
     const { data, error } = await supabase
         .from('rh_empleados')
@@ -41,6 +64,22 @@ export async function findStaff(idStaff) {
     }
     
     return data;
+}
+
+// Función para encontrar el id_empleado basado en el numero de empleado
+export async function findStaffNumber(staffNo) {
+    const { data, error } = await supabase
+        .from('rh_empleados')
+        .select('id_empleado, numero_empleado')
+        .eq('numero_empleado', staffNo)
+        .maybeSingle();
+    
+    if (error) {
+        console.error('Error obteniendo al empleado:', error);
+        throw error;
+    }
+    
+    return data ? data.id_empleado : null;
 }
 
 // Función para editar empleados de la base
@@ -74,26 +113,3 @@ export async function deleteStaff(idStaff) {
         return;
     }
 };
-
-// Función para obtener empleados activos
-export async function getActiveStaff() {
-    const { data, error } = await supabase
-        .from('rh_empleados')
-        .select(`
-            id_empleado,
-            numero_empleado,
-            nombre,
-            puesto,
-            fecha_ingreso,
-            estatus
-            `)
-        .eq('estatus', 'Activo')
-        .order('id_empleado', { ascending: true });
-    
-    if (error) {
-        console.error('Error obteniendo empleados activos:', error);
-        throw error;
-    }
-    
-    return data;
-}

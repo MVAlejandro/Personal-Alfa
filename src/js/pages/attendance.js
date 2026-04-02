@@ -21,11 +21,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     await initPage()
     // Generar tabla con el día actual
     register = await attendanceFilter();
+    document.getElementById('attendance-resume-container').addEventListener('change', async function (e) {
+        if (e.target.matches('input[name="attendance-select"]')) {
+            register = await attendanceFilter();
+        }
+        });
 });
 
 // Declarar el botón de filtrado
-document.addEventListener('click', async function(e) {
+document.addEventListener('click', async function (e) {
     if (e.target.id === 'filter-btn' || e.target.closest('#filter-btn')) {
+        // Seleccionar por defecto el filtro de Total
+        const defaultRadio = document.querySelector('input[name="attendance-select"][value="Total"]');
+        if (defaultRadio) defaultRadio.checked = true;
+        // Ejecutar el filtro
         register = await attendanceFilter();
     }
 });
@@ -49,19 +58,21 @@ document.getElementById("export-btn").addEventListener('click', async function()
         return;
     }
 
-    const dataForExcel = register
-
-    const formattedData = dataForExcel.map(r => ({
+    const dataForExcel = register.map(r => ({
         "No. Empleado": r.numero_empleado,
         "Nombre": r.nombre,
         "Puesto": r.puesto,
         "Fecha": r.fecha,
+        "Día": r.dia,
         "Entrada": r.entrada,
+        "Variación E": r.variacion_entrada,
         "Salida": r.salida,
-        "Verificación": r.verificacion
+        "Variación S": r.variacion_salida,
+        "Verificación": r.verificacion,
+        "Tiempo extra": r.tiempo_extra
     }));
 
-    const ws = XLSX.utils.json_to_sheet(formattedData);
+    const ws = XLSX.utils.json_to_sheet(dataForExcel);
     const wb = XLSX.utils.book_new();
 
     XLSX.utils.book_append_sheet(wb, ws, `${register[0].fecha_asistencia}`);

@@ -1,15 +1,10 @@
 // Servicios Supabase
-import { createAttendance, findEmployee } from '../../services/attendance-service.js';
+import { findStaffNumber } from '../../services/staff-service.js';
+import { createAttendance } from '../../services/attendance-service.js';
 import { attendanceFilter } from './attendance-filter.js';
 // Utilidades
 import { textValidate, inputValidate } from '../../utils/form-validations.js';
-
-// Función para separar el formato de tiempo en día y hora
-function splitDateTime(fechaTexto) {
-    const [date, hour] = fechaTexto.trim().split(' ');
-    const [day, month, year] = date.split('/');
-    return { date: `${year}-${month}-${day}`, hour };
-}
+import { determinateType, getWeekDay, splitDateTime } from '../../utils/time-functions.js';
 
 // Función para agregar registro de asistencias con el formato de Excel
 export async function addExcelAttendances(event) {
@@ -77,9 +72,11 @@ export async function addExcelAttendances(event) {
         const tiempo_asistencia = columns[0].trim();
         const numero_empleado = columns[1].trim();
         const verificación = columns[2].trim();
-
+        // Determinar la información extra con ayuda de las funciones
+        const id_empleado = await findStaffNumber(numero_empleado);
         const time = splitDateTime(tiempo_asistencia);
-        const id_empleado = await findEmployee(numero_empleado);
+        const dia = getWeekDay(time.date)
+        const tipo = await determinateType(id_empleado, dia, time.hour);
 
         if (id_empleado == null) {
             console.warn(`Fila ${i + 1} ignorada: empleado con número ${numero_empleado} no encontrado`)
@@ -88,9 +85,11 @@ export async function addExcelAttendances(event) {
 
         // Insertar en Supabase
         const newAssistanceData = {
+            id_empleado,
             fecha_asistencia: time.date,
             hora_asistencia: time.hour,
-            id_empleado,
+            tipo,
+            dia,
             verificación
         };
 

@@ -95,7 +95,16 @@ document.getElementById("export-btn").addEventListener('click', async function()
         return;
     }
 
-    const ws = XLSX.utils.json_to_sheet(register);
+    const dataForExcel = register.map(r => ({
+        "No. Empleado": r.numero_empleado, "Nombre": r.nombre, "Puesto": r.puesto,
+        "Estatus": r.estatus, "F Ingreso": r.fecha_ingreso, "F Baja": r.fecha_baja,
+        "F Nacimiento": r.fecha_nacimiento, "NSS": r.nss, "RFC": r.rfc,
+        "CURP": r.curp, "Télefono": r.telefono, "T Sangre": r.tipo_sangre,
+        "Enfermedad": r.enfermedad, "Medicamento": r.medicamento, "Alergia": r.alergia,
+        "Calzado": r.calzado, "Playera": r.playera, "Camisa": r.camisa, "Pantalón": r.pantalon
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(dataForExcel);
     const wb = XLSX.utils.book_new();
 
     XLSX.utils.book_append_sheet(wb, ws, `Kardex`);

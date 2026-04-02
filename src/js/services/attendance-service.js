@@ -1,6 +1,10 @@
 import supabase from '../supabase/supabase-client.js'
 // Servicios Supabase
 import { getActiveStaff } from './staff-service.js';
+import { findSchedule } from './schedule-service.js';
+// Utilidades
+import { timeToMinutes, minutesToTime } from '../utils/time-functions.js'; 
+import { findExtraTimeDay } from './extra-time-service.js';
 
 // Función para insertar nuevas asistencias
 export async function createAttendance(attendanceData) {
@@ -20,7 +24,7 @@ export async function createAttendance(attendanceData) {
     return { inserted: true, duplicate: false, data };
 }
 
-// Función para obtener asistencias
+// Función para obtener asistencias de una fecha especificada
 export async function getSingleAttendances(date) {
     const { data, error } = await supabase
         .from('rh_asistencias')
@@ -28,6 +32,8 @@ export async function getSingleAttendances(date) {
             id_asistencia,
             fecha_asistencia,
             hora_asistencia,
+            tipo,
+            dia,
             verificación,
             
             id_empleado,
@@ -47,6 +53,8 @@ export async function getSingleAttendances(date) {
         id_asistencia: asistencia.id_asistencia,
         fecha_asistencia: asistencia.fecha_asistencia,
         hora_asistencia: asistencia.hora_asistencia,
+        tipo: asistencia.tipo,
+        dia: asistencia.dia,
         verificación: asistencia.verificación,
         id_empleado: asistencia.id_empleado,
         numero_empleado: asistencia.rh_empleados?.numero_empleado,
@@ -55,62 +63,15 @@ export async function getSingleAttendances(date) {
     }));
 }
 
-// Función para editar asistencias de la base
-export async function updateAttendance(id_asistencia, updatedData) {
-    const { data, error } = await supabase
-        .from('rh_asistencias')
-        .update(updatedData)
-        .eq('id_asistencia', id_asistencia);
-
-    if (error) {
-        console.error('Error al actualizar:', error);
-        alert('Error al actualizar la asistencia: ' + error.message);
-    }
-}
-
-// Función para eliminar asistencias de la base
-export async function deleteAttendance(idAttendance) {
-    if (!idAttendance) {
-        alert('No se pudo obtener el ID del registro de asistencia a eliminar.');
-        return;
-    }
-
-    const { error } = await supabase
-        .from('rh_asistencias')
-        .delete()
-        .eq('id_asistencia', idAttendance);
-
-    if (error) {
-        console.error('Error eliminando asistencia:', error);
-        alert('Ocurrió un error al eliminar la asistencia.');
-        return;
-    }
-};
-
-// Función para obtener asistencias
-export async function findEmployee(employeeNo) {
-    const { data, error } = await supabase
-        .from('rh_empleados')
-        .select('id_empleado, numero_empleado')
-        .eq('numero_empleado', employeeNo)
-        .maybeSingle();
-    
-    if (error) {
-        console.error('Error obteniendo al empleado:', error);
-        throw error;
-    }
-    
-    return data ? data.id_empleado : null;
-}
-
 // Función para obtener toda la lista de asistencia en base a empleados activos y registros de asistencia
 export async function getFullAttendances(allAttendances) {
     const activeStaff = await getActiveStaff();
     const grouped = {};
 
-    // Agrupar asistencias por empleado + fecha
-    allAttendances.forEach(a => {
+    // Agrupar por empleado + fecha
+    await Promise.all(allAttendances.map(async (a) => {
         const key = `${a.id_empleado}-${a.fecha_asistencia}`;
+        const tiempo_extra = await findExtraTimeDay(a.id_empleado, a.fecha_asistencia);
 
         if (!grouped[key]) {
             grouped[key] = {
@@ -119,17 +80,22 @@ export async function getFullAttendances(allAttendances) {
                 nombre: a.nombre,
                 puesto: a.puesto,
                 fecha: a.fecha_asistencia,
-                horas: [],
-                verificacion: a.verificación
+                dia: a.dia,
+                entradas: [],
+                salidas: [],
+                verificacion: a.verificación,
+                tiempo_extra
             };
         }
 
-        grouped[key].horas.push(a.hora_asistencia);
-    });
+        if (a.tipo === 'Entrada') grouped[key].entradas.push(a.hora_asistencia);
+        if (a.tipo === 'Salida') grouped[key].salidas.push(a.hora_asistencia);
+    }));
 
     // Formatear asistencias existentes
     const formattedAttendances = Object.values(grouped).map(g => {
-        const horasOrdenadas = g.horas.sort();
+        const entradasOrdenadas = g.entradas.sort();
+        const salidasOrdenadas = g.salidas.sort();
 
         return {
             id_empleado: g.id_empleado,
@@ -137,11 +103,13 @@ export async function getFullAttendances(allAttendances) {
             nombre: g.nombre,
             puesto: g.puesto,
             fecha: g.fecha,
-            entrada: horasOrdenadas[0] || "",
-            salida: horasOrdenadas.length > 1
-                ? horasOrdenadas[horasOrdenadas.length - 1]
+            dia: g.dia,
+            entrada: entradasOrdenadas[0] || "",
+            salida: salidasOrdenadas.length > 0
+                ? salidasOrdenadas[salidasOrdenadas.length - 1]
                 : "",
-            verificacion: g.verificacion
+            verificacion: g.verificacion,
+            tiempo_extra: g.tiempo_extra || ""
         };
     });
 
@@ -153,12 +121,7 @@ export async function getFullAttendances(allAttendances) {
 
     // Construir lista final incluyendo empleados sin checadas
     const fullList = activeStaff.map(emp => {
-        if (attendanceMap[emp.id_empleado]) {
-            return attendanceMap[emp.id_empleado];
-        }
-
-        // empleado sin registros
-        return {
+        return attendanceMap[emp.id_empleado] || {
             id_empleado: emp.id_empleado,
             numero_empleado: emp.numero_empleado,
             nombre: emp.nombre,
@@ -166,9 +129,45 @@ export async function getFullAttendances(allAttendances) {
             fecha: "",
             entrada: "",
             salida: "",
-            verificacion: ""
+            verificacion: "",
+            tiempo_extra: ""
         };
     });
 
     return fullList;
+}
+
+// Función para evaluar cada registro de asistencia con el horario y determinar las variaciones de tiempo
+export async function addTimeVariations(fullAttendances) {
+    return await Promise.all(fullAttendances.map(async (a) => {
+        if (!a.entrada || !a.salida || !a.dia) {
+            return {
+                ...a,
+                variacion_entrada: "",
+                variacion_salida: ""
+            };
+        }
+
+        const horario = await findSchedule(a.id_empleado, a.dia);
+
+        if (!horario) {
+            return {
+                ...a,
+                variacion_entrada: "",
+                variacion_salida: ""
+            };
+        }
+
+        const entradaReal = timeToMinutes(a.entrada);
+        const salidaReal = timeToMinutes(a.salida);
+
+        const entradaHorario = timeToMinutes(horario.entrada);
+        const salidaHorario = timeToMinutes(horario.salida);
+
+        return {
+            ...a,
+            variacion_entrada: minutesToTime(entradaReal - entradaHorario),
+            variacion_salida: minutesToTime(salidaReal - salidaHorario)
+        };
+    }));
 }

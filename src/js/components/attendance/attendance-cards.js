@@ -6,14 +6,27 @@ export async function createResumeCards(fullAttendances) {
     const allStaff = await getActiveStaff();
     if (!allStaff) return;
 
-    // Filtrar presentes (aquellos que tienen al menos una entrada)
-    const presentAttendances = fullAttendances.filter(a => !!a.entrada);
+    // Filtrar presentes (aquellos que tienen al menos una entrada o salida)
+    const presentAttendances = fullAttendances.filter(a => !!a.entrada || !!a.salida);
 
-    // Filtrar tardanzas (entrada después de las 08:05)
-    const lateAttendances = presentAttendances.filter(a => a.entrada > "08:05");
+    // Filtrar tardanzas (entrada con variacion_entrada > +00:05)
+    const lateAttendances = presentAttendances.filter(a => {
+        const variacion = a.variacion_entrada;
+        if (!variacion) return false;
 
-    // Contar ausentes
-    const absentCount = allStaff.length - presentAttendances.length;
+        const match = variacion.match(/([+-])(\d{2}):(\d{2})/);
+        if (!match) return false;
+
+        const sign = match[1];
+        const hours = parseInt(match[2], 10);
+        const minutes = parseInt(match[3], 10);
+        const totalMinutes = hours * 60 + minutes;
+
+        return sign === '+' && totalMinutes > 5;
+    });
+
+    // Filtrar ausentes (aquellos que no tienen al entrada o salida)
+    const absentCount = fullAttendances.filter(a => !a.entrada && !a.salida);
 
     // Renderizar las cards
     renderStaffCard(allStaff);
@@ -75,12 +88,12 @@ export async function renderAbsentCard(absentCount) {
     const element = document.getElementById("absence-text");
     element.textContent = "";
 
-    if (absentCount <= 0) {
+    if (!absentCount.length) {
         element.textContent = `-`;
         element.className = "general-report-cant text-muted";
         return;
     }
 
-    element.textContent = `${absentCount.toLocaleString('en-US')}`;
+    element.textContent = `${absentCount.length.toLocaleString('en-US')}`;
     element.className = `general-report-cant text-danger`;
 }

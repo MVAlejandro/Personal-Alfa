@@ -67,34 +67,19 @@ export async function findExtraTime(id_empleado) {
     return data;
 }
 
-// Función para editar las horas extra de la base
-export async function updateExtraTime(id_extra, updatedData) {
+// Función para verificar si hay horas extra de un empleado en una fecha especificada
+export async function findExtraTimeDay(id_empleado, fecha) {
     const { data, error } = await supabase
         .from('rh_tiempo_extra')
-        .update(updatedData)
-        .eq('id_extra', id_extra);
-
+        .select("*")
+        .eq('id_empleado', id_empleado)
+        .eq('fecha', fecha)
+        .maybeSingle();
+    
     if (error) {
-        console.error('Error al actualizar:', error);
-        alert('Error al actualizar el registro: ' + error.message);
+        console.error('Error obteniendo horas extra:', error);
+        throw error;
     }
+    
+    return data?.tiempo || 0;
 }
-
-// Función para eliminar horas extra de la base
-export async function deleteExtraTime(idExtraT) {
-    if (!idExtraT) {
-        alert('No se pudo obtener el ID del registro a eliminar.');
-        return;
-    }
-
-    const { error } = await supabase
-        .from('rh_tiempo_extra')
-        .delete()
-        .eq('id_extra', idExtraT);
-
-    if (error) {
-        console.error('Error eliminando tiempo extra:', error);
-        alert('Ocurrió un error al eliminar el registro.');
-        return;
-    }
-};

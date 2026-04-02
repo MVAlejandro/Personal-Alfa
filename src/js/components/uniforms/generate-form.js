@@ -1,5 +1,7 @@
+// Servicios Supabase
+import { getActiveStaff } from "../../services/staff-service";
 // Utilidades
-import { loadOptions } from "../../utils/load-select";
+import { loadOptionsFilter } from "../../utils/load-select";
 
 document.addEventListener("DOMContentLoaded", async () => {
     const container = document.getElementById('uniforms-form');
@@ -79,7 +81,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>`;
 
     // Cargar los empleados en el formulario
-    await loadOptions('staff', 'rh_empleados', 'id_empleado', 'nombre')
+    await loadOptionsFilter('staff', getActiveStaff, 'nombre', 'id_empleado', 'Seleccione...')
 
     const uniformsContainer = document.getElementById('uniforms-form-container');
 

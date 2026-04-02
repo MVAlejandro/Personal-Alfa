@@ -83,11 +83,21 @@ document.getElementById("export-btn").addEventListener('click', async function()
         return;
     }
 
-    const uniformsList = await getUniformsResume(register);
+    const dataForExcel = register.map(r => ({
+        "No. Empleado": r.numero_empleado, 
+        "Nombre": r.nombre, 
+        "Puesto": r.puesto,
+        "Tipo": r.tipo_entrega, 
+        "Prenda": r.tipo_prenda, 
+        "Talla": r.talla,
+        "Cantidad": r.cantidad, 
+        "F Entrega": r.fecha_entrega, 
+        "Observaciones": r.observaciones
+    }));
 
-    const ws = XLSX.utils.json_to_sheet(uniformsList);
+    const ws = XLSX.utils.json_to_sheet(dataForExcel);
     const wb = XLSX.utils.book_new();
 
-    XLSX.utils.book_append_sheet(wb, ws, `Uniformes`);
-    XLSX.writeFile(wb, `reporte_uniformes_${new Date().toISOString().split('T')[0]}.xlsx`);
+    XLSX.utils.book_append_sheet(wb, ws, `Entregas`);
+    XLSX.writeFile(wb, `reporte_entregas_uniformes_${new Date().toISOString().split('T')[0]}.xlsx`);
 });

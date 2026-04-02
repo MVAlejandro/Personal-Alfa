@@ -84,7 +84,6 @@ export async function editStaff(event) {
             icon: 'success',
             confirmButtonText: 'OK'
         });
-console.log(staffData);
 
         // Recarga el contenedor con los datos actualizados
         await renderStaffEditForm(staffData);

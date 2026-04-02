@@ -53,38 +53,6 @@ export async function getSchedule() {
     });
 }
 
-// Función para editar horarios de la base
-export async function updateSchedule(id_horario, updatedData) {
-    const { data, error } = await supabase
-        .from('rh_horarios')
-        .update(updatedData)
-        .eq('id_horario', id_horario);
-
-    if (error) {
-        console.error('Error al actualizar:', error);
-        alert('Error al actualizar el horario: ' + error.message);
-    }
-}
-
-// Función para eliminar horarios de la base
-export async function deleteSchedule(idSchedule) {
-    if (!idSchedule) {
-        alert('No se pudo obtener el ID del horario a eliminar.');
-        return;
-    }
-
-    const { error } = await supabase
-        .from('rh_horarios')
-        .delete()
-        .eq('id_horario', idSchedule);
-
-    if (error) {
-        console.error('Error eliminando horario:', error);
-        alert('Ocurrió un error al eliminar el horario.');
-        return;
-    }
-};
-
 // Función para formatear todos los registros de horarios por empleado y día
 export async function getFullSchedules(allSchedules) {
     const activeStaff = await getActiveStaff();
@@ -123,4 +91,34 @@ export async function getFullSchedules(allSchedules) {
 
     // Convertir a array
     return Object.values(grouped);
+}
+
+// Función para obtener el horario de un empleado del día especificado
+export async function findSchedule(id_empleado, dia) {
+    const { data, error } = await supabase
+        .from('rh_horarios')
+        .select('*')
+        .eq('id_empleado', id_empleado)
+        .eq('dia', dia)
+        .maybeSingle();
+    
+    if (error) {
+        console.error('Error obteniendo horarios:', error);
+        throw error;
+    }
+    
+    return data
+}
+
+// Función para editar horarios de la base
+export async function updateSchedule(id_horario, updatedData) {
+    const { data, error } = await supabase
+        .from('rh_horarios')
+        .update(updatedData)
+        .eq('id_horario', id_horario);
+
+    if (error) {
+        console.error('Error al actualizar:', error);
+        alert('Error al actualizar el horario: ' + error.message);
+    }
 }

@@ -1,5 +1,5 @@
 // Servicios Supabase
-import { getFullAttendances, getSingleAttendances } from '../../services/attendance-service.js'; 
+import { addTimeVariations, getFullAttendances, getSingleAttendances } from '../../services/attendance-service.js'; 
 import { createResumeCards } from './attendance-cards.js';
 import { renderAttendancesTable } from './attendance-table.js';
 
@@ -12,40 +12,50 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Función de filtrado por valores seleccionados
 export async function attendanceFilter() {
-    // Obtener valores de filtros
+    // Obtener el filtro de fecha
     const dayFilterEl = document.getElementById('day-filter');
-    const statusFilterEl = document.getElementById('status-filter');
+    const dayFilter = dayFilterEl.value ? dayFilterEl.value.split(', ').map(d => d.trim()) : [];
 
-    const dayFilter = dayFilterEl?.value ? dayFilterEl.value.split(', ').map(d => d.trim()) : [];
+    // Obtener filtro de estado por el radio seleccionado
+    const statusFilter = document.querySelector('input[name="attendance-select"]:checked')?.value || '0';
 
-    const statusFilter = statusFilterEl?.value || '0';
-
-    // Obtener todos los registros de asistencia filtrados por día
+    // Obtener registros filtrados por fecha
     allAttendances = await getSingleAttendances(dayFilter);
     // Agrupar los registros de asistencia por empleado con sus horas de checado
     const fullAttendances = await getFullAttendances(allAttendances);
+    const Attendances = await addTimeVariations(fullAttendances);
 
-    // Generar las cards con los registros ya filtrados
-    createResumeCards(fullAttendances);
-
-    // Filtrar el nuevo arreglo por tipo
-    const typeFiltered = fullAttendances.filter(a => {
-        if (statusFilter === '0') return true;
-
-        const entrada = a.entrada;
-
-        if (statusFilter === 'Faltas') return !entrada;
-        if (statusFilter === 'Presentes') return !!entrada;
+    // Filtrar por el estado seleccionado
+    const filtered = Attendances.filter(a => {
+        if (statusFilter === 'Total') return true;
+        if (statusFilter === 'Ausencias') {
+            return !a.entrada && !a.salida;
+        }
+        if (statusFilter === 'Presentes') {
+            return !!a.entrada || !!a.salida;
+        }
         if (statusFilter === 'Retardos') {
-            if (!entrada) return false;
-            return entrada > "08:05";
+        if (!a.entrada || !a.variacion_entrada) return false;
+            // Extraer los minutos positivos de variacion_entrada
+            const match = a.variacion_entrada.match(/([+-])(\d{2}):(\d{2})/);
+            if (!match) return false;
+
+            const sign = match[1]; // + o -
+            const hours = parseInt(match[2], 10);
+            const minutes = parseInt(match[3], 10);
+
+            const totalMinutes = hours * 60 + minutes;
+
+            // Retardo: solo positivos y más de 5 minutos
+            return sign === '+' && totalMinutes > 5;
         }
 
         return true;
     });
 
-    // Generar la tabla con los valores filtrados
-    renderAttendancesTable(typeFiltered);
+    // Generar tabla y cards con los registros filtrados
+    createResumeCards(Attendances);
+    renderAttendancesTable(filtered);
 
-    return typeFiltered;
+    return filtered;
 }

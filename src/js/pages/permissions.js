@@ -24,6 +24,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     await initPage()
     // Generar tabla con todos los registros
     register = await permissionsFilter();
+    console.log(register);
+    
 });
 
 // Declarar el botón de filtrado
@@ -92,12 +94,21 @@ document.getElementById("export-btn").addEventListener('click', async function()
         return;
     }
 
-    const vacationsList = await getVacationsResume(register);
+    const dataForExcel = register.map(r => ({
+        "No. Empleado": r.numero_empleado, 
+        "Nombre": r.nombre, 
+        "Puesto": r.puesto,
+        "Tipo": r.tipo,
+        "F Solicitud": r.fecha_solicitud, 
+        "Fechas": r.fechas_solicitadas,
+        "Estado": r.estado, 
+        "Observaciones": r.observaciones
+    }));
 
-    const ws = XLSX.utils.json_to_sheet(vacationsList);
+    const ws = XLSX.utils.json_to_sheet(dataForExcel);
     const wb = XLSX.utils.book_new();
 
-    XLSX.utils.book_append_sheet(wb, ws, `Vacaciones`);
-    XLSX.writeFile(wb, `reporte_vacaciones_${new Date().toISOString().split('T')[0]}.xlsx`);
+    XLSX.utils.book_append_sheet(wb, ws, `Permisos`);
+    XLSX.writeFile(wb, `reporte_permisos_${new Date().toISOString().split('T')[0]}.xlsx`);
 });
 

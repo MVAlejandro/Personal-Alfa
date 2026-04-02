@@ -8,8 +8,8 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-#attendance-form-container, #attendance-filter-container, .card, .table-responsive, #attendance-pages-container {
-    background-color: var(--background-light) !important;
+#attendance-form-container, #attendance-filter-container, .attendance-btn, .table-responsive, #attendance-pages-container {
+    background-color: var(--background-light);
     border-radius: 1rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
@@ -25,24 +25,69 @@
     }   
 }
 
-/* Estilos de cards */
+/* Estilos de los botones de reporte */
 .general-report-cant {
     font-size: 30px;
     font-weight: bold;
+    margin-left: 0;
 }
 
-.card {
+.btn-container {
+    height: 100px;
+}
+
+.attendance-btn {
+    color: var(--secondary) !important;
+    border: 1px solid var(--secondary-light);
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    font-weight: 600;
+}
+
+.attendance-btn:hover {
+    background-color: var(--primary-dark) !important;
+    color: var(--primary-light) !important;
+    border-color: var(--primary) !important;
+    border-width: 2px;
+    transform: translateY(-3px);
+    cursor: pointer;
+}
+
+.attendance-btn:active {
+    transform: scale(0.98);
+    box-shadow: var(--primary-dark);
+}
+
+.btn-check:checked + .attendance-btn {
+    background-color: var(--primary-light);
+    border-color: var(--primary);
+    border-width: 2px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-check:checked + .attendance-btn .icon-circle {
+    background-color: var(--primary);
+    color: var(--primary-light);
+}
+
+.attendance-btn.is-invalid {
+    border: 1px solid #dc3545;
+}
+
+.attendance-btn.is-valid {
+    border: 1px solid #198754;
+}
+
+.attendance-btn {
     transition: transform 0.3s ease;
     animation: fadeInUp 1s ease-in-out;
 }
 
-.card:hover {
-    transform: translateY(-5px);
-}
-
 @media (max-width: 770px) {
-    .resume-card {
-        margin-top: .75rem;
+    .attendance-btn {
         font-size: 15px !important;
     }
 }
