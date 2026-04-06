@@ -9,7 +9,7 @@ export async function createResumeCards(fullAttendances) {
     // Filtrar presentes (aquellos que tienen al menos una entrada o salida)
     const presentAttendances = fullAttendances.filter(a => !!a.entrada || !!a.salida);
 
-    // Filtrar tardanzas (entrada con variacion_entrada > +00:05)
+    // Filtrar retardos (entrada con variacion_entrada > +00:05)
     const lateAttendances = presentAttendances.filter(a => {
         const variacion = a.variacion_entrada;
         if (!variacion) return false;

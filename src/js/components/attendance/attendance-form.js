@@ -1,10 +1,11 @@
 // Servicios Supabase
 import { findStaffNumber } from '../../services/staff-service.js';
+import { findSchedule } from '../../services/schedule-service.js';
 import { createAttendance } from '../../services/attendance-service.js';
 import { attendanceFilter } from './attendance-filter.js';
 // Utilidades
 import { textValidate, inputValidate } from '../../utils/form-validations.js';
-import { determinateType, getWeekDay, splitDateTime } from '../../utils/time-functions.js';
+import { determinateType, getWeekDay, minutesToTime, splitDateTime, timeToMinutes } from '../../utils/time-functions.js';
 
 // Función para agregar registro de asistencias con el formato de Excel
 export async function addExcelAttendances(event) {
@@ -77,6 +78,25 @@ export async function addExcelAttendances(event) {
         const time = splitDateTime(tiempo_asistencia);
         const dia = getWeekDay(time.date)
         const tipo = await determinateType(id_empleado, dia, time.hour);
+        const horario = await findSchedule(id_empleado, dia);
+        let variacion = "";
+        // Calcular variaciones de tiempo en base al horario del empleado
+        if (!horario) {
+            console.warn(`Fila ${i + 1} ignorada: sin horario para empleado ${numero_empleado}`);
+            continue;
+        }
+        
+        const horaRealMin = timeToMinutes(time.hour);
+
+        if (tipo === 'Entrada') {
+            const entradaHorarioMin = timeToMinutes(horario.entrada);
+            variacion = minutesToTime(horaRealMin - entradaHorarioMin);
+        }
+
+        if (tipo === 'Salida') {
+            const salidaHorarioMin = timeToMinutes(horario.salida);
+            variacion = minutesToTime(horaRealMin - salidaHorarioMin);
+        }
 
         if (id_empleado == null) {
             console.warn(`Fila ${i + 1} ignorada: empleado con número ${numero_empleado} no encontrado`)
@@ -89,6 +109,7 @@ export async function addExcelAttendances(event) {
             fecha_asistencia: time.date,
             hora_asistencia: time.hour,
             tipo,
+            variacion,
             dia,
             verificación
         };

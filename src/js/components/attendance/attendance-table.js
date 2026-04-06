@@ -2,8 +2,6 @@ import { formatWeekDay, entryColor, exitColor } from '../../utils/time-functions
 
 // Función para crear la tabla y la paginación
 export async function renderAttendancesTable(attendancesList) {
-    console.log(attendancesList);
-    
     const tbody = document.querySelector('#attendance-table tbody');
     const resultsText = document.getElementById('attendance-pages-results');
     
@@ -11,7 +9,7 @@ export async function renderAttendancesTable(attendancesList) {
     tbody.innerHTML = '';
 
     if (!attendancesList || attendancesList.length === 0) {
-        tbody.innerHTML = `<tr><td class="text-center" colspan="8">No hay asistencias registradas</td></tr>`;
+        tbody.innerHTML = `<tr><td class="text-center" colspan="9">No hay asistencias registradas</td></tr>`;
         resultsText.textContent = `Mostrando 0 resultados`;
         return;
     }

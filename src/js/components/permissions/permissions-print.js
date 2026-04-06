@@ -43,7 +43,7 @@ export async function generatePDF(ticket) {
 
     // Encabezado centrado
     doc.setFontSize(15);
-    textCenter("SOLICITUD DE VACACIONES", 254, 23);
+    textCenter(`SOLICITUD DE ${ticket.tipo.toString().toUpperCase()}`, 254, 23);
 
     // Datos clave
     doc.setFontSize(10);
@@ -137,7 +137,7 @@ export async function generatePDF(ticket) {
 
     // Encabezado centrado
     doc.setFontSize(15);
-    textCenter("SOLICITUD DE VACACIONES", 254, 157.7);
+    textCenter(`SOLICITUD DE ${ticket.tipo.toString().toUpperCase()}`, 254, 157.7);
 
     // Datos clave
     doc.setFontSize(10);

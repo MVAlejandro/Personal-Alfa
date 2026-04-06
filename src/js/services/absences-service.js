@@ -34,22 +34,22 @@ function calculateVacation(antiguedad) {
     return 0;
 }
 // Función para determinar a qué período laboral pertenece una fecha de vacación
-function getVacationPeriod(fechaIngreso, fechaVacacion) {
+function getCurrentPeriod(fechaIngreso) {
+    const today = new Date();
     const ingreso = new Date(fechaIngreso);
-    const vacacion = new Date(fechaVacacion);
-    
-    let anosCompletos = vacacion.getFullYear() - ingreso.getFullYear();
-    const mesIngreso = ingreso.getMonth();
-    const diaIngreso = ingreso.getDate();
-    const mesVacacion = vacacion.getMonth();
-    const diaVacacion = vacacion.getDate();
-    
-    if (mesVacacion < mesIngreso || (mesVacacion === mesIngreso && diaVacacion < diaIngreso)) {
-        anosCompletos--;
+
+    let inicio = new Date(today.getFullYear(), ingreso.getMonth(), ingreso.getDate());
+
+    // Si aún no llega el aniversario este año
+    if (today < inicio) {
+        inicio.setFullYear(inicio.getFullYear() - 1);
     }
-    
-    // El período es años completos
-    return anosCompletos;
+
+    const fin = new Date(inicio);
+    fin.setFullYear(fin.getFullYear() + 1);
+    fin.setDate(fin.getDate() - 1);
+
+    return { inicio, fin };
 }
 
 // Función para insertar nuevas ausencias
@@ -64,24 +64,62 @@ export async function createAbsence(absencesData) {
     } 
 }
 
+// Función para obtener las ausencias
+export async function getAbsences() {
+    const { data, error } = await supabase
+        .from('rh_ausencias')
+        .select(`
+            id_ausencia,
+            fecha,
+            tipo,
+            id_permiso,
+            id_empleado,
+            rh_empleados (
+                numero_empleado, 
+                nombre, 
+                puesto, 
+                fecha_ingreso)
+            `)
+        .order('numero_empleado', { foreignTable: 'rh_empleados', ascending: true });
+    
+    if (error) {
+        console.error('Error obteniendo ausencias:', error);
+        throw error;
+    }
+
+    return data.map(ausencia => {
+        return {
+            id_ausencia: ausencia.id_ausencia,
+            fecha: ausencia.fecha,
+            tipo: ausencia.tipo,
+            id_permiso: ausencia.id_permiso,
+            id_empleado: ausencia.id_empleado,
+            numero_empleado: ausencia?.rh_empleados?.numero_empleado,
+            nombre: ausencia?.rh_empleados?.nombre,
+            puesto: ausencia?.rh_empleados?.puesto,
+            fecha_ingreso: ausencia?.rh_empleados?.fecha_ingreso
+        };
+    });
+}
+
 // Función para obtener las vacacciones
 export async function getVacations() {
     const { data, error } = await supabase
         .from('rh_ausencias')
         .select(`
-            id_vacacion,
+            id_ausencia,
             fecha,
-            id_solicitud,
-            rh_solicitudes_vacaciones (
-                id_empleado,
-                rh_empleados (
-                    numero_empleado, 
-                    nombre, 
-                    puesto, 
-                    fecha_ingreso)
-            )
+            tipo,
+            id_permiso,
+            id_empleado,
+            rh_empleados (
+                numero_empleado, 
+                nombre, 
+                puesto, 
+                fecha_ingreso)
             `)
-        .order('numero_empleado', { foreignTable: 'rh_solicitudes_vacaciones.rh_empleados', ascending: true });
+        .eq('tipo', 'Vacaciones')
+        .order('numero_empleado', { foreignTable: 'rh_empleados', ascending: true });
     
     if (error) {
         console.error('Error obteniendo vacaciones:', error);
@@ -90,109 +128,68 @@ export async function getVacations() {
 
     return data.map(vacacion => {
         return {
-            id_vacacion: vacacion.id_vacacion,
+            id_ausencia: vacacion.id_ausencia,
             fecha: vacacion.fecha,
-            id_solicitud: vacacion.id_solicitud,
-            id_empleado: vacacion.rh_solicitudes_vacaciones?.id_empleado,
-            numero_empleado: vacacion.rh_solicitudes_vacaciones?.rh_empleados?.numero_empleado,
-            nombre: vacacion.rh_solicitudes_vacaciones?.rh_empleados?.nombre,
-            puesto: vacacion.rh_solicitudes_vacaciones?.rh_empleados?.puesto,
-            fecha_ingreso: vacacion.rh_solicitudes_vacaciones?.rh_empleados?.fecha_ingreso
+            tipo: vacacion.tipo,
+            id_permiso: vacacion.id_permiso,
+            id_empleado: vacacion.id_empleado,
+            numero_empleado: vacacion?.rh_empleados?.numero_empleado,
+            nombre: vacacion?.rh_empleados?.nombre,
+            puesto: vacacion?.rh_empleados?.puesto,
+            fecha_ingreso: vacacion?.rh_empleados?.fecha_ingreso
         };
     });
 }
 
 // Función para obtener la lista de todos los días de vacaciones por empleado en base a registros
-export async function getVacationsResume(allVacations) {
+export async function getVacationsResume() {
     const activeStaff = await getActiveStaff();
-    const grouped = {};
+    const allVacations = await getVacations();
 
-    for (const vacation of allVacations) {
-        const key = vacation.id_empleado;
-        
-        if (!grouped[key]) {
-            grouped[key] = {
-                id_empleado: vacation.id_empleado,
-                numero_empleado: vacation.numero_empleado,
-                nombre: vacation.nombre,
-                puesto: vacation.puesto,
-                fecha_ingreso: vacation.fecha_ingreso,
-                periodos: {}
-            };
-        }
-        
-        // Determinar a qué período pertenece esta vacación
-        const periodo = getVacationPeriod(vacation.fecha_ingreso, vacation.fecha);
-        
-        if (!grouped[key].periodos[periodo]) {
-            // Obtener los días asignados para ese período
-            const diasAsignados = calculateVacation(periodo);
-            grouped[key].periodos[periodo] = {
-                periodo,
-                dias_asignados: diasAsignados,
-                dias_tomados: [],
-                dias_pendientes: diasAsignados
-            };
-        }
-        
-        grouped[key].periodos[periodo].dias_tomados.push(vacation.fecha);
-        grouped[key].periodos[periodo].dias_pendientes = 
-            grouped[key].periodos[periodo].dias_asignados - 
-            grouped[key].periodos[periodo].dias_tomados.length;
+    const results = [];
+
+    for (const emp of activeStaff) {
+        const antiguedad = calculateAntique(emp.fecha_ingreso);
+        const dias_total = calculateVacation(antiguedad);
+
+        const { inicio, fin } = getCurrentPeriod(emp.fecha_ingreso);
+
+        // Filtrar vacaciones del periodo actual
+        const vacacionesActuales = allVacations.filter(v => {
+            const fecha = new Date(v.fecha + 'T00:00:00'); // evita problemas de zona horaria
+
+            return (
+                v.id_empleado === emp.id_empleado &&
+                fecha >= inicio &&
+                fecha <= fin
+            );
+        });
+
+        // Obtener fechas tomadas ordenadas
+        const fechas_tomadas = vacacionesActuales
+            .map(v => v.fecha)
+            .sort();
+
+        const dias_tomados = fechas_tomadas.length;
+        const dias_pendientes = dias_total - dias_tomados;
+
+        results.push({
+            id_empleado: emp.id_empleado,
+            numero_empleado: emp.numero_empleado,
+            nombre: emp.nombre,
+            puesto: emp.puesto,
+            fecha_ingreso: emp.fecha_ingreso,
+            antiguedad,
+            dias_total,
+            dias_tomados,
+            dias_pendientes,
+            fechas_tomadas,
+            periodo_actual: {
+                inicio,
+                fin
+            }
+        });
     }
 
-    const formattedVacations = Object.values(grouped).map(emp => {
-        // Obtener los años cumplidos hasta hoy
-        const periodoActual = calculateAntique(emp.fecha_ingreso);
-        // Obtener días asignados para el período actual
-        const diasTotalActual = calculateVacation(periodoActual);
-        
-        const periodoActualInfo = emp.periodos[periodoActual] || {
-            dias_asignados: diasTotalActual,
-            dias_tomados: [],
-            dias_pendientes: diasTotalActual
-        };
-        
-        return {
-            id_empleado: emp.id_empleado,
-            numero_empleado: emp.numero_empleado,
-            nombre: emp.nombre,
-            puesto: emp.puesto,
-            fecha_ingreso: emp.fecha_ingreso,
-            antiguedad: periodoActual, // Período en el que está actualmente
-            dias_total: diasTotalActual,
-            dias_tomados_actual: periodoActualInfo.dias_tomados.length,
-            dias_pendientes_actual: periodoActualInfo.dias_pendientes,
-            historial_periodos: Object.values(emp.periodos)
-        };
-    });
-
-    const vacationMap = {};
-    formattedVacations.forEach(v => { vacationMap[v.id_empleado] = v; });
-
-    const fullList = activeStaff.map(emp => {
-        if (vacationMap[emp.id_empleado]) {
-            return vacationMap[emp.id_empleado];
-        }
-        
-        const aniosCumplidos = calculateAntique(emp.fecha_ingreso);
-        const periodoActual = aniosCumplidos + 1;
-        const diasTotalActual = calculateVacation(periodoActual);
-        
-        return {
-            id_empleado: emp.id_empleado,
-            numero_empleado: emp.numero_empleado,
-            nombre: emp.nombre,
-            puesto: emp.puesto,
-            fecha_ingreso: emp.fecha_ingreso,
-            antiguedad: periodoActual,
-            anos_cumplidos: aniosCumplidos,
-            dias_total: diasTotalActual,
-            dias_tomados_actual: 0,
-            dias_pendientes_actual: diasTotalActual,
-            historial_periodos: []
-        };
-    });
-
-    return fullList;
+    return results;
 }

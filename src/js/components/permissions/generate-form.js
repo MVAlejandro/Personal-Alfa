@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         mode: "multiple",
         dateFormat: "Y-m-d",
         disable: [
-            date => date.getDay() === 0 || date.getDay() === 6
+            date => date.getDay() === 0
         ]
     });
 });

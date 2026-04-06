@@ -1,5 +1,5 @@
 // Servicios Supabase
-import { addTimeVariations, getFullAttendances, getSingleAttendances } from '../../services/attendance-service.js'; 
+import { getFormatedAttendances, getSingleAttendances } from '../../services/attendance-service.js'; 
 import { createResumeCards } from './attendance-cards.js';
 import { renderAttendancesTable } from './attendance-table.js';
 
@@ -22,11 +22,10 @@ export async function attendanceFilter() {
     // Obtener registros filtrados por fecha
     allAttendances = await getSingleAttendances(dayFilter);
     // Agrupar los registros de asistencia por empleado con sus horas de checado
-    const fullAttendances = await getFullAttendances(allAttendances);
-    const Attendances = await addTimeVariations(fullAttendances);
+    const fullAttendances = await getFormatedAttendances(allAttendances);
 
     // Filtrar por el estado seleccionado
-    const filtered = Attendances.filter(a => {
+    const filtered = fullAttendances.filter(a => {
         if (statusFilter === 'Total') return true;
         if (statusFilter === 'Ausencias') {
             return !a.entrada && !a.salida;
@@ -54,7 +53,7 @@ export async function attendanceFilter() {
     });
 
     // Generar tabla y cards con los registros filtrados
-    createResumeCards(Attendances);
+    createResumeCards(fullAttendances);
     renderAttendancesTable(filtered);
 
     return filtered;

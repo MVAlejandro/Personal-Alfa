@@ -1,5 +1,6 @@
 // Servicios Supabase
 import { createUniformsDeliver } from '../../services/uniforms-deliver-service.js'; 
+import { updateUniforms } from '../../services/uniforms-service.js';
 import { renderUniformsDeliverTable } from './uniforms-table.js'; 
 // Utilidades
 import { textValidate, amountValidate, inputValidate, selectValidate } from '../../utils/form-validations.js';
@@ -75,7 +76,17 @@ export async function addUniforms(event) {
     };
 
     try {
+        // Guardar historial de entrega
         await createUniformsDeliver(newUDeliverData);
+        // Actualizar el estado de los uniformes del empleado
+        await updateUniforms(
+            newUDeliverData.id_empleado,
+            newUDeliverData.tipo_entrega,
+            newUDeliverData.tipo_prenda,
+            newUDeliverData.talla,
+            Number(newUDeliverData.cantidad)
+        );
+
         Swal.fire({
             title: 'Entrega de uniforme registrada con éxito.',
             icon: 'success',

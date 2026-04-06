@@ -14,18 +14,19 @@ import '../components/attendance/generate-form.js'
 import { initPage } from '../utils/session-validate.js';
 import { addExcelAttendances } from '../components/attendance/attendance-form.js'; 
 import { attendanceFilter } from '../components/attendance/attendance-filter.js';
+import { attendanceReportFilter } from '../components/attendance/attendance-report.js';
 
-let register = []
+let report = []
 
 document.addEventListener('DOMContentLoaded', async () => {
     await initPage()
     // Generar tabla con el día actual
-    register = await attendanceFilter();
+    await attendanceFilter();
     document.getElementById('attendance-resume-container').addEventListener('change', async function (e) {
         if (e.target.matches('input[name="attendance-select"]')) {
-            register = await attendanceFilter();
+            await attendanceFilter();
         }
-        });
+    });
 });
 
 // Declarar el botón de filtrado
@@ -35,7 +36,7 @@ document.addEventListener('click', async function (e) {
         const defaultRadio = document.querySelector('input[name="attendance-select"][value="Total"]');
         if (defaultRadio) defaultRadio.checked = true;
         // Ejecutar el filtro
-        register = await attendanceFilter();
+        await attendanceFilter();
     }
 });
 
@@ -47,34 +48,59 @@ document.addEventListener('click', function(e) {
 });
 
 // Declarar el botón de exportación a Excel
-document.getElementById("export-btn").addEventListener('click', async function() {
-    if (!register.length) {
-        Swal.fire({
-            title: 'Atención',
-            text: 'No hay datos para exportar.',
-            icon: 'warning',
-            confirmButtonText: 'OK'
-        });
-        return;
+document.addEventListener('click', async function (e) {
+    if (e.target.id === 'btn-report' || e.target.closest('#btn-report')) {
+
+        // Obtener los registros para el reporte
+        const report = await attendanceReportFilter();
+
+        if (!report || !report.length) {
+            Swal.fire({
+                title: 'Atención',
+                text: 'No hay datos para exportar.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        // Transformar los datos para Excel
+        const dataForExcel = report.map(r => ({
+            "No. Empleado": r.numero_empleado,
+            "Nombre": r.nombre,
+            "Puesto": r.puesto,
+            "Fecha": r.fecha,
+            "Día": r.dia,
+            "Entrada": r.entrada,
+            "Variación E": r.variacion_entrada,
+            "Salida": r.salida,
+            "Variación S": r.variacion_salida,
+            "Verificación": r.verificacion,
+            "Tiempo extra": r.tiempo_extra
+        }));
+
+        const resultsText = document.getElementById('attendance-results');
+        const filterValue = document.getElementById('status-report').value;
+        // Actualizar texto de resultados
+        if (!dataForExcel.length) {
+            resultsText.textContent = `0 Registros generados`;
+            return;
+        }
+        resultsText.textContent = `${dataForExcel.length} Registros generados`;
+
+        // Generar Excel
+        
+        const ws = XLSX.utils.json_to_sheet(dataForExcel);
+        const wb = XLSX.utils.book_new();
+
+        XLSX.utils.book_append_sheet(wb, ws, `Reporte`);
+        XLSX.writeFile(wb, `rep_asistencia_${new Date().toISOString().split('T')[0]}_${filterValue}.xlsx`);
+        
     }
+});
 
-    const dataForExcel = register.map(r => ({
-        "No. Empleado": r.numero_empleado,
-        "Nombre": r.nombre,
-        "Puesto": r.puesto,
-        "Fecha": r.fecha,
-        "Día": r.dia,
-        "Entrada": r.entrada,
-        "Variación E": r.variacion_entrada,
-        "Salida": r.salida,
-        "Variación S": r.variacion_salida,
-        "Verificación": r.verificacion,
-        "Tiempo extra": r.tiempo_extra
-    }));
-
-    const ws = XLSX.utils.json_to_sheet(dataForExcel);
-    const wb = XLSX.utils.book_new();
-
-    XLSX.utils.book_append_sheet(wb, ws, `${register[0].fecha_asistencia}`);
-    XLSX.writeFile(wb, `reporte_asistencia_${new Date().toISOString().split('T')[0]}.xlsx`);
+// Al cerrar modal formatear el texto
+document.getElementById('report-modal').addEventListener('hidden.bs.modal', () => {
+    const resultsText = document.getElementById('attendance-results');
+    resultsText.textContent = `0 Registros generados`;
 });

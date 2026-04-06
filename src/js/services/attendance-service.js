@@ -1,9 +1,7 @@
 import supabase from '../supabase/supabase-client.js'
 // Servicios Supabase
 import { getActiveStaff } from './staff-service.js';
-import { findSchedule } from './schedule-service.js';
 // Utilidades
-import { timeToMinutes, minutesToTime } from '../utils/time-functions.js'; 
 import { findExtraTimeDay } from './extra-time-service.js';
 
 // Función para insertar nuevas asistencias
@@ -33,6 +31,7 @@ export async function getSingleAttendances(date) {
             fecha_asistencia,
             hora_asistencia,
             tipo,
+            variacion,
             dia,
             verificación,
             
@@ -54,6 +53,56 @@ export async function getSingleAttendances(date) {
         fecha_asistencia: asistencia.fecha_asistencia,
         hora_asistencia: asistencia.hora_asistencia,
         tipo: asistencia.tipo,
+        variacion: asistencia.variacion,
+        dia: asistencia.dia,
+        verificación: asistencia.verificación,
+        id_empleado: asistencia.id_empleado,
+        numero_empleado: asistencia.rh_empleados?.numero_empleado,
+        nombre: asistencia.rh_empleados?.nombre,
+        puesto: asistencia.rh_empleados?.puesto
+    }));
+}
+
+// Función para obtener asistencias de una fecha especificada
+export async function getRangeAttendances(startDate, endDate) {
+    let query = supabase
+        .from('rh_asistencias')
+        .select(`
+            id_asistencia,
+            fecha_asistencia,
+            hora_asistencia,
+            tipo,
+            variacion,
+            dia,
+            verificación,
+            id_empleado,
+            rh_empleados (numero_empleado, nombre, puesto)
+        `);
+
+    if (startDate) {
+        query = query.gte('fecha_asistencia', startDate);
+    }
+
+    if (endDate) {
+        query = query.lte('fecha_asistencia', endDate);
+    }
+
+    const { data, error } = await query
+        .order('fecha_asistencia', { ascending: true })
+        .order('hora_asistencia', { ascending: true })
+        .order('id_empleado', { ascending: true });
+
+    if (error) {
+        console.error('Error obteniendo asistencias:', error);
+        throw error;
+    }
+    
+    return data.map(asistencia => ({
+        id_asistencia: asistencia.id_asistencia,
+        fecha_asistencia: asistencia.fecha_asistencia,
+        hora_asistencia: asistencia.hora_asistencia,
+        tipo: asistencia.tipo,
+        variacion: asistencia.variacion,
         dia: asistencia.dia,
         verificación: asistencia.verificación,
         id_empleado: asistencia.id_empleado,
@@ -64,7 +113,7 @@ export async function getSingleAttendances(date) {
 }
 
 // Función para obtener toda la lista de asistencia en base a empleados activos y registros de asistencia
-export async function getFullAttendances(allAttendances) {
+export async function getFormatedAttendances(allAttendances) {
     const activeStaff = await getActiveStaff();
     const grouped = {};
 
@@ -83,19 +132,36 @@ export async function getFullAttendances(allAttendances) {
                 dia: a.dia,
                 entradas: [],
                 salidas: [],
+                variacionesEntrada: [],
+                variacionesSalida: [],
                 verificacion: a.verificación,
                 tiempo_extra
             };
         }
 
-        if (a.tipo === 'Entrada') grouped[key].entradas.push(a.hora_asistencia);
-        if (a.tipo === 'Salida') grouped[key].salidas.push(a.hora_asistencia);
+        if (a.tipo === 'Entrada') {
+            grouped[key].entradas.push(a.hora_asistencia);
+            grouped[key].variacionesEntrada.push(a.variacion);
+        }
+
+        if (a.tipo === 'Salida') {
+            grouped[key].salidas.push(a.hora_asistencia);
+            grouped[key].variacionesSalida.push(a.variacion);
+        }
     }));
 
     // Formatear asistencias existentes
     const formattedAttendances = Object.values(grouped).map(g => {
-        const entradasOrdenadas = g.entradas.sort();
-        const salidasOrdenadas = g.salidas.sort();
+        const entradasOrdenadas = g.entradas
+            .map((hora, i) => ({ hora, variacion: g.variacionesEntrada[i] }))
+            .sort((a, b) => a.hora.localeCompare(b.hora));
+
+        const salidasOrdenadas = g.salidas
+            .map((hora, i) => ({ hora, variacion: g.variacionesSalida[i] }))
+            .sort((a, b) => a.hora.localeCompare(b.hora));
+
+        const primeraEntrada = entradasOrdenadas[0] || {};
+        const ultimaSalida = salidasOrdenadas[salidasOrdenadas.length - 1] || {};
 
         return {
             id_empleado: g.id_empleado,
@@ -104,70 +170,60 @@ export async function getFullAttendances(allAttendances) {
             puesto: g.puesto,
             fecha: g.fecha,
             dia: g.dia,
-            entrada: entradasOrdenadas[0] || "",
-            salida: salidasOrdenadas.length > 0
-                ? salidasOrdenadas[salidasOrdenadas.length - 1]
-                : "",
+            entrada: primeraEntrada.hora || "",
+            salida: ultimaSalida.hora || "",
+            variacion_entrada: primeraEntrada.variacion || "",
+            variacion_salida: ultimaSalida.variacion || "",
             verificacion: g.verificacion,
             tiempo_extra: g.tiempo_extra || ""
         };
     });
 
-    // Crear mapa por id_empleado para buscar rápido
+    // Obtener fechas únicas
+    const uniqueDates = [...new Set(formattedAttendances.map(a => a.fecha))];
+
+    // Crear mapa por empleado + fecha
     const attendanceMap = {};
     formattedAttendances.forEach(a => {
-        attendanceMap[a.id_empleado] = a;
+        const key = `${a.id_empleado}-${a.fecha}`;
+        attendanceMap[key] = a;
     });
 
-    // Construir lista final incluyendo empleados sin checadas
-    const fullList = activeStaff.map(emp => {
-        return attendanceMap[emp.id_empleado] || {
-            id_empleado: emp.id_empleado,
-            numero_empleado: emp.numero_empleado,
-            nombre: emp.nombre,
-            puesto: emp.puesto,
-            fecha: "",
-            entrada: "",
-            salida: "",
-            verificacion: "",
-            tiempo_extra: ""
-        };
+    // Construir lista completa (con faltantes)
+    const fullList = [];
+
+    uniqueDates.forEach(fecha => {
+        activeStaff.forEach(emp => {
+            const key = `${emp.id_empleado}-${fecha}`;
+
+            if (attendanceMap[key]) {
+                fullList.push(attendanceMap[key]);
+            } else {
+                fullList.push({
+                    id_empleado: emp.id_empleado,
+                    numero_empleado: emp.numero_empleado,
+                    nombre: emp.nombre,
+                    puesto: emp.puesto,
+                    fecha,
+                    dia: "",
+                    entrada: "",
+                    salida: "",
+                    variacion_entrada: "",
+                    variacion_salida: "",
+                    verificacion: "",
+                    tiempo_extra: ""
+                });
+            }
+        });
+    });
+
+    // Ordenar por fecha
+    fullList.sort((a, b) => {
+        if (a.fecha === b.fecha) {
+            return a.nombre.localeCompare(b.nombre);
+        }
+        return new Date(a.fecha) - new Date(b.fecha);
     });
 
     return fullList;
-}
-
-// Función para evaluar cada registro de asistencia con el horario y determinar las variaciones de tiempo
-export async function addTimeVariations(fullAttendances) {
-    return await Promise.all(fullAttendances.map(async (a) => {
-        if (!a.entrada || !a.salida || !a.dia) {
-            return {
-                ...a,
-                variacion_entrada: "",
-                variacion_salida: ""
-            };
-        }
-
-        const horario = await findSchedule(a.id_empleado, a.dia);
-
-        if (!horario) {
-            return {
-                ...a,
-                variacion_entrada: "",
-                variacion_salida: ""
-            };
-        }
-
-        const entradaReal = timeToMinutes(a.entrada);
-        const salidaReal = timeToMinutes(a.salida);
-
-        const entradaHorario = timeToMinutes(horario.entrada);
-        const salidaHorario = timeToMinutes(horario.salida);
-
-        return {
-            ...a,
-            variacion_entrada: minutesToTime(entradaReal - entradaHorario),
-            variacion_salida: minutesToTime(salidaReal - salidaHorario)
-        };
-    }));
 }

@@ -11,9 +11,9 @@ export function splitDateTime(fechaTexto) {
 // Función para obtener el día de la semana
 export function getWeekDay(date) {
     const dias = [ 'domingo', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado' ];
-    const [day, month, year] = date.split('-').map(Number);
+    const [year, month, day] = date.split('-').map(Number);
     const fecha = new Date(year, month - 1, day);
-
+    
     return dias[fecha.getDay()];
 }
 

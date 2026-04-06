@@ -42,7 +42,7 @@
                             </svg>
                             <p class="ps-1">Registrar Entrega</p>
                         </button>
-                        <button id="export-btn" class="btn btn-primary d-flex align-items-center ps-3 pe-3 ms-2 me-2">
+                        <button id="export-btn" class="btn btn-primary d-flex align-items-center ps-3 pe-3 ms-2 me-2" data-bs-target="#report-modal" data-bs-toggle="modal">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
                                 <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 2h-4v3h4zm0 4h-4v3h4zm0 4h-4v3h3a1 1 0 0 0 1-1zm-5 3v-3H6v3zm-5 0v-3H1v2a1 1 0 0 0 1 1zm-4-4h4V8H1zm0-4h4V4H1zm5-3v3h4V4zm4 4H6v3h4z"/>
                             </svg>
@@ -165,12 +165,10 @@
                                 <div class="col-md-8 label-over-border">
                                     <label for="edit-staff" class="form-label m-2">Empleado</label>
                                     <input type="text" class="form-control" id="edit-staff" disabled>
-                                    <p class="error invalid-feedback" id="error-editStaff" style="color: red;"></p>
                                 </div>
                                 <div class="col-md-4 ms-auto label-over-border">
                                     <label for="edit-type" class="form-label m-2">Tipo</label>
                                     <input type="text" class="form-control" id="edit-type" disabled>
-                                    <p class="error invalid-feedback" id="error-editType" style="color: red;"></p>
                                 </div>
                             </div>
                             <!-- Campos editables -->
@@ -178,23 +176,20 @@
                                 <div class="col-md-4 label-over-border">
                                     <label for="edit-cloth" class="form-label m-2">Prenda</label>
                                     <input type="text" class="form-control" id="edit-cloth" disabled>
-                                    <p class="error invalid-feedback" id="error-editCloth" style="color: red;"></p>
                                 </div>
                                 <div class="col-md-4 label-over-border">
                                     <label for="edit-size" class="form-label m-2">Talla</label>
-                                    <input type="text" class="form-control" id="edit-size">
-                                    <p class="error invalid-feedback" id="error-editSize" style="color: red;"></p>
+                                    <input type="text" class="form-control" id="edit-size" disabled>
                                 </div>
                                 <div class="col-md-4 label-over-border">
                                     <label for="edit-quantity" class="form-label m-2">Cantidad</label>
-                                    <input type="text" class="form-control" id="edit-quantity">
-                                    <p class="error invalid-feedback" id="error-editQuantity" style="color: red;"></p>
+                                    <input type="text" class="form-control" id="edit-quantity" disabled>
                                 </div>
                             </div>
                             <div class="row ms-2 me-2 pt-3 pb-3">
                                 <div class="col label-over-border">
                                     <label for="edit-observations" class="form-label m-2">Observaciones</label>
-                                    <input type="text" class="form-control" id="edit-observations">
+                                    <input type="text" class="form-control" id="edit-observations" autocomplete="off">
                                     <p class="error invalid-feedback" id="error-editObservations" style="color: red;"></p>
                                 </div>
                             </div>
@@ -234,6 +229,73 @@
                 <div class="modal-footer me-4">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
                     <button id="btn-delete-entry" class="btn btn-primary">Sí</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para la generación de reporte -->
+    <div class="modal fade" id="report-modal" tabindex="-1" aria-labelledby="report-modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content pt-3 pb-3">
+                <div class="modal-header">
+                    <div class="row">
+                        <div class="col d-flex align-items-center">
+                            <div class="ms-4 me-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-spreadsheet" viewBox="0 0 16 16">
+                                    <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V9H3V2a1 1 0 0 1 1-1h5.5zM3 12v-2h2v2zm0 1h2v2H4a1 1 0 0 1-1-1zm3 2v-2h3v2zm4 0v-2h3v1a1 1 0 0 1-1 1zm3-3h-3v-2h3zm-7 0v-2h3v2z"/>
+                                </svg>
+                            </div>
+                            <h5 class="modal-title" id="report-modalLabel">Generación del Reporte de Uniformes</h5>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close me-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <form id="report-form" class="pb-3">
+                            <div class="row ms-2 me-2 mt-3">
+                                <div class="col-lg-6 btn-container mt-2">
+                                    <input type="radio" class="btn-check" name="report-select" id="uniforms-history" value="Historial" checked>
+                                    <label class="report-btn d-flex align-items-center" for="uniforms-history">
+                                        <div class="icon-circle">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
+                                                <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"/>
+                                                <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="ms-4">
+                                            <p>Reporte Entregas</p>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="col-lg-6 btn-container mt-2">
+                                    <input type="radio" class="btn-check" name="report-select" id="uniforms-inventory" value="Registro">
+                                    <label class="report-btn d-flex align-items-center" for="uniforms-inventory">
+                                        <div class="icon-circle">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-list-check" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3.854 2.146a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 3.293l1.146-1.147a.5.5 0 0 1 .708 0m0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 7.293l1.146-1.147a.5.5 0 0 1 .708 0m0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0"/>
+                                            </svg>
+                                        </div>
+                                        <div class="ms-4">
+                                            <p>Inventario Uniformes</p>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </form>
+                        <hr>
+                        <p id="uniforms-results" class="ms-2">0 Registros generados</p>
+                    </div>
+                </div>
+                <div class="modal-footer me-4">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button id="btn-report" class="btn btn-primary d-flex align-items-center ps-3 pe-3 ms-2 me-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
+                            <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 2h-4v3h4zm0 4h-4v3h4zm0 4h-4v3h3a1 1 0 0 0 1-1zm-5 3v-3H6v3zm-5 0v-3H1v2a1 1 0 0 0 1 1zm-4-4h4V8H1zm0-4h4V4H1zm5-3v3h4V4zm4 4H6v3h4z"/>
+                        </svg>
+                        <p class="ps-2">Generar</p>
+                    </button>
                 </div>
             </div>
         </div>

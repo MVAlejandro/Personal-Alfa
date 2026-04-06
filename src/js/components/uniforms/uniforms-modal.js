@@ -2,7 +2,7 @@
 import { updateUniformsDeliver, deleteUniformsDeliver } from '../../services/uniforms-deliver-service.js'; 
 import { renderUniformsDeliverTable } from './uniforms-table.js'; 
 // Utilidades
-import { textValidate, amountValidate, inputValidate } from '../../utils/form-validations.js';
+import { textValidate, inputValidate } from '../../utils/form-validations.js';
 
 // Función para cargar datos en el modal
 export async function renderUniformsEditModal(entrega) {
@@ -21,17 +21,10 @@ export async function renderUniformsEditModal(entrega) {
 document.getElementById('btn-edit-entry').addEventListener('click', async function() {
     const form = document.getElementById('delivers-edit-form');
     // Referencias para validación
-    const tallaIn = document.getElementById('edit-size');
-    const cantidadIn = document.getElementById('edit-quantity');
     const observacionesIn = document.getElementById('edit-observations');
-
-    const tallaError = document.getElementById('error-editSize');
-    const cantidadError = document.getElementById('error-editQuantity');
     const observacionesError = document.getElementById('error-editObservations');
 
     // Validaciones
-    textValidate(tallaIn, tallaError)
-    amountValidate(cantidadIn, cantidadError)
     textValidate(observacionesIn, observacionesError)
 
     const campos = document.querySelectorAll('input')
@@ -46,11 +39,7 @@ document.getElementById('btn-edit-entry').addEventListener('click', async functi
     }
 
     const id_entrega = document.getElementById('edit-id-deliver').value;
-    const updatedData = {
-        talla: tallaIn.value,
-        cantidad: cantidadIn.value,
-        observaciones: observacionesIn.value
-    };
+    const updatedData = { observaciones: observacionesIn.value };
 
     try {
         await updateUniformsDeliver(id_entrega, updatedData);

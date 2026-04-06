@@ -13,22 +13,20 @@ import '../components/uniforms/generate-form.js'
 // Servicios Supabase
 import { initPage } from '../utils/session-validate.js'; 
 import { addUniforms } from '../components/uniforms/uniforms-form.js'; 
-import { getUniformsResume } from '../services/uniforms-deliver-service.js';
 import { uniformsFilter } from '../components/uniforms/uniforms-filter.js';
 import { renderUniformsEditModal } from '../components/uniforms/uniforms-modal.js';
-
-let register = []
+import { uniformsReport } from '../components/uniforms/uniforms-report.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     await initPage()
     // Generar tabla con todos los registros
-    register = await uniformsFilter();
+    await uniformsFilter();
 });
 
 // Declarar el botón de filtrado
 document.addEventListener('click', async function(e) {
     if (e.target.id === 'filter-btn' || e.target.closest('#filter-btn')) {
-        register = await uniformsFilter();
+        await uniformsFilter();
     }
 });
 
@@ -72,32 +70,12 @@ deleteModal.addEventListener('hidden.bs.modal', () => {
 });
 
 // Declarar el botón de exportación a Excel
-document.getElementById("export-btn").addEventListener('click', async function() {
-    if (!register.length) {
-        Swal.fire({
-            title: 'Atención',
-            text: 'No hay datos para exportar.',
-            icon: 'warning',
-            confirmButtonText: 'OK'
-        });
-        return;
-    }
+document.getElementById("btn-report").addEventListener('click', async function() {
+    uniformsReport();
+});
 
-    const dataForExcel = register.map(r => ({
-        "No. Empleado": r.numero_empleado, 
-        "Nombre": r.nombre, 
-        "Puesto": r.puesto,
-        "Tipo": r.tipo_entrega, 
-        "Prenda": r.tipo_prenda, 
-        "Talla": r.talla,
-        "Cantidad": r.cantidad, 
-        "F Entrega": r.fecha_entrega, 
-        "Observaciones": r.observaciones
-    }));
-
-    const ws = XLSX.utils.json_to_sheet(dataForExcel);
-    const wb = XLSX.utils.book_new();
-
-    XLSX.utils.book_append_sheet(wb, ws, `Entregas`);
-    XLSX.writeFile(wb, `reporte_entregas_uniformes_${new Date().toISOString().split('T')[0]}.xlsx`);
+// Al cerrar modal formatear el texto
+document.getElementById('report-modal').addEventListener('hidden.bs.modal', () => {
+    const resultsText = document.getElementById('uniforms-results');
+    resultsText.textContent = `0 Registros generados`;
 });

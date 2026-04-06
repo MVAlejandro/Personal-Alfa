@@ -13,25 +13,21 @@ import '../components/permissions/generate-form.js'
 // Servicios Supabase
 import { initPage } from '../utils/session-validate.js'; 
 import { addPermission } from '../components/permissions/permissions-form.js';
-import { getVacationsResume } from '../services/absences-service.js';
+import { absencesReport } from '../components/permissions/permissions-report.js';
 import { permissionsFilter } from '../components/permissions/permissions-filter.js';
 import { renderPermissionsEditModal } from '../components/permissions/permissions-modal.js';
 import { generatePDF } from '../components/permissions/permissions-print.js';
 
-let register = []
-
 document.addEventListener('DOMContentLoaded', async () => {
     await initPage()
     // Generar tabla con todos los registros
-    register = await permissionsFilter();
-    console.log(register);
-    
+    await permissionsFilter();
 });
 
 // Declarar el botón de filtrado
 document.addEventListener('click', async function(e) {
     if (e.target.id === 'filter-btn' || e.target.closest('#filter-btn')) {
-        register = await permissionsFilter();
+        await permissionsFilter();
     }
 });
 
@@ -83,32 +79,13 @@ deleteModal.addEventListener('hidden.bs.modal', () => {
 });
 
 // Declarar el botón de exportación a Excel
-document.getElementById("export-btn").addEventListener('click', async function() {
-    if (!register.length) {
-        Swal.fire({
-            title: 'Atención',
-            text: 'No hay datos para exportar.',
-            icon: 'warning',
-            confirmButtonText: 'OK'
-        });
-        return;
-    }
+document.getElementById("btn-report").addEventListener('click', async function() {
+    absencesReport();
+});
 
-    const dataForExcel = register.map(r => ({
-        "No. Empleado": r.numero_empleado, 
-        "Nombre": r.nombre, 
-        "Puesto": r.puesto,
-        "Tipo": r.tipo,
-        "F Solicitud": r.fecha_solicitud, 
-        "Fechas": r.fechas_solicitadas,
-        "Estado": r.estado, 
-        "Observaciones": r.observaciones
-    }));
-
-    const ws = XLSX.utils.json_to_sheet(dataForExcel);
-    const wb = XLSX.utils.book_new();
-
-    XLSX.utils.book_append_sheet(wb, ws, `Permisos`);
-    XLSX.writeFile(wb, `reporte_permisos_${new Date().toISOString().split('T')[0]}.xlsx`);
+// Al cerrar modal formatear el texto
+document.getElementById('report-modal').addEventListener('hidden.bs.modal', () => {
+    const resultsText = document.getElementById('permissions-results');
+    resultsText.textContent = `0 Registros generados`;
 });
 

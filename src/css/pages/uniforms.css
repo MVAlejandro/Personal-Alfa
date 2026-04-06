@@ -8,7 +8,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-#uniforms-form-container, #uniforms-filter-container, .table-responsive, #uniforms-pages-container {
+#uniforms-form-container, #uniforms-filter-container, .report-btn, .table-responsive, #uniforms-pages-container {
     background-color: var(--background-light) !important;
     border-radius: 1rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -28,4 +28,65 @@ th {
 .uniform-departament, .uniform-quantity, #uniforms-pages-results {
     font-size: 13px;
     color: var(--secondary) !important;
+}
+
+/* Estilos de los botones de reporte */
+.btn-container {
+    height: 100px;
+}
+
+.report-btn {
+    color: var(--secondary) !important;
+    border: 1px solid var(--secondary-light);
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    font-weight: 600;
+}
+
+.report-btn:hover {
+    background-color: var(--primary-dark) !important;
+    color: var(--primary-light) !important;
+    border-color: var(--primary) !important;
+    border-width: 2px;
+    transform: translateY(-3px);
+    cursor: pointer;
+}
+
+.report-btn:active {
+    transform: scale(0.98);
+    box-shadow: var(--primary-dark);
+}
+
+.btn-check:checked + .report-btn {
+    background-color: var(--primary-light);
+    border-color: var(--primary);
+    border-width: 2px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-check:checked + .report-btn .icon-circle {
+    background-color: var(--primary);
+    color: var(--primary-light);
+}
+
+.report-btn.is-invalid {
+    border: 1px solid #dc3545;
+}
+
+.report-btn.is-valid {
+    border: 1px solid #198754;
+}
+
+.report-btn {
+    transition: transform 0.3s ease;
+    animation: fadeInUp 1s ease-in-out;
+}
+
+@media (max-width: 770px) {
+    .report-btn {
+        font-size: 15px !important;
+    }
 }
