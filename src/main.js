@@ -13,16 +13,28 @@ import './js/components/navbar.js';
 import { initPage } from './js/utils/session-validate.js';
 import { createResumeCards } from './js/components/index/resume-cards.js';
 import { getFormatedAttendances, getSingleAttendances } from './js/services/attendance-service.js';
+import { renderAttendanceGraphic, renderStaffGraphic } from './js/components/index/attendance-graphic.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const today = new Date().toISOString().split("T")[0] || "-";
-    const allAttendances = await getSingleAttendances(today);
-    
+    // Obtener la fecha actual
+    const today = new Date();
+    const todayStr = today.toISOString().split("T")[0] || "-"
+    // Primer día del mes
+    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+    const firstDayStr = firstDay.toISOString().split("T")[0];
+
+    // Último día del mes
+    const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    const lastDayStr = lastDay.toISOString().split("T")[0];
+
+    const allAttendances = await getSingleAttendances(todayStr);
     const fullAttendances = await getFormatedAttendances(allAttendances);
 
     const dayText = document.getElementById('dayHeader');
-    dayText.innerHTML = `${today}`;
+    dayText.innerHTML = `${todayStr}`;
 
     await initPage()
     createResumeCards(fullAttendances)
+    renderStaffGraphic()
+    renderAttendanceGraphic(firstDayStr, lastDayStr)
 })

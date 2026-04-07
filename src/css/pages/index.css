@@ -34,7 +34,7 @@ table {
     font-size: 13px !important;
 }
 
-#resume-container, .absences-statistics-container, #requests-container {
+#resume-container, .attendance-statistics-container, #graphic-staff-container, #graphic-attendance-container, #requests-container {
     background-color: var(--background-light) !important;
     border-radius: 1rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
@@ -43,6 +43,12 @@ table {
 
 #dayHeader {
     color: var(--primary-dark);
+}
+
+.graphic-report-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
 }
 
 /* Estilos generales para cards */

@@ -37,7 +37,9 @@ export async function getActiveStaff() {
             nombre,
             puesto,
             fecha_ingreso,
-            estatus
+            estatus,
+            id_departamento,
+            rh_departamentos (nombre)
             `)
         .eq('estatus', 'Activo')
         .order('id_empleado', { ascending: true });
@@ -47,7 +49,18 @@ export async function getActiveStaff() {
         throw error;
     }
     
-    return data;
+    return data.map(empleado => {
+        return {
+            id_empleado: empleado.id_empleado,
+            numero_empleado: empleado.numero_empleado,
+            nombre: empleado.nombre,
+            puesto: empleado.puesto,
+            fecha_ingreso: empleado.fecha_ingreso,
+            estatus: empleado.estatus,
+            id_departamento: empleado.id_departamento,
+            departamento: empleado?.rh_departamentos?.nombre
+        };
+    });
 }
 
 //Función para obtener toda la información de un empleado por id

@@ -15,7 +15,7 @@ import { initPage } from '../utils/session-validate.js';
 import { addPermission } from '../components/permissions/permissions-form.js';
 import { absencesReport } from '../components/permissions/permissions-report.js';
 import { permissionsFilter } from '../components/permissions/permissions-filter.js';
-import { renderPermissionsEditModal } from '../components/permissions/permissions-modal.js';
+import { renderPermissionsEditModal, renderPermissionsInfoModal } from '../components/permissions/permissions-modal.js';
 import { generatePDF } from '../components/permissions/permissions-print.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -65,17 +65,19 @@ editModal.addEventListener('hidden.bs.modal', () => {
     });
 });
 
-// Acciones del modal de eliminación
-const deleteModal = document.getElementById('delete-modal');
+// Acciones del modal de información
+const infoModal = document.getElementById('info-modal');
 // Al abrir modal
-deleteModal.addEventListener('shown.bs.modal', event => {
+infoModal.addEventListener('shown.bs.modal', event => {
     const button = event.relatedTarget;
-    const idpermission = button.dataset.id;
-    document.getElementById('delete-id-permission').value = idpermission;
+    const permissionData = JSON.parse(button.getAttribute('permission-data'));
+    renderPermissionsInfoModal(permissionData);
 });
 // Al cerrar modal
-deleteModal.addEventListener('hidden.bs.modal', () => {
-    document.getElementById('delete-id-permission').value = '';
+infoModal.addEventListener('hidden.bs.modal', () => {
+    infoModal.querySelectorAll('input, select').forEach(el => {
+        el.value = '';
+    });
 });
 
 // Declarar el botón de exportación a Excel

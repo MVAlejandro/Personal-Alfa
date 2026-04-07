@@ -17,8 +17,8 @@ export async function createPermission(permissionData) {
 }
 
 // Función para obtener permisos
-export async function getPermission() {
-    const { data, error } = await supabase
+export async function getPermission(id_staff) {
+    let query = supabase
         .from('rh_permisos_ausencia')
         .select(`
             id_permiso,
@@ -33,7 +33,12 @@ export async function getPermission() {
                 nombre, 
                 puesto, 
                 fecha_ingreso)
-            `)
+            `);
+    if (id_staff) {
+        query = query.eq('id_empleado', id_staff);
+    }
+
+    const { data, error } = await query
         .order('id_permiso', { ascending: true });
     
     if (error) {

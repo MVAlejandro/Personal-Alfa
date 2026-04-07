@@ -15,6 +15,11 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+.text-sencondary {
+    color: var(--secondary);
+    text-decoration: underline;
+}
+
 th {
     color: var(--secondary) !important;
 }
@@ -33,6 +38,10 @@ th {
 }
 
 /* Estilos de texto para la tabla */
+#permissions-resume-table {
+    font-size: 13px !important;
+}
+
 .permission-entry-date {
     font-weight: bold;
 }
