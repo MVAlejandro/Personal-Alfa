@@ -13,7 +13,8 @@ import { generateForm, restoreForm } from '../components/staff/generate-form.js'
 // Servicios Supabase
 import { initPage, validateUserRole } from '../utils/session-validate.js';
 import { addStaff } from '../components/staff/staff-add.js';
-import { editStaff } from '../components/staff/staff-edit.js';
+import { authorizeStaff, editStaff } from '../components/staff/staff-edit.js';
+import { removeStaff } from '../components/staff/staff-remove.js';
 import { staffFilter } from '../components/staff/staff-filter.js';
 import { renderStaffEditForm } from '../components/staff/staff-edit.js';
 import { findStaff } from '../services/staff-service.js';
@@ -35,12 +36,6 @@ document.addEventListener('click', async function(e) {
 // Declarar los botones para manipulación del formulario
 document.getElementById("btn-add-staff").addEventListener("click", async () => {
     await generateForm()
-
-    const container = document.getElementById('form-buttons-container');
-    container.innerHTML =
-        `<button id="btn-cancel-entry" class="btn btn-outline-secondary m-1">Cancelar</button>
-         <button id="btn-add-entry" class="btn btn-primary m-1 d-none" data-rh-only>Añadir Empleado</button>`;
-    validateUserRole()
 });
 
 document.addEventListener("click", (e) => {
@@ -68,18 +63,26 @@ container.addEventListener('click', async function(e) {
     
     await generateForm();
     await renderStaffEditForm(staffData);
-    const container = document.getElementById('form-buttons-container');
-    container.innerHTML =
-        `<button id="btn-cancel-entry" class="btn btn-outline-secondary m-1">Cancelar</button>
-         <button id="btn-delete-entry" class="btn btn-danger m-1 d-none" data-rh-only data-bs-target="#delete-modal" data-bs-toggle="modal">Eliminar</button>
-         <button id="btn-update-entry" class="btn btn-primary m-1 d-none" data-rh-only>Actualizar Empleado</button>`;
-    validateUserRole()
 });
 
 // Declarar el botón de edición del empleado
 document.addEventListener('click', function(e) {
     if (e.target.id === 'btn-update-entry') {
         editStaff(e);
+    }
+});
+
+// Declarar el botón de aceptar el alta del empleado
+document.addEventListener('click', function(e) {
+    if (e.target.id === 'btn-authorize-entry') {
+        authorizeStaff(e);
+    }
+});
+
+// Declarar el botón de eliminación del empleado
+document.addEventListener('click', function(e) {
+    if (e.target.id === 'btn-remove-staff') {
+        removeStaff(e);
     }
 });
 

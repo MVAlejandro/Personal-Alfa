@@ -28,6 +28,8 @@ export async function renderStaffList(staffParam = null) {
             statusClass = 'black';
         } else if (staff.estatus == 'Inactivo') {
             statusClass = 'red';
+        } else if (staff.estatus == 'Pendiente') {
+            statusClass = 'grey';
         }
 
         container.innerHTML += 

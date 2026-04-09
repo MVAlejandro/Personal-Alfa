@@ -67,7 +67,7 @@
                                     <div class="row ms-2 me-2">
                                         <div class="col-md col-lg-12 d-flex align-items-center label-over-border">
                                             <label for="search-filter" class="form-label m-2">Buscar por empleado</label>    
-                                            <input id="search-filter" class="form-control" type="search" placeholder="Buscar por No / Nombre" aria-label="Search"/>
+                                            <input id="search-filter" class="form-control" type="search" placeholder="Buscar por No / Nombre" aria-label="Search" autocomplete="off"/>
                                         </div>
                                         <div class="col-md col-lg-12 d-flex align-items-center label-over-border">
                                             <label for="status-filter" class="form-label m-2">Filtrar por Estatus</label>
@@ -75,6 +75,7 @@
                                                 <option value="0">Todos</option>
                                                 <option value="Activo">Activos</option>
                                                 <option value="Inactivo">Inactivos</option>
+                                                <option value="Pendiente">Pendientes</option>
                                             </select>
                                         </div>
                                         <div id="filter-btn-container" class="col-md d-flex align-items-center justify-content-end">
@@ -113,9 +114,9 @@
         </section>
     </main>
 
-    <!-- Modal de confirmación para eliminar registro -->
-    <div class="modal fade" id="delete-modal" aria-hidden="true" aria-labelledby="delete-modalLabel" tabindex="-1">
-        <div class="modal-dialog">
+    <!-- Modal para dar de baja un empleado -->
+    <div class="modal fade" id="remove-modal" aria-hidden="true" aria-labelledby="remove-modalLabel" tabindex="-1">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content pt-3 pb-2">
                 <div class="modal-header">
                     <div class="row">
@@ -126,17 +127,41 @@
                                     <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>
                                 </svg>
                             </div>
-                            <h5 class="modal-title" id="delete-modalLabel">Confirmar eliminación</h5>
+                            <h5 class="modal-title" id="remove-modalLabel">Información de la Baja</h5>
                         </div>
                     </div>
                     <button type="button" class="btn-close me-3" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body m-auto pt-4 pb-4">
-                    <p>¿Está seguro de querer eliminar el registro seleccionado?</p>
+                <div class="modal-body">
+                    <div class="container">
+                        <form id="remove-staff-form">
+                            <div class="row ms-2 me-2 mt-4">
+                                <div class="col-md-9 col-lg-4 label-over-border">
+                                    <label for="remove-motive" class="form-label m-2">Motivo de Salida</label>
+                                    <select class="form-select" id="remove-motive">
+                                        <option value="0">Seleccione...</option>
+                                        <option value="Sueldo">Sueldo y Prestaciones</option>
+                                        <option value="Ambiente">Ambiente laboral</option>
+                                        <option value="Acoso">Acoso o Bullyng</option>
+                                        <option value="Condiciones">Condiciones de trabajo</option>
+                                        <option value="Capacitacion">Capacitación del puesto</option>
+                                        <option value="Personal">Motivos personales</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                    <p class="error invalid-feedback" id="error-remove-motive" style="color: red;"></p>
+                                </div>
+                                <div class="col-md-12 col-lg-8 label-over-border">
+                                    <label for="remove-description" class="form-label m-2">Descripción</label>
+                                    <textarea id="remove-description" class="form-control" rows="4" placeholder="Describa a detalle el motivo de salida del colaborador."></textarea>
+                                    <p class="error invalid-feedback" id="error-remove-description" style="color: red;"></p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
                 <div class="modal-footer me-4">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                    <button id="btn-delete-entry" class="btn btn-primary">Sí</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button id="btn-remove-staff" class="btn btn-danger">Dar de Baja</button>
                 </div>
             </div>
         </div>

@@ -8,9 +8,7 @@ export function validateForm() {
     const nombreIn = document.getElementById("staff-name");
     const departamentoIn = document.getElementById("staff-departament");
     const puestoIn = document.getElementById("staff-position");
-    const estatusIn = document.getElementById("staff-status");
     const fecha_ingresoIn = document.getElementById("staff-entry");
-    const fecha_bajaIn = document.getElementById("staff-removed");
     const fecha_nacimientoIn = document.getElementById("staff-birth");
     const nssIn = document.getElementById("staff-nss");
     const rfcIn = document.getElementById("staff-rfc");
@@ -33,7 +31,6 @@ export function validateForm() {
     const nombreError = document.getElementById("error-staff-name");
     const departamentoError = document.getElementById("error-staff-departament");
     const puestoError = document.getElementById("error-staff-position");
-    const estatusError = document.getElementById("error-staff-status");
     const fecha_ingresoError = document.getElementById("error-staff-entry");
     const fecha_nacimientoError = document.getElementById("error-staff-birth");
     const nssError = document.getElementById("error-staff-nss");
@@ -47,7 +44,6 @@ export function validateForm() {
     nameValidate(nombreIn, nombreError)
     selectValidate(departamentoIn, departamentoError)
     textValidate(puestoIn, puestoError)
-    selectValidate(estatusIn, estatusError)
     dateValidate(fecha_ingresoIn, fecha_ingresoError)
     dateValidate(fecha_nacimientoIn, fecha_nacimientoError)
     nssValidate(nssIn, nssError)
@@ -68,9 +64,7 @@ export function validateForm() {
         nombre: nombreIn.value,
         id_departamento: departamentoIn.value,
         puesto: puestoIn.value,
-        estatus: estatusIn.value,
         fecha_ingreso: fecha_ingresoIn.value,
-        fecha_baja: fecha_bajaIn.value,
         fecha_nacimiento: fecha_nacimientoIn.value,
         nss: nssIn.value,
         rfc: rfcIn.value,

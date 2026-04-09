@@ -41,7 +41,6 @@ export async function getSingleAttendances(date) {
         .eq('fecha_asistencia', date)
         .order('fecha_asistencia', { ascending: true })
         .order('hora_asistencia', { ascending: true })
-        .order('id_empleado', { ascending: true });
     
     if (error) {
         console.error('Error obteniendo asistencias:', error);
@@ -220,7 +219,7 @@ export async function getFormatedAttendances(allAttendances) {
     // Ordenar por fecha
     fullList.sort((a, b) => {
         if (a.fecha === b.fecha) {
-            return a.nombre.localeCompare(b.nombre);
+            return a.numero_empleado - b.numero_empleado;
         }
         return new Date(a.fecha) - new Date(b.fecha);
     });

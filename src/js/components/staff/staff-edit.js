@@ -1,7 +1,7 @@
 // Servicios Supabase
-import { updateStaff, deleteStaff } from '../../services/staff-service.js'; 
-import { renderStaffList } from './staff-list.js'; 
-import { restoreForm } from './generate-form.js';
+import { findStaff, updateStaff } from '../../services/staff-service.js';
+import { renderStaffList } from './staff-list.js';
+import { validateUserRole } from '../../utils/session-validate.js';
 // Utilidades
 import { validateForm } from './staff-form.js';
 
@@ -33,8 +33,28 @@ export async function renderStaffEditForm(staff) {
     document.getElementById("staff-shirt").value = staff.camisa;
     document.getElementById("staff-pants").value = staff.pantalon;
 
-    if(document.getElementById("staff-status").value == "Inactivo") {
-        document.getElementById("staff-status").disabled = true;
+    if(document.getElementById("staff-status").value == "Activo") {
+        document.getElementById("id-staff").disabled = false;
+    }
+
+    const container = document.getElementById('form-buttons-container');
+
+    // A partir del estatus del empleado generar los botones correspondientes
+    if(document.getElementById("staff-status").value == "Pendiente") {
+        container.innerHTML =
+            `<button id="btn-cancel-entry" class="btn btn-outline-secondary m-1">Cerrar</button>
+            <button id="btn-authorize-entry" class="btn btn-primary m-1 d-none" data-rh-only>Autorizar Alta</button>`;
+        validateUserRole()
+    } else if(document.getElementById("staff-status").value == "Activo") {
+        container.innerHTML =
+            `<button id="btn-cancel-entry" class="btn btn-outline-secondary m-1">Cerrar</button>
+            <button id="btn-remove-entry" class="btn btn-danger m-1 d-none" data-rh-only data-bs-target="#remove-modal" data-bs-toggle="modal">Solicitar Baja</button>
+            <button id="btn-update-entry" class="btn btn-primary m-1 d-none" data-rh-only>Actualizar Empleado</button>`;
+        validateUserRole()
+    } else {
+        container.innerHTML =
+            `<button id="btn-cancel-entry" class="btn btn-outline-secondary m-1">Cerrar</button>`;
+        validateUserRole()
     }
 }
 
@@ -51,12 +71,6 @@ export async function editStaff(event) {
     }
 
     const staffData = validateForm();
-
-    // Verificar que no haya fecha de baja al estar inactivo para registrar la fecha del cambio
-    if (staffData.estatus == "Inactivo" && staffData.fecha_baja == "") {
-        const today = new Date().toISOString().split('T')[0]
-        staffData.fecha_baja = today;
-    }
 
     if (!staffData) {
         Swal.fire({
@@ -85,8 +99,13 @@ export async function editStaff(event) {
             confirmButtonText: 'OK'
         });
 
+        // Bajar la información del empleado encontrado con su id
+        const updatedStaffData = await findStaff(id_staff)
+
         // Recarga el contenedor con los datos actualizados
-        await renderStaffEditForm(staffData);
+        await renderStaffEditForm(updatedStaffData);
+        // Recarga la lista con los datos actualizados
+        await renderStaffList();
     } catch (err) {
         console.error('Error al actualizar empleado:', err);
         Swal.fire({
@@ -104,21 +123,35 @@ export async function editStaff(event) {
     }
 }
 
-// Eliminar entrada al dar click en el botón
-document.getElementById('btn-delete-entry').addEventListener('click', async () => {
-    const idStaff = document.getElementById('hidden-id-staff').value;
-    console.log("ID: "+idStaff);
-    
-    await deleteStaff(idStaff);
+export async function authorizeStaff(event) {
+    event.preventDefault()
 
-    // Mostrar alerta
-    Swal.fire({
-        title: 'Empleado eliminado correctamente.',
-        icon: 'warning',
-        confirmButtonText: 'OK'
-    });
+    const id_staff = document.getElementById('hidden-id-staff').value;
 
-    // Recarga la página con los datos actualizados
-    await renderStaffList();
-    await restoreForm();
-});
+    try {
+        await updateStaff(id_staff, {estatus: "Activo"});
+        
+        // Mostrar alerta
+        Swal.fire({
+            title: 'Empleado dado de alta correctamente.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+
+        // Bajar la información del empleado encontrado con su id
+        const updatedStaffData = await findStaff(id_staff)
+
+        // Recarga el contenedor con los datos actualizados
+        await renderStaffEditForm(updatedStaffData);
+        // Recarga la lista con los datos actualizados
+        await renderStaffList();
+    } catch (err) {
+        console.error('Error al dar de alta al empleado:', err);
+        Swal.fire({
+            title: 'Oops...',
+            text: 'Ocurrió un error al dar de alta al empleado.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    }
+}

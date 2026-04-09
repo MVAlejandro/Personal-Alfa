@@ -17,7 +17,7 @@ export async function getStaff() {
     const { data, error } = await supabase
         .from('rh_empleados')
         .select("*")
-        .order('id_empleado', { ascending: true });
+        .order('numero_empleado', { ascending: true });
     
     if (error) {
         console.error('Error obteniendo empleados:', error);
@@ -42,7 +42,7 @@ export async function getActiveStaff() {
             rh_departamentos (nombre)
             `)
         .eq('estatus', 'Activo')
-        .order('id_empleado', { ascending: true });
+        .order('numero_empleado', { ascending: true });
     
     if (error) {
         console.error('Error obteniendo empleados activos:', error);

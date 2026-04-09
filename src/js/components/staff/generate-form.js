@@ -15,12 +15,12 @@ export async function generateForm() {
                 <div class="row ms-2 me-2 pb-1">
                     <div class="col-md-3">
                         <label for="id-staff" class="form-label fw-semibold m-2">No Empleado</label>
-                        <input type="text" class="form-control" id="id-staff" placeholder="0000" inputmode="numeric">
+                        <input type="text" class="form-control" id="id-staff" value="999" inputmode="numeric" autocomplete="off" disabled>
                         <p class="error invalid-feedback" id="error-id-staff" style="color: red;"></p>
                     </div>
                     <div class="col-md-9">
                         <label for="staff-name" class="form-label fw-semibold m-2">Nombre</label>
-                        <input type="text" class="form-control" id="staff-name" placeholder="Nombre y Apellidos">
+                        <input type="text" class="form-control" id="staff-name" placeholder="Nombre y Apellidos" autocomplete="off">
                         <p class="error invalid-feedback" id="error-staff-name" style="color: red;"></p>
                     </div>
                 </div>
@@ -35,62 +35,56 @@ export async function generateForm() {
                     </div>
                     <div class="col-md-4">
                         <label for="staff-position" class="form-label fw-semibold m-2">Puesto</label>
-                        <input type="text" class="form-control" id="staff-position" placeholder="Puesto">
+                        <input type="text" class="form-control" id="staff-position" placeholder="Puesto" autocomplete="off">
                         <p class="error invalid-feedback" id="error-staff-position" style="color: red;"></p>
                     </div>
                     <div class="col-md-4">
                         <label for="staff-status" class="form-label fw-semibold m-2">Estatus</label>
-                        <select id="staff-status" class="form-select" aria-label="Default select example">
-                            <option value="0">Seleccione...</option>
-                            <option value="Activo">Activo</option>
-                            <option value="Inactivo">Inactivo </option>
-                        </select>
-                        <p class="error invalid-feedback" id="error-staff-status" style="color: red;"></p>
+                        <input type="text" class="form-control" id="staff-status" autocomplete="off" placeholder="Pendiente" disabled>
                     </div>
                 </div>
                 <div class="row ms-2 me-2">
                     <div class="col-md-4">
                        <label for="staff-entry" class="form-label fw-semibold m-2">Fecha ingreso</label>
-                        <input type="date" class="form-control" id="staff-entry" required>
+                        <input type="date" class="form-control" id="staff-entry" autocomplete="off">
                         <p class="error invalid-feedback" id="error-staff-entry" style="color: red;"></p> 
                     </div>
                     <div class="col-md-4">
                        <label for="staff-removed" class="form-label fw-semibold m-2">Fecha baja*</label>
-                        <input type="date" class="form-control" id="staff-removed" disabled>
-                        <p class="error invalid-feedback" id="error-staff-removed" style="color: red;"></p> 
+                        <input type="date" class="form-control" id="staff-removed" autocomplete="off" disabled>
                     </div>
                     <div class="col-md-4">
                     <label for="staff-birth" class="form-label fw-semibold m-2">Fecha nacimiento</label>
-                        <input type="date" class="form-control" id="staff-birth" required>
+                        <input type="date" class="form-control" id="staff-birth" autocomplete="off">
                         <p class="error invalid-feedback" id="error-staff-birth" style="color: red;"></p>
                     </div>
                 </div>
                 <div class="row ms-2 me-2">
                     <div class="col-md-3">
                         <label for="staff-nss" class="form-label fw-semibold m-2">NSS</label>
-                        <input type="number" class="form-control no-arrows" id="staff-nss" placeholder="01234567891" inputmode="numeric">
+                        <input type="number" class="form-control no-arrows" id="staff-nss" placeholder="01234567891" inputmode="numeric" autocomplete="off">
                         <p class="error invalid-feedback" id="error-staff-nss" style="color: red;"></p>
                     </div>
                     <div class="col-md-3">
                         <label for="staff-rfc" class="form-label fw-semibold m-2">RFC</label>
-                        <input type="text" class="form-control" id="staff-rfc" placeholder="RFCX000000YY">
+                        <input type="text" class="form-control" id="staff-rfc" placeholder="RFCX000000YY" autocomplete="off">
                         <p class="error invalid-feedback" id="error-staff-rfc" style="color: red;"></p>
                     </div>
                     <div class="col-md-6">
                         <label for="staff-curp" class="form-label fw-semibold m-2">CURP</label>
-                        <input type="text" class="form-control" id="staff-curp" placeholder="CURP000000AABBCC00">
+                        <input type="text" class="form-control" id="staff-curp" placeholder="CURP000000AABBCC00" autocomplete="off">
                         <p class="error invalid-feedback" id="error-staff-curp" style="color: red;"></p>
                     </div>
                 </div>
                 <div class="row ms-2 me-2 pb-3">
                 <div class="col-md-4">
                         <label for="staff-phone" class="form-label fw-semibold m-2">Teléfono</label>
-                        <input type="number" class="form-control no-arrows" id="staff-phone" placeholder="5510203040">
+                        <input type="number" class="form-control no-arrows" id="staff-phone" placeholder="5510203040" autocomplete="off">
                         <p class="error invalid-feedback" id="error-staff-phone" style="color: red;"></p>
                     </div>
                     <div class="col-md-8">
                         <label for="staff-direction" class="form-label fw-semibold m-2">Dirección</label>
-                        <input type="text" class="form-control" id="staff-direction" placeholder="Dirección completa">
+                        <input type="text" class="form-control" id="staff-direction" placeholder="Dirección completa" autocomplete="off">
                         <p class="error invalid-feedback" id="error-staff-direction" style="color: red;"></p>
                     </div>
                 </div>
@@ -98,17 +92,17 @@ export async function generateForm() {
                 <div class="row ms-2 me-2 pb-3">
                     <div class="col-md-6">
                         <label for="emergency-name" class="form-label fw-semibold m-2">Nombre*</label>
-                        <input type="text" class="form-control" id="emergency-name" placeholder="Nombre del contacto">
+                        <input type="text" class="form-control" id="emergency-name" placeholder="Nombre del contacto" autocomplete="off">
                         <p class="error invalid-feedback" id="error-emergency-name" style="color: red;"></p>
                     </div>
                     <div class="col-md-3">
                         <label for="emergency-relation" class="form-label fw-semibold m-2">Parentesco*</label>
-                        <input type="text" class="form-control" id="emergency-relation" placeholder="Parentesco de la persona">
+                        <input type="text" class="form-control" id="emergency-relation" placeholder="Parentesco de la persona" autocomplete="off">
                         <p class="error invalid-feedback" id="error-emergency-relation" style="color: red;"></p>
                     </div>
                     <div class="col-md-3">
                         <label for="emergency-phone" class="form-label fw-semibold m-2">Teléfono*</label>
-                        <input type="number" class="form-control no-arrows" id="emergency-phone" placeholder="Teléfono de emergencia">
+                        <input type="number" class="form-control no-arrows" id="emergency-phone" placeholder="Teléfono de emergencia"autocomplete="off">
                         <p class="error invalid-feedback" id="error-emergency-phone" style="color: red;"></p>
                     </div>
                 </div>
@@ -116,22 +110,22 @@ export async function generateForm() {
                 <div class="row ms-2 me-2 pb-3">
                     <div class="col-md-3">
                         <label for="staff-btype" class="form-label fw-semibold m-2">Tipo sangre*</label>
-                        <input type="text" class="form-control" id="staff-btype" placeholder="(Opcional)">
+                        <input type="text" class="form-control" id="staff-btype" placeholder="(Opcional)" autocomplete="off">
                         <p class="error invalid-feedback" id="error-staff-btype" style="color: red;"></p>
                     </div>
                     <div class="col-md-3">
                         <label for="staff-illness" class="form-label fw-semibold m-2">Enfermedad*</label>
-                        <input type="text" class="form-control" id="staff-illness" placeholder="(Opcional)">
+                        <input type="text" class="form-control" id="staff-illness" placeholder="(Opcional)" autocomplete="off">
                         <p class="error invalid-feedback" id="error-staff-illness" style="color: red;"></p>
                     </div>
                     <div class="col-md-3">
                         <label for="staff-medicament" class="form-label fw-semibold m-2">Medicamento*</label>
-                        <input type="text" class="form-control" id="staff-medicament" placeholder="(Opcional)">
+                        <input type="text" class="form-control" id="staff-medicament" placeholder="(Opcional)" autocomplete="off">
                         <p class="error invalid-feedback" id="error-staff-medicament" style="color: red;"></p>
                     </div>
                     <div class="col-md-3">
                         <label for="staff-allergy" class="form-label fw-semibold m-2">Alergia*</label>
-                        <input type="text" class="form-control" id="staff-allergy" placeholder="(Opcional)">
+                        <input type="text" class="form-control" id="staff-allergy" placeholder="(Opcional)" autocomplete="off">
                         <p class="error invalid-feedback" id="error-staff-allergy" style="color: red;"></p>
                     </div>
                 </div>
@@ -139,28 +133,29 @@ export async function generateForm() {
                 <div class="row ms-2 me-2">
                     <div class="col-md-3">
                         <label for="staff-boots" class="form-label fw-semibold m-2">Calzado*</label>
-                        <input type="number" class="form-control no-arrows" id="staff-boots" placeholder="Talla de calzado">
+                        <input type="number" class="form-control no-arrows" id="staff-boots" placeholder="Talla de calzado" autocomplete="off">
                         <p class="error invalid-feedback" id="error-staff-boots" style="color: red;"></p>
                     </div>
                     <div class="col-md-3">
                         <label for="staff-tshirt" class="form-label fw-semibold m-2">Playera*</label>
-                        <input type="text" class="form-control" id="staff-tshirt" placeholder="Talla de playera">
+                        <input type="text" class="form-control" id="staff-tshirt" placeholder="Talla de playera" autocomplete="off">
                         <p class="error invalid-feedback" id="error-staff-tshirt" style="color: red;"></p>
                     </div>
                     <div class="col-md-3">
                         <label for="staff-shirt" class="form-label fw-semibold m-2">Camisa*</label>
-                        <input type="text" class="form-control" id="staff-shirt" placeholder="Talla de camisa">
+                        <input type="text" class="form-control" id="staff-shirt" placeholder="Talla de camisa" autocomplete="off">
                         <p class="error invalid-feedback" id="error-staff-shirt" style="color: red;"></p>
                     </div>
                     <div class="col-md-3">
                         <label for="staff-pants" class="form-label fw-semibold m-2">Pantalón*</label>
-                        <input type="number" class="form-control no-arrows" id="staff-pants" placeholder="Talla de pantalón">
+                        <input type="number" class="form-control no-arrows" id="staff-pants" placeholder="Talla de pantalón" autocomplete="off">
                         <p class="error invalid-feedback" id="error-staff-pants" style="color: red;"></p>
                     </div>
                 </div>
             </form>
             <div id="form-buttons-container" class="form-buttons d-flex justify-content-end pb-4 me-3">
-                
+                <button id="btn-cancel-entry" class="btn btn-outline-secondary m-1">Cancelar</button>
+                <button id="btn-add-entry" class="btn btn-primary m-1">Añadir Empleado</button>
             </div>
         </div>`;
 

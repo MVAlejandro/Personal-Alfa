@@ -36,6 +36,7 @@ export async function addStaff(event) {
         await createStaff(staffData);
         Swal.fire({
             title: 'Empleado agregado con éxito.',
+            text: 'Solicite a su superior que apruebe el alta.',
             icon: 'success',
             confirmButtonText: 'OK'
         });
