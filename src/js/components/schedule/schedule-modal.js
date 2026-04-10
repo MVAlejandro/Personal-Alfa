@@ -1,8 +1,8 @@
 // Servicios Supabase
-import { updateSchedule, createSchedule } from '../../services/schedule-service.js'; 
-import { renderSchedulesTable } from './schedule-table.js';
+import { updateSchedule, createSchedule } from '../../services/schedule-service.js';
 // Utilidades
 import { timeValidate } from '../../utils/form-validations.js';
+import { schedulesFilter } from './schedule-filter.js';
 
 // Función para cargar datos en el modal
 export async function renderScheduleEditModal(horario) {
@@ -128,7 +128,7 @@ document.getElementById('btn-edit-entry').addEventListener('click', async functi
         });
     
         // Recarga la tabla con los datos actualizados
-        renderSchedulesTable();
+        schedulesFilter();
     } catch (err) {
         console.error('Error al actualizar el horario:', err);
         Swal.fire({

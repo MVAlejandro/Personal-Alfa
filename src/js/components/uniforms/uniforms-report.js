@@ -31,7 +31,8 @@ export async function uniformsReport() {
     }
         
     if (reportType === 'Registro') {
-        const allUniforms = await getUniformsResume();
+        const today = new Date().toISOString().split("T")[0];
+        const allUniforms = await getUniformsResume(today);
         dataForExcel = allUniforms.map(r => ({
             "No. Empleado": r.numero_empleado, 
             "Nombre": r.nombre, 

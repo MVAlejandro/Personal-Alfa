@@ -28,7 +28,7 @@ export async function getStaff() {
 }
 
 // Función para obtener empleados activos
-export async function getActiveStaff() {
+export async function getActiveStaff(fecha) {
     const { data, error } = await supabase
         .from('rh_empleados')
         .select(`
@@ -37,30 +37,61 @@ export async function getActiveStaff() {
             nombre,
             puesto,
             fecha_ingreso,
+            fecha_baja,
             estatus,
             id_departamento,
             rh_departamentos (nombre)
-            `)
-        .eq('estatus', 'Activo')
+        `)
+        .lte('fecha_ingreso', fecha)
+        .or(`fecha_baja.is.null,fecha_baja.gte.${fecha}`)
+        .neq('estatus', 'Pendiente')
         .order('numero_empleado', { ascending: true });
-    
+
     if (error) {
-        console.error('Error obteniendo empleados activos:', error);
+        console.error('Error obteniendo empleados por fecha:', error);
         throw error;
     }
-    
-    return data.map(empleado => {
-        return {
-            id_empleado: empleado.id_empleado,
-            numero_empleado: empleado.numero_empleado,
-            nombre: empleado.nombre,
-            puesto: empleado.puesto,
-            fecha_ingreso: empleado.fecha_ingreso,
-            estatus: empleado.estatus,
-            id_departamento: empleado.id_departamento,
-            departamento: empleado?.rh_departamentos?.nombre
-        };
-    });
+
+    return data.map(empleado => ({
+        id_empleado: empleado.id_empleado,
+        numero_empleado: empleado.numero_empleado,
+        nombre: empleado.nombre,
+        puesto: empleado.puesto,
+        fecha_ingreso: empleado.fecha_ingreso,
+        fecha_baja: empleado.fecha_baja,
+        estatus: empleado.estatus,
+        id_departamento: empleado.id_departamento,
+        departamento: empleado?.rh_departamentos?.nombre
+    }));
+}
+
+// Función para obtener empleados activos con un rango de fechas
+export async function getActiveStaffRange(fechaInicio, fechaFin) {
+    const { data, error } = await supabase
+        .from('rh_empleados')
+        .select(`
+            id_empleado,
+            numero_empleado,
+            nombre,
+            puesto,
+            fecha_ingreso,
+            fecha_baja,
+            id_departamento,
+            rh_departamentos (nombre)
+        `)
+        // Entró antes de que termine el rango
+        .lte('fecha_ingreso', fechaFin)
+        // No salió antes de que empezara el rango
+        .or(`fecha_baja.is.null,fecha_baja.gte.${fechaInicio}`)
+        .neq('estatus', 'Pendiente')
+        .order('numero_empleado', { ascending: true });
+
+    if (error) {
+        console.error('Error obteniendo empleados por rango:', error);
+        throw error;
+    }
+
+    return data;
 }
 
 //Función para obtener toda la información de un empleado por id

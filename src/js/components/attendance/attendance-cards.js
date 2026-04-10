@@ -1,9 +1,9 @@
 // Servicios Supabase
 import { getActiveStaff } from "../../services/staff-service";
 
-export async function createResumeCards(fullAttendances) {
+export async function createResumeCards(date, fullAttendances) {
     // Obtener todos los empleados activos
-    const allStaff = await getActiveStaff();
+    const allStaff = await getActiveStaff(date);
     if (!allStaff) return;
 
     // Filtrar presentes (aquellos que tienen al menos una entrada o salida)

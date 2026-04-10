@@ -142,8 +142,8 @@ export async function getVacations() {
 }
 
 // Función para obtener la lista de todos los días de vacaciones por empleado en base a registros
-export async function getVacationsResume() {
-    const activeStaff = await getActiveStaff();
+export async function getVacationsResume(date) {
+    const activeStaff = await getActiveStaff(date);
     const allVacations = await getVacations();
 
     const results = [];

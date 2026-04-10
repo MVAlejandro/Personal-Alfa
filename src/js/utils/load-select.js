@@ -1,3 +1,4 @@
+import { getActiveStaff } from "../services/staff-service";
 import supabase from "../supabase/supabase-client";
 
 // Función para cargar datos completos en los select del formulario
@@ -92,4 +93,21 @@ export function loadDaysFilter() {
             date => date.getDay() === 0
         ]
     });
+}
+
+// Función para cargar los empleados activos en el select
+export async function loadStaff(selectId) {
+    const today = new Date().toISOString().split("T")[0];
+    const select = document.getElementById(selectId)
+    if (!select) return
+    
+    const data = await getActiveStaff(today)
+
+    data.forEach(item => {
+        const option = document.createElement('option')
+        option.value = item.id_empleado;
+        option.textContent = item.nombre;
+
+        select.appendChild(option)
+    })
 }

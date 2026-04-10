@@ -54,8 +54,8 @@ export async function getSchedule() {
 }
 
 // Función para formatear todos los registros de horarios por empleado y día
-export async function getFullSchedules(allSchedules) {
-    const activeStaff = await getActiveStaff();
+export async function getFullSchedules(date, allSchedules) {
+    const activeStaff = await getActiveStaff(date);
     const grouped = {};
     const dias = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
 
@@ -66,6 +66,7 @@ export async function getFullSchedules(allSchedules) {
             numero_empleado: emp.numero_empleado,
             nombre: emp.nombre,
             puesto: emp.puesto,
+            estatus: emp.estatus,
             dias: dias.map(dia => ({
                 id_horario: null,
                 dia,

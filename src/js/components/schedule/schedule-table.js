@@ -4,6 +4,7 @@ import { validateUserRole } from '../../utils/session-validate.js';
 
 let allSchedules = [];
 let staffSchedules = [];
+const today = new Date().toISOString().split("T")[0];
 
 function determinateSchedule(dia) {
     let entrada = "00:00";
@@ -27,15 +28,7 @@ function determinateSchedule(dia) {
 }
 
 // Función para crear la tabla y la paginación
-export async function renderSchedulesTable(schedulesParam = null) {
-    // Obtener horarios si no se pasa una lista filtrada
-    if (schedulesParam) {
-        staffSchedules = schedulesParam;
-    } else {
-        allSchedules = await getSchedule();
-        staffSchedules = await getFullSchedules(allSchedules);
-    }
-    
+export async function renderSchedulesTable(staffSchedules) {
     const tbody = document.querySelector('#schedule-table tbody');
 
     // Limpiar tabla antes de insertar

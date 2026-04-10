@@ -3,9 +3,9 @@ import { getActiveStaff } from "../../services/staff-service";
 import { getFormatedAttendances, getRangeAttendances } from "../../services/attendance-service"; 
 
 // Función para crear el gráfico por departamentos
-export async function renderStaffGraphic() {
+export async function renderStaffGraphic(date) {
     // Obtener todos los registros
-    const allStaff = await getActiveStaff();
+    const allStaff = await getActiveStaff(date);
 
     const container = document.getElementById("graphic-staff-container");
     // Limpiar antes de insertar
@@ -62,12 +62,12 @@ export async function renderStaffGraphic() {
     
 }
 
-// Función para crear el gráfico por departamentos
-export async function renderAttendanceGraphic(start, end) {
+// Función para crear el gráfico de asistencias
+export async function renderAttendanceGraphic(start, end, activeStaff) {
     // Obtener todos los registros
     const allAttendances = await getRangeAttendances(start, end);
     // Agrupar los registros de asistencia por empleado con sus horas de checado
-    const fullAttendances = await getFormatedAttendances(allAttendances);
+    const fullAttendances = await getFormatedAttendances(activeStaff, allAttendances);
 
     const container = document.getElementById("graphic-attendance-container");
     // Limpiar antes de insertar

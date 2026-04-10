@@ -6,9 +6,9 @@ import { getPermission } from "../../services/permissions-service";
 let allStaff = [];
 let allPermissions = [];
 
-export async function createResumeCards(fullAttendances) {
+export async function createResumeCards(date, fullAttendances) {
     // Obtener empleados
-    allStaff = await getActiveStaff();
+    allStaff = await getActiveStaff(date);
 
     // Filtrar presentes (aquellos que tienen al menos una entrada)
     const presentAttendances = fullAttendances.filter(a => !!a.entrada);

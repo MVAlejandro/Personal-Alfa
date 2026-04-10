@@ -33,8 +33,8 @@ export async function getUniforms() {
 }
 
 // Función para obtener la lista de todos los uniformes por empleado en base a registros
-export async function getUniformsResume() {
-    const activeStaff = await getActiveStaff();
+export async function getUniformsResume(date) {
+    const activeStaff = await getActiveStaff(date);
     const allUniforms = await getUniforms();
     const grouped = {};
 

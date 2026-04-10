@@ -1,4 +1,5 @@
 // Servicios Supabase
+import { getActiveStaffRange } from '../../services/staff-service.js';  
 import { getFormatedAttendances, getRangeAttendances } from '../../services/attendance-service.js'; 
 
 let allAttendances = [];
@@ -11,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         mode: "range",
         dateFormat: "Y-m-d",
-        defaultDate: new Date(),
         onChange: function(selectedDates, dateStr, instance) {
             if (selectedDates.length === 2) {
                 const diffTime = Math.abs(selectedDates[1] - selectedDates[0]);
@@ -25,8 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         icon: 'warning',
                         confirmButtonText: 'OK'
                     });
-                    // Borra la selección
-                    instance.setDate(new Date(), true); 
                 }
             }
         }
@@ -46,8 +44,9 @@ export async function attendanceReportFilter() {
 
     // Obtener registros filtrados por fecha
     allAttendances = await getRangeAttendances(start, end);
+    const activeStaff = await getActiveStaffRange(start, end);
     // Agrupar los registros de asistencia por empleado con sus horas de checado
-    const fullAttendances = await getFormatedAttendances(allAttendances);
+    const fullAttendances = await getFormatedAttendances(activeStaff, allAttendances);
 
     // Filtrar el nuevo arreglo por tipo
     const filtered = fullAttendances.filter(a => {

@@ -30,8 +30,8 @@ export async function absencesReport() {
     }
         
     if (reportType === 'Vacaciones') {
-        const allVacations = await getVacationsResume();
-        console.log(allVacations);
+        const today = new Date().toISOString().split("T")[0];
+        const allVacations = await getVacationsResume(today);
         
         dataForExcel = allVacations.map(r => ({
             "No. Empleado": r.numero_empleado, 

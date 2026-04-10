@@ -1,6 +1,4 @@
 import supabase from '../supabase/supabase-client.js'
-// Servicios Supabase
-import { getActiveStaff } from './staff-service.js';
 // Utilidades
 import { findExtraTimeDay } from './extra-time-service.js';
 
@@ -112,8 +110,7 @@ export async function getRangeAttendances(startDate, endDate) {
 }
 
 // Función para obtener toda la lista de asistencia en base a empleados activos y registros de asistencia
-export async function getFormatedAttendances(allAttendances) {
-    const activeStaff = await getActiveStaff();
+export async function getFormatedAttendances(staffList, allAttendances) {
     const grouped = {};
 
     // Agrupar por empleado + fecha
@@ -192,7 +189,7 @@ export async function getFormatedAttendances(allAttendances) {
     const fullList = [];
 
     uniqueDates.forEach(fecha => {
-        activeStaff.forEach(emp => {
+        staffList.forEach(emp => {
             const key = `${emp.id_empleado}-${fecha}`;
 
             if (attendanceMap[key]) {

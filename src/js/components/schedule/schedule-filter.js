@@ -7,13 +7,14 @@ let staffSchedules = [];
 
 // Función de filtrado por valores seleccionados
 export async function schedulesFilter() {
+    const today = new Date().toISOString().split("T")[0];
     const searchText = document.getElementById('search-filter').value.trim().toLowerCase();
     const statusFilter = document.getElementById('status-filter').value;
 
     // Obtener horarios y formatear para la tabla
     allSchedules = await getSchedule();
         if (!allSchedules) return;
-    staffSchedules = await getFullSchedules(allSchedules);
+    staffSchedules = await getFullSchedules(today, allSchedules);
 
     // Si no hay filtros activos, mostrar todo
     const filterClean = statusFilter === '' && searchText === '';
