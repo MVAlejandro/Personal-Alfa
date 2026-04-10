@@ -74,6 +74,7 @@ export async function findExtraTimeDay(id_empleado, fecha) {
         .select("*")
         .eq('id_empleado', id_empleado)
         .eq('fecha', fecha)
+        .eq('estado', "Aceptado")
         .maybeSingle();
     
     if (error) {
@@ -82,4 +83,17 @@ export async function findExtraTimeDay(id_empleado, fecha) {
     }
     
     return data?.tiempo || 0;
+}
+
+// Función para editar registros de horas extra
+export async function updateExtraTime(id_extra, updatedData) {
+    const { data, error } = await supabase
+        .from('rh_tiempo_extra')
+        .update(updatedData)
+        .eq('id_extra', id_extra);
+
+    if (error) {
+        console.error('Error al actualizar:', error);
+        alert('Error al actualizar el registro: ' + error.message);
+    }
 }

@@ -30,7 +30,7 @@ th {
     color: var(--secondary) !important;
 }
 
-.extra-date, .extra-time {
+.extra-date, .extra-time, .extraP-date, .extraP-time {
     color: var(--secondary) !important;
 }
 

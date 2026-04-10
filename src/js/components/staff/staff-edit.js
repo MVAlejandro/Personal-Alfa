@@ -43,7 +43,7 @@ export async function renderStaffEditForm(staff) {
     if(document.getElementById("staff-status").value == "Pendiente") {
         container.innerHTML =
             `<button id="btn-cancel-entry" class="btn btn-outline-secondary m-1">Cerrar</button>
-            <button id="btn-authorize-entry" class="btn btn-primary m-1 d-none" data-rh-only>Autorizar Alta</button>`;
+            <button id="btn-authorize-entry" class="btn btn-primary m-1 d-none" data-dir-only>Autorizar Alta</button>`;
         validateUserRole()
     } else if(document.getElementById("staff-status").value == "Activo") {
         container.innerHTML =

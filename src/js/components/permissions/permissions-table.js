@@ -69,7 +69,7 @@ export async function renderPermissionsTable(permissionParam = null) {
                 <p class="permission-status ${statusClass}">${permiso.estado}</p>
             </td>
             <td class="permission-observations p-1">${permiso.observaciones}</td>
-            <td class="permission-controls text-end p-2 pe-4 d-none" data-rh-only>
+            <td class="permission-controls text-end p-2 pe-4 d-none" data-rh-only data-dir-only>
                 <div class="action-buttons">
                     <button class="btn btn-edit" 
                         data-bs-target="#edit-modal" 

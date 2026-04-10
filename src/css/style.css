@@ -260,7 +260,7 @@ input::placeholder, textarea::placeholder, #default-option {
 
 .btn-add {
     color: var(--secondary);
-    box-shadow: 0 2px 4px rgba(121, 17, 28, 0.3);
+    box-shadow: 0 2px 4px rgba(117, 107, 108, 0.3);
 }
 
 .btn-add:hover {
@@ -282,6 +282,10 @@ input::placeholder, textarea::placeholder, #default-option {
 
 .btn-delete-confirm {
     width: 85px;
+}
+
+.btn-extra {
+    padding: 1px 8px 3px 8px !important;
 }
 
 /* Estilos para paginación y su navegación */
