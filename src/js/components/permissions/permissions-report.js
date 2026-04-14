@@ -1,6 +1,6 @@
 // Servicios Supabase
-import { getPermission } from "../../services/permissions-service"; 
-import { getVacationsResume } from "../../services/absences-service"; 
+import { getPermission } from "../../services/permissions-service.js"; 
+import { getVacationsResume } from "../../services/vacations-service.js"; 
 
 export async function absencesReport() {
     // Obtener tipo de reporte por el radio seleccionado
@@ -39,9 +39,9 @@ export async function absencesReport() {
             "Puesto": r.puesto,
             "F Ingreso": r.fecha_ingreso,
             "Antigüedad": r.antiguedad,
-            "Total": r.dias_total,
+            "Total": r.dias_asignados,
             "Tomados": r.dias_tomados,
-            "Pendientes": r.dias_pendientes,
+            "Pendientes": r.saldo,
             "Fechas tomadas": (r.fechas_tomadas || []).join(', ')
         }));
 

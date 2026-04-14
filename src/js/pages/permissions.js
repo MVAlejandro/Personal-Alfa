@@ -15,8 +15,9 @@ import { initPage } from '../utils/session-validate.js';
 import { addPermission } from '../components/permissions/permissions-form.js';
 import { absencesReport } from '../components/permissions/permissions-report.js';
 import { permissionsFilter } from '../components/permissions/permissions-filter.js';
-import { renderPermissionsEditModal, renderPermissionsInfoModal } from '../components/permissions/permissions-modal.js';
-import { generatePDF } from '../components/permissions/permissions-print.js';
+import { renderPermissionsEditModal } from '../components/permissions/permissions-modal.js';
+import { renderPermissionsInfoModal } from '../components/permissions/vacations-modal.js';
+import { vacationPDF } from '../components/permissions/pdf/vacation-pdf.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     await initPage()
@@ -50,7 +51,9 @@ editModal.addEventListener('shown.bs.modal', event => {
     const btnSave = editModal.querySelector('#btn-save');
     // Elimina eventos anteriores para evitar duplicados
     btnSave.onclick = async function () {
-        const doc = await generatePDF(permissionData);
+        console.log(permissionData);
+        
+        const doc = await vacationPDF(permissionData);
         window.open(doc.output('bloburl'), '_blank');
     };
 });
@@ -78,6 +81,11 @@ infoModal.addEventListener('hidden.bs.modal', () => {
     infoModal.querySelectorAll('input, select').forEach(el => {
         el.value = '';
     });
+    // Limpiar registros anteriores
+    const tbody = document.querySelector('#permissions-resume-table tbody');
+    tbody.innerHTML = `<td class="text-center" colspan="4">Sin registros</td>`;
+    const container = document.getElementById('vacations-info-container');
+    container.innerHTML = `<p class="text-center">Sin registros</p>`;
 });
 
 // Declarar el botón de exportación a Excel

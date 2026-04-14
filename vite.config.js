@@ -10,6 +10,7 @@ export default defineConfig({
                 index: resolve(__dirname, 'index.html'),
                 login: resolve(__dirname, 'login.html'),
                 staff: resolve(__dirname, 'staff.html'),
+                schedule: resolve(__dirname, 'schedule.html'),
                 attendance: resolve(__dirname, 'attendance.html'),
                 uniforms: resolve(__dirname, 'uniforms.html'),
                 permissions: resolve(__dirname, 'permissions.html')

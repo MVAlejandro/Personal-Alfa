@@ -1,9 +1,20 @@
 // Servicios Supabase
-import { getPermission, updatePermission } from '../../services/permissions-service.js'; 
-import { createAbsence, getVacationsResume } from '../../services/absences-service.js';
+import { updatePermission } from '../../services/permissions-service.js'; 
+import { createAbsence } from '../../services/absences-service.js';
 import { renderPermissionsTable } from './permissions-table.js'; 
 // Utilidades
 import { textValidate, inputValidate, selectValidate } from '../../utils/form-validations.js';
+import { createVacation } from '../../services/vacations-service.js';
+
+// Función para agregar una fecha visualmente en la lista
+async function addDateRow(dateValue = '') {
+    const container = document.getElementById("permissions-dates-container");
+    const newDate = document.createElement("div");
+    newDate.className = "ms-2 me-2 pb-1 date-item";
+    newDate.innerHTML = 
+        `<li class="date-input ms-2">${dateValue}</li>`;
+    container.appendChild(newDate);
+}
 
 // Función para cargar datos en el modal de edición
 export async function renderPermissionsEditModal(permiso) {
@@ -40,20 +51,11 @@ export async function renderPermissionsEditModal(permiso) {
     }
 }
 
-// Función para agregar una fecha visualmente en la lista
-async function addDateRow(dateValue = '') {
-    const container = document.getElementById("permissions-dates-container");
-    const newDate = document.createElement("div");
-    newDate.className = "ms-2 me-2 pb-1 date-item";
-    newDate.innerHTML = 
-        `<li class="date-input ms-2">${dateValue}</li>`;
-    container.appendChild(newDate);
-}
-
 // Función para guardar cambios
 document.getElementById('btn-edit-entry').addEventListener('click', async function() {
     const id_permiso = document.getElementById('edit-id-permission').value;
     const id_empleado = document.getElementById('edit-id-staff').value;
+    const antiguedad = parseInt(document.getElementById('edit-antique').value);
     const dates = document.getElementById('edit-requested-dates').value;
     const tipo = document.getElementById('edit-type').value;
     const form = document.getElementById('permissions-edit-form');
@@ -101,6 +103,33 @@ document.getElementById('btn-edit-entry').addEventListener('click', async functi
                 }
             }
 
+            if (tipo === "Vacaciones") {
+                const fechas = dates.split(', ');
+                let vacationsData = {
+                    id_empleado,
+                    tipo: "Uso",
+                    antiguedad,
+                    dias: fechas.length
+                }
+
+                try {
+                    await createVacation(vacationsData);
+                } catch (err) {
+                    console.error(`Error registrando vacaciones`, err);
+                }
+
+                // Cerrar el modal y mostrar alerta
+                bootstrap.Modal.getInstance(document.getElementById('edit-modal')).hide();
+                Swal.fire({
+                    title: 'Permiso de vacaciones aprobado correctamente.',
+                    text: `Se agregaron ${fechas.length} días.`,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+
+                return
+            }
+
             // Cerrar el modal y mostrar alerta
             bootstrap.Modal.getInstance(document.getElementById('edit-modal')).hide();
             Swal.fire({
@@ -109,6 +138,7 @@ document.getElementById('btn-edit-entry').addEventListener('click', async functi
                 icon: 'success',
                 confirmButtonText: 'OK'
             });
+
         } else {
             // Cerrar el modal y mostrar alerta
             bootstrap.Modal.getInstance(document.getElementById('edit-modal')).hide();
@@ -136,77 +166,3 @@ document.getElementById('btn-edit-entry').addEventListener('click', async functi
     }
 });
 
-// Función para cargar datos en el modal de información
-export async function renderPermissionsInfoModal(permiso) {
-    const allPermissions = await getPermission(permiso.id_empleado)
-    const allVacations = await getVacationsResume();
-    const vacations = allVacations.find(v => v.id_empleado === permiso.id_empleado);
-    // Insertar valores en los inputs
-    document.getElementById('info-id-staff').value = permiso.id_empleado;
-    document.getElementById('info-id').value = permiso.numero_empleado;
-    document.getElementById('info-staff').value = permiso.nombre;
-
-    // Limpiar registros anteriores
-    const tbody = document.querySelector('#permissions-resume-table tbody');
-    tbody.innerHTML = '';
-    const container = document.getElementById('vacations-info-container');
-    container.innerHTML = '';
-
-    if (!allPermissions || allPermissions.length === 0) {
-        tbody.innerHTML = `<tr><td class="text-center" colspan="4">Sin registros</td></tr>`;
-        return;
-    }
-
-    for (const permiso of allPermissions) {
-        // Determinar clase CSS para el estatus
-        let statusClass = '';
-        if (permiso.estado == 'Pendiente') {
-            statusClass = 'yellow';
-        } else if (permiso.estado == 'Aceptado') {
-            statusClass = 'green';
-        } else if (permiso.estado == 'Rechazado') {
-            statusClass = 'red';
-        }
-        
-        tbody.innerHTML +=
-        `<tr>
-            <td class="permission-date p-1">${permiso.fecha_solicitud}</td>
-            <td class="permission-type p-1">${permiso.tipo}</td>
-            <td class="permission-dates fst-italic p-1">${permiso.fechas_solicitadas}</td>
-            <td class="text-center p-2">
-                <p class="permission-status ${statusClass}">${permiso.estado}</p>
-            </td>
-        </tr>`;
-    };
-
-    if (!vacations || vacations === "") {
-        container.innerHTML = `<p class="text-center">Sin registros</p>`;
-        return;
-    }
-
-    container.innerHTML = 
-    `<div class="row ms-2 me-2 mt-1">
-        <div class="col-lg-6 mt-2">
-            <p class="ps-1"p><span class="text-sencondary fw-semibold">Fecha de Ingreso:</span> ${vacations.fecha_ingreso}</p>
-        </div>
-        <div class="col-lg-6 mt-2">
-            <p class="ps-1"p><span class="text-sencondary fw-semibold">Antigüedad:</span> ${vacations.antiguedad}</p>
-        </div>
-    </div>
-    <div class="row ms-2 me-2">
-        <div class="col-lg-6 mt-2">
-            <p class="ps-1"p><span class="text-sencondary fw-semibold">Total días:</span> ${vacations.dias_total}</p>
-        </div>
-        <div class="col-lg-6 mt-2">
-            <p class="ps-1"p><span class="text-sencondary fw-semibold">Días tomados:</span> ${vacations.dias_tomados}</p>
-        </div>
-    </div>
-    <div class="row ms-2 me-2">
-        <div class="col-lg-6 mt-2">
-            <p class="ps-1"p><span class="text-sencondary fw-semibold">Días pendientes:</span> ${vacations.dias_pendientes}</p>
-        </div>
-        <div class="col-lg-6 mt-2">
-            <p class="ps-1"p><span class="text-sencondary fw-semibold">Fechas:</span> ${vacations.fechas_tomadas}</p>
-        </div>
-    </div>`;
-}

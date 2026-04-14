@@ -38,8 +38,7 @@ export async function getSchedule() {
         throw error;
     }
     
-    return data.map(horario => {
-        return {
+    return data.map(horario => ({
             id_horario: horario.id_horario,
             dia: horario.dia,
             entrada: horario.entrada,
@@ -49,8 +48,7 @@ export async function getSchedule() {
             nombre: horario.rh_empleados?.nombre,
             puesto: horario.rh_empleados?.puesto,
             estatus: horario.rh_empleados?.estatus
-        };
-    });
+    }));
 }
 
 // Función para formatear todos los registros de horarios por empleado y día
@@ -91,7 +89,7 @@ export async function getFullSchedules(date, allSchedules) {
     });
 
     // Convertir a array
-    return Object.values(grouped);
+    return Object.values(grouped).sort((a, b) => a.numero_empleado - b.numero_empleado);
 }
 
 // Función para obtener el horario de un empleado del día especificado

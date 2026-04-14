@@ -16,7 +16,7 @@ export async function renderStaffGraphic(date) {
         return;
     }
 
-    // Agrupar tickets por departamento
+    // Agrupar empleados por departamento
     const staffDepartaments = {};
 
     allStaff.forEach(staff => {
@@ -31,35 +31,48 @@ export async function renderStaffGraphic(date) {
     const labels = Object.keys(staffDepartaments);
     const data = Object.values(staffDepartaments);
 
-    // Generar el gráfico con la información del reporte
+    // Insertar canvas
     container.innerHTML = '<canvas id="departament-graphic"></canvas>';
     const ctx = document.getElementById('departament-graphic').getContext('2d');
 
-    // Registrar el plugin si es necesario
+    // Registrar plugin
     Chart.register(ChartDataLabels);
 
     new Chart(ctx, {
-        type: 'doughnut',
+        type: 'bar',
         data: {
             labels,
             datasets: [{
                 label: 'Empleados por departamento',
-                data
+                data,
+                backgroundColor: '#8FC74A'
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            },
             plugins: {
                 datalabels: {
-                    color: '#fff',
+                    anchor: 'center',
+                    align: 'center',
+                    color: '#FFF',
                     formatter: value => value
+                },
+                legend: {
+                    display: false
                 }
             }
         },
         plugins: [ChartDataLabels]
     });
-    
 }
 
 // Función para crear el gráfico de asistencias

@@ -1,5 +1,5 @@
 
-export async function generatePDF(ticket) {
+export async function vacationPDF(solicitud) {
     const { jsPDF } = window.jspdf;
 
     const doc = new jsPDF({
@@ -43,7 +43,7 @@ export async function generatePDF(ticket) {
 
     // Encabezado centrado
     doc.setFontSize(15);
-    textCenter(`SOLICITUD DE ${ticket.tipo.toString().toUpperCase()}`, 254, 23);
+    textCenter(`SOLICITUD DE ${solicitud.tipo.toString().toUpperCase()}`, 254, 23);
 
     // Datos clave
     doc.setFontSize(10);
@@ -72,12 +72,12 @@ export async function generatePDF(ticket) {
     doc.setFont("helvetica", "bold");
     doc.text(`Núm empleado:`, 130, 55);
     doc.setFont("helvetica", "normal");
-    doc.text(`${ticket.numero_empleado}`, 158, 55);
+    doc.text(`${solicitud.numero_empleado}`, 158, 55);
 
     doc.setFont("helvetica", "bold");
     doc.text(`Fecha:`, 130, 60);
     doc.setFont("helvetica", "normal");
-    doc.text(`${ticket.fecha_solicitud}`, 143, 60);
+    doc.text(`${solicitud.fecha_solicitud}`, 143, 60);
 
     doc.setFont("helvetica", "bold");
     doc.text(`Días pendientes por`, 20, 60);
@@ -88,26 +88,26 @@ export async function generatePDF(ticket) {
     doc.setFont("helvetica", "bold");
     doc.text(`Fecha de ingreso:`, 70, 68);
     doc.setFont("helvetica", "normal");
-    doc.text(`${ticket.fecha_ingreso}`, 110, 68);
+    doc.text(`${solicitud.fecha_ingreso}`, 110, 68);
 
     doc.setFont("helvetica", "bold");
     doc.text(`Nombre:`, 70, 73);
     doc.setFont("helvetica", "normal");
-    doc.text(`${ticket.nombre}`, 110, 73);
+    doc.text(`${solicitud.nombre}`, 110, 73);
 
     // Tabla días
     drawRect(34.5, 83, 20, 20, 0.1);
     drawRect(34.5, 83, 20, 5, 0.1);
     textCenter("Días", 89, 87);
     doc.setFontSize(18);
-    textCenter(`${(ticket.fechas_solicitadas.split(",").length) || ""}`, 88.5, 98);
+    textCenter(`${(solicitud.fechas_solicitadas.split(",").length) || ""}`, 88.5, 98);
 
     // Tabla fechas
     drawRect(70, 83, 136, 20, 0.1);
     drawRect(70, 83, 136, 5, 0.1);
     doc.setFontSize(10);
     textCenter("Fechas", 276, 87);
-    doc.text(`${ticket.fechas_solicitadas}`, 75, 94.5,{ maxWidth: 136 });
+    doc.text(`${solicitud.fechas_solicitadas}`, 75, 94.5,{ maxWidth: 136 });
 
     // Tabla pendientes
     doc.setFontSize(8);
@@ -137,7 +137,7 @@ export async function generatePDF(ticket) {
 
     // Encabezado centrado
     doc.setFontSize(15);
-    textCenter(`SOLICITUD DE ${ticket.tipo.toString().toUpperCase()}`, 254, 157.7);
+    textCenter(`SOLICITUD DE ${solicitud.tipo.toString().toUpperCase()}`, 254, 157.7);
 
     // Datos clave
     doc.setFontSize(10);
@@ -166,12 +166,12 @@ export async function generatePDF(ticket) {
     doc.setFont("helvetica", "bold");
     doc.text(`Núm empleado:`, 130, 189.7);
     doc.setFont("helvetica", "normal");
-    doc.text(`${ticket.numero_empleado}`, 158, 189.7);
+    doc.text(`${solicitud.numero_empleado}`, 158, 189.7);
 
     doc.setFont("helvetica", "bold");
     doc.text(`Fecha:`, 130, 194.7);
     doc.setFont("helvetica", "normal");
-    doc.text(`${ticket.fecha_solicitud}`, 143, 194.7);
+    doc.text(`${solicitud.fecha_solicitud}`, 143, 194.7);
 
     doc.setFont("helvetica", "bold");
     doc.text(`Días pendientes por`, 20, 194.7);
@@ -182,26 +182,26 @@ export async function generatePDF(ticket) {
     doc.setFont("helvetica", "bold");
     doc.text(`Fecha de ingreso:`, 70, 202.7);
     doc.setFont("helvetica", "normal");
-    doc.text(`${ticket.fecha_ingreso}`, 110, 202.7);
+    doc.text(`${solicitud.fecha_ingreso}`, 110, 202.7);
 
     doc.setFont("helvetica", "bold");
     doc.text(`Nombre:`, 70, 207.7);
     doc.setFont("helvetica", "normal");
-    doc.text(`${ticket.nombre}`, 110, 207.7);
+    doc.text(`${solicitud.nombre}`, 110, 207.7);
 
     // Tabla días
     drawRect(34.5, 217.7, 20, 20, 0.1);
     drawRect(34.5, 217.7, 20, 5, 0.1);
     textCenter("Días", 89, 221.5);
     doc.setFontSize(18);
-    textCenter(`${(ticket.fechas_solicitadas.split(",").length) || ""}`, 88.5, 232.7);
+    textCenter(`${(solicitud.fechas_solicitadas.split(",").length) || ""}`, 88.5, 232.7);
 
     // Tabla fechas
     drawRect(70, 217.7, 136, 20, 0.1);
     drawRect(70, 217.7, 136, 5, 0.1);
     doc.setFontSize(10);
     textCenter("Fechas", 276, 221.5);
-    doc.text(`${ticket.fechas_solicitadas}`, 75, 229.2,{ maxWidth: 136 });
+    doc.text(`${solicitud.fechas_solicitadas}`, 75, 229.2,{ maxWidth: 136 });
 
     // Tabla pendientes
     doc.setFontSize(8);
