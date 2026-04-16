@@ -20,6 +20,7 @@ export async function addUniforms(event) {
     // Referencias para validación
     const id_empleadoIn = document.getElementById("staff");
     const tipo_entregaIn = document.getElementById("type");
+    const fecha_entregaIn = document.getElementById("date");
     const tipo_prendaIn = document.getElementById("cloth");
     const tallaIn = document.getElementById("size");
     const cantidadIn = document.getElementById("quantity");
@@ -27,6 +28,7 @@ export async function addUniforms(event) {
     // Referencias para errores
     const id_empleadoError = document.getElementById('error-staff');
     const tipo_entregaError = document.getElementById('error-type');
+    const fecha_entregaError = document.getElementById('error-date');
     const tipo_prendaError = document.getElementById('error-cloth');
     const tallaError = document.getElementById('error-size');
     const cantidadError = document.getElementById('error-quantity');
@@ -35,6 +37,7 @@ export async function addUniforms(event) {
     // Validaciones
     selectValidate(id_empleadoIn, id_empleadoError)
     selectValidate(tipo_entregaIn, tipo_entregaError)
+    textValidate(fecha_entregaIn, fecha_entregaError)
     selectValidate(tipo_prendaIn, tipo_prendaError)
     textValidate(tallaIn, tallaError)
     amountValidate(cantidadIn, cantidadError)
@@ -62,8 +65,6 @@ export async function addUniforms(event) {
         return
     }
 
-    const fecha_entrega = new Date().toISOString().split('T')[0];
-
     // Guardar valores
     const newUDeliverData = {
         id_empleado: id_empleadoIn.value,
@@ -71,7 +72,7 @@ export async function addUniforms(event) {
         tipo_prenda: tipo_prendaIn.value,
         talla: tallaIn.value,
         cantidad: cantidadIn.value,
-        fecha_entrega,
+        fecha_entrega: fecha_entregaIn.value,
         observaciones: observacionesIn.value
     };
 

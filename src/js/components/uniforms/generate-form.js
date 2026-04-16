@@ -39,6 +39,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                         <p class="error invalid-feedback" id="error-type" style="color: red;"></p>
                     </div>
                     <div class="col-md-3 col-lg-3 label-over-border">
+                       <label for="date" class="form-label fw-semibold m-2">Fecha entrega</label>
+                        <input id="date" type="date" class="form-control">
+                        <p class="error invalid-feedback" id="error-date" style="color: red;"></p> 
+                    </div>
+                    <div class="col-md-3 col-lg-3 label-over-border">
                         <label for="cloth" class="form-label m-2">Tipo Prenda</label>
                         <select id="cloth" class="form-select" aria-label="Default select example">
                             <option value="0">Seleccione...</option>
@@ -49,19 +54,19 @@ document.addEventListener("DOMContentLoaded", async () => {
                         </select>
                         <p class="error invalid-feedback" id="error-cloth" style="color: red;"></p>
                     </div>
-                    <div class="col-md-3 col-lg-3 label-over-border">
+                </div>
+                <div class="row ms-2 me-2 pt-3 pb-3">
+                    <div class="col-md-3 col-lg-2 label-over-border ms-auto">
                         <label for="size" class="form-label m-2">Talla</label>
                         <input type="text" id="size" class="form-control" placeholder="Número o texto">
                         <p class="error invalid-feedback" id="error-size" style="color: red;"></p>
                     </div>
-                </div>
-                <div class="row ms-2 me-2 pt-3 pb-3">
-                    <div class="col-md-3 col-lg-2 label-over-border ms-auto">
+                    <div class="col-md-3 col-lg-2 label-over-border">
                         <label for="quantity" class="form-label m-2">Cantidad</label>
                         <input type="number" id="quantity" class="form-control no-arrows" placeholder="Cant.">
                         <p class="error invalid-feedback" id="error-quantity" style="color: red;"></p>
                     </div>
-                    <div class="col-md-9 col-lg-4 label-over-border">
+                    <div class="col-md-6 col-lg-4 label-over-border">
                         <label for="observations" class="form-label m-2">Observaciones</label>
                         <input type="text" id="observations" class="form-control" placeholder="Observaciones adicionales">
                         <p class="error invalid-feedback" id="error-observations" style="color: red;"></p>

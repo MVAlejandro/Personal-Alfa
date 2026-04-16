@@ -18,6 +18,7 @@ import { permissionsFilter } from '../components/permissions/permissions-filter.
 import { renderPermissionsEditModal } from '../components/permissions/permissions-modal.js';
 import { renderPermissionsInfoModal } from '../components/permissions/vacations-modal.js';
 import { vacationPDF } from '../components/permissions/pdf/vacation-pdf.js';
+import { permissionPDF } from '../components/permissions/pdf/permission-pdf.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     await initPage()
@@ -46,14 +47,19 @@ editModal.addEventListener('shown.bs.modal', event => {
     const button = event.relatedTarget;
     const permissionData = JSON.parse(button.getAttribute('permission-data'));
     renderPermissionsEditModal(permissionData);
+console.log(permissionData);
 
     // Declarar el botón de guardado
     const btnSave = editModal.querySelector('#btn-save');
-    // Elimina eventos anteriores para evitar duplicados
+    // Dependiendo el tipo del permiso generar su documento 
     btnSave.onclick = async function () {
-        console.log(permissionData);
-        
-        const doc = await vacationPDF(permissionData);
+        let doc = "";
+        if(permissionData.tipo == "Vacaciones") {
+            doc = await vacationPDF(permissionData);
+        } else {
+            doc = await permissionPDF(permissionData);
+        }
+
         window.open(doc.output('bloburl'), '_blank');
     };
 });
