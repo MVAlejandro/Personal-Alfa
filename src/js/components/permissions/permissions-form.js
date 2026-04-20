@@ -3,6 +3,7 @@ import { createPermission } from '../../services/permissions-service.js';
 import { renderPermissionsTable } from './permissions-table.js'; 
 // Utilidades
 import { textValidate, inputValidate, selectValidate } from '../../utils/form-validations.js';
+import { verifyAntique } from '../../utils/time-functions.js';
 
 // Función para agregar una nueva solicitud
 export async function addPermission(event) {
@@ -79,6 +80,9 @@ export async function addPermission(event) {
             e.classList.remove('is-valid', 'is-invalid');
         });
     
+        // Verificar su antigüedad del empleado para gestión de vacaciones
+        await verifyAntique(newPermissionData.id_empleado)
+
         // Recarga la tabla con los datos actualizados
        await renderPermissionsTable();
     } catch (err) {

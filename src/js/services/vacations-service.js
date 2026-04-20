@@ -2,7 +2,7 @@ import supabase from '../supabase/supabase-client.js'
 import { getActiveStaff } from './staff-service.js';
 
 // Función para calcular la antigüedad con base a la fecha de ingreso
-function calculateAntique(fecha_ingreso) {
+export function calculateAntique(fecha_ingreso) {
     const actualDate = new Date();
     const entryDate = new Date(fecha_ingreso);
     let antiguedad = actualDate.getFullYear() - entryDate.getFullYear();
@@ -16,7 +16,7 @@ function calculateAntique(fecha_ingreso) {
 }
 
 // Función para determinar los días de vacaciones a gozar
-function calculateVacation(antiguedad) {
+export function calculateVacation(antiguedad) {
     if (antiguedad <= 0) return 0;
 
     // Primeros 5 años (incrementa de 2 en 2)
@@ -103,7 +103,19 @@ export async function getVacationsResume(date) {
         const dias_asignados = empMovements.filter(m => m.tipo === 'Asignacion').reduce((sum, m) => sum + m.dias, 0);
         const dias_tomados = empMovements.filter(m => m.tipo === 'Uso').reduce((sum, m) => sum + Math.abs(m.dias), 0);
         const saldo = dias_asignados - dias_tomados;
-        const fechas_tomadas = absences.filter(a => a.id_empleado === emp.id_empleado).map(a => a.fecha).sort();
+        const endDate = new Date(date);
+        const startDate = new Date(date);
+        startDate.setDate(startDate.getDate() - 365);
+
+        const fechas_tomadas = absences.filter(a => { const fecha = new Date(a.fecha);
+                return (
+                    a.id_empleado === emp.id_empleado &&
+                    fecha >= startDate &&
+                    fecha <= endDate
+                );
+            })
+            .map(a => a.fecha)
+            .sort();
 
         results.push({
             id_empleado: emp.id_empleado,

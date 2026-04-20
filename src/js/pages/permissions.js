@@ -47,7 +47,6 @@ editModal.addEventListener('shown.bs.modal', event => {
     const button = event.relatedTarget;
     const permissionData = JSON.parse(button.getAttribute('permission-data'));
     renderPermissionsEditModal(permissionData);
-console.log(permissionData);
 
     // Declarar el botón de guardado
     const btnSave = editModal.querySelector('#btn-save');

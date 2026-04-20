@@ -82,6 +82,8 @@ export async function getRangeAttendances(startDate, endDate) {
 
     if (endDate) {
         query = query.lte('fecha_asistencia', endDate);
+    } else {
+        query = query.lte('fecha_asistencia', startDate);
     }
 
     const { data, error } = await query

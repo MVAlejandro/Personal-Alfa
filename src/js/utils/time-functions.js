@@ -1,5 +1,7 @@
 // Servicios Supabase
 import { findSchedule } from "../services/schedule-service";
+import { findStaff } from "../services/staff-service";
+import { calculateAntique, calculateVacation, createVacation } from "../services/vacations-service";
 
 // Función para separar el formato de tiempo en día y hora
 export function splitDateTime(fechaTexto) {
@@ -10,10 +12,10 @@ export function splitDateTime(fechaTexto) {
 
 // Función para obtener el día de la semana
 export function getWeekDay(date) {
-    const dias = [ 'domingo', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado' ];
+    const dias = ['domingo', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
     const [year, month, day] = date.split('-').map(Number);
     const fecha = new Date(year, month - 1, day);
-    
+
     return dias[fecha.getDay()];
 }
 
@@ -76,7 +78,7 @@ export async function determinateType(id, day, time) {
     }
 
     // Fuera de rango
-    return null; 
+    return null;
 }
 
 // Funciones para obtener el color dependiendo la variación de tiempo
@@ -97,5 +99,34 @@ export function exitColor(data) {
         return 'green';
     } else {
         return 'black';
+    }
+}
+
+// Función para comparar fecha de ingreso del empleado para determinar su antigüedad al día
+export async function verifyAntique(id_empleado) {
+    const staffInfo = await findStaff(id_empleado)
+    const today = new Date();
+    const entryDate = new Date(staffInfo.fecha_ingreso + "T00:00:00");
+    let antiguedad = calculateAntique(staffInfo.fecha_ingreso);
+    const vacationDays = calculateVacation(antiguedad);
+
+    // Si la fecha actual coincide con su aniversario, agregar los días de vacaciones correspondientes
+    if (today.getMonth() === entryDate.getMonth() && today.getDate() === entryDate.getDate()) {
+        let vacationsData = {
+            id_empleado,
+            tipo: "Asignacion",
+            antiguedad,
+            dias: vacationDays
+        }
+        
+        try {
+            // console.log(vacationsData);
+            
+            await createVacation(vacationsData);
+        } catch (err) {
+            console.error(`Error registrando vacaciones`, err);
+        }
+    } else {
+        console.log("No cumple aniversario");
     }
 }

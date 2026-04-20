@@ -1,10 +1,13 @@
 // Servicios Supabase
 import { getActiveStaff } from '../../services/staff-service.js'; 
-import { getFormatedAttendances, getSingleAttendances } from '../../services/attendance-service.js'; 
+import { getSingleAttendances } from '../../services/attendance-service.js'; 
+import { getRangeAbsences } from '../../services/absences-service.js';
+import { getCalendarEvents } from '../../services/calendar-service.js';
 import { createResumeCards } from './attendance-cards.js';
 import { renderAttendancesTable } from './attendance-table.js';
 
 let allAttendances = [];
+let allAbsences = [];
 
 document.addEventListener('DOMContentLoaded', async () => { 
     const today = new Date().toISOString().split("T")[0]
@@ -20,13 +23,14 @@ export async function attendanceFilter() {
     // Obtener filtro de estado por el radio seleccionado
     const statusFilter = document.querySelector('input[name="attendance-select"]:checked')?.value || '0';
 
-    // Obtener registros filtrados por fecha
+    // Obtener registros de asistencias y ausencias filtrados por fecha
     allAttendances = await getSingleAttendances(dayFilter);
+    allAbsences = await getRangeAbsences(dayFilter);
     const activeStaff = await getActiveStaff(dayFilter);
     
     // Agrupar los registros de asistencia por empleado con sus horas de checado
-    const fullAttendances = await getFormatedAttendances(activeStaff, allAttendances);
-    
+    const fullAttendances = await getCalendarEvents(activeStaff, allAttendances, allAbsences);
+
     // Filtrar por el estado seleccionado
     const filtered = fullAttendances.filter(a => {
         if (statusFilter === 'Total') return true;

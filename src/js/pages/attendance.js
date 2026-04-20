@@ -66,11 +66,12 @@ document.addEventListener('click', async function (e) {
 
         // Transformar los datos para Excel
         const dataForExcel = report.map(r => ({
-            "No. Empleado": r.numero_empleado,
+            "No. Emp": r.numero_empleado,
             "Nombre": r.nombre,
             "Puesto": r.puesto,
             "Fecha": r.fecha,
-            "Día": r.dia,
+            "Detalle": r.detalle,
+            "Día": r.detalle !== "Presente" ? r.tipo_dia : r.dia,
             "Entrada": r.entrada,
             "Variación E": r.variacion_entrada,
             "Salida": r.salida,

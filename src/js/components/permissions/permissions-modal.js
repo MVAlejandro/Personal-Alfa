@@ -163,6 +163,8 @@ document.getElementById('btn-edit-entry').addEventListener('click', async functi
             icon: 'error',
             confirmButtonText: 'OK'
         });
+        
+        await renderPermissionsTable();
     }
 });
 

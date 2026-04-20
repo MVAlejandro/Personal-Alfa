@@ -1,8 +1,11 @@
 // Servicios Supabase
 import { getActiveStaffRange } from '../../services/staff-service.js';  
-import { getFormatedAttendances, getRangeAttendances } from '../../services/attendance-service.js'; 
+import { getRangeAttendances } from '../../services/attendance-service.js'; 
+import { getRangeAbsences } from '../../services/absences-service.js';
+import { getCalendarEvents } from '../../services/calendar-service.js';
 
 let allAttendances = [];
+let allAbsences = [];
 
 document.addEventListener('DOMContentLoaded', () => { 
     flatpickr("#date-report", {
@@ -44,9 +47,10 @@ export async function attendanceReportFilter() {
 
     // Obtener registros filtrados por fecha
     allAttendances = await getRangeAttendances(start, end);
+    allAbsences = await getRangeAbsences(start, end);
     const activeStaff = await getActiveStaffRange(start, end);
     // Agrupar los registros de asistencia por empleado con sus horas de checado
-    const fullAttendances = await getFormatedAttendances(activeStaff, allAttendances);
+    const fullAttendances = await getCalendarEvents(activeStaff, allAttendances, allAbsences);
 
     // Filtrar el nuevo arreglo por tipo
     const filtered = fullAttendances.filter(a => {

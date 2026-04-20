@@ -1,10 +1,5 @@
 // Servicios Supabase
-import { getSchedule, getFullSchedules } from '../../services/schedule-service.js'; 
 import { validateUserRole } from '../../utils/session-validate.js';
-
-let allSchedules = [];
-let staffSchedules = [];
-const today = new Date().toISOString().split("T")[0];
 
 function determinateSchedule(dia) {
     let entrada = "00:00";
@@ -47,7 +42,7 @@ export async function renderSchedulesTable(staffSchedules) {
                 <p class="schedule-employee">${horario.nombre}</p>
                 <p class="schedule-departament">${horario.puesto}</p>
             </td>
-            <td class="schedule-day text-center p-1">${determinateSchedule(horario.dias[0])}}</td>
+            <td class="schedule-day text-center p-1">${determinateSchedule(horario.dias[0])}</td>
             <td class="schedule-day text-center p-1">${determinateSchedule(horario.dias[1])}</td>
             <td class="schedule-day text-center p-1">${determinateSchedule(horario.dias[2])}</td>
             <td class="schedule-day text-center p-1">${determinateSchedule(horario.dias[3])}</td>
