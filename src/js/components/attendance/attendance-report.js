@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         mode: "range",
         dateFormat: "Y-m-d",
+
         onChange: function(selectedDates, dateStr, instance) {
             if (selectedDates.length === 2) {
                 const diffTime = Math.abs(selectedDates[1] - selectedDates[0]);
@@ -28,6 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         icon: 'warning',
                         confirmButtonText: 'OK'
                     });
+
+                    instance.setDate([selectedDates[0]], true);
                 }
             }
         }
@@ -37,13 +40,20 @@ document.addEventListener('DOMContentLoaded', () => {
 // Función de filtrado por valores seleccionados
 export async function attendanceReportFilter() {
     // Obtener valores de filtros
-    const dayFilterEl = document.getElementById('date-report');
-    const statusFilterEl = document.getElementById('status-report');
+    const dayFilter = document.getElementById('date-report').value;
+    const statusFilter = document.getElementById('status-report').value;
 
-    const dayFilter = dayFilterEl?.value || "";
-    const [start, end] = dayFilter.split(" a ");
-    
-    const statusFilter = statusFilterEl?.value || '0';
+    let start = null;
+    let end = null;
+
+    if (dayFilter.includes(" a ")) {
+        [start, end] = dayFilter.split(" a ");
+    } else if (dayFilter) {
+        start = dayFilter;
+        end = dayFilter;
+    } else {
+        throw new Error('NO_DATE');
+    }
 
     // Obtener registros filtrados por fecha
     allAttendances = await getRangeAttendances(start, end);
@@ -79,6 +89,145 @@ export async function attendanceReportFilter() {
 
         return true;
     });
-    
+
     return filtered;
+}
+
+// Función para crear el gráfico por departamentos
+export function renderAttendanceGraphic(fullAttendances) {
+    const container = document.getElementById("report-container");
+    container.innerHTML = "";
+
+    if (!fullAttendances.length) {
+        container.innerHTML = `<div class="alert alert-info">No hay datos para mostrar</div>`;
+        return;
+    }
+
+    // Agrupar por tipo de evento
+    function getStatus(a) {
+        if (!a.entrada && !a.salida) return 'Ausencias';
+
+        if (a.entrada && a.variacion_entrada) {
+            const match = a.variacion_entrada.match(/([+-])(\d{2}):(\d{2})/);
+
+            if (match) {
+                const sign = match[1];
+                const minutes = parseInt(match[2]) * 60 + parseInt(match[3]);
+
+                if (sign === '+' && minutes > 5) {
+                    return 'Retardos';
+                }
+            }
+        }
+
+        return 'Asistencias';
+    }
+
+    // Agrupar por día
+    const groupedByDay = {};
+
+    fullAttendances.forEach(a => {
+        const date = new Date(a.fecha).toISOString().split('T')[0];
+
+        if (!groupedByDay[date]) {
+            groupedByDay[date] = {
+                Asistencias: 0,
+                Retardos: 0,
+                Ausencias: 0
+            };
+        }
+
+        const status = getStatus(a);
+        groupedByDay[date][status]++;
+    });
+
+    const labels = Object.keys(groupedByDay).sort();
+
+    const asistencias = labels.map(d => groupedByDay[d].Asistencias);
+    const retardos = labels.map(d => groupedByDay[d].Retardos);
+    const ausencias = labels.map(d => groupedByDay[d].Ausencias);
+
+    // Crear canvas para insertar el gráfico
+    container.innerHTML = '<canvas id="attendance-graphic"></canvas>';
+    const ctx = document.getElementById('attendance-graphic').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [
+                {
+                    label: 'Asistencias',
+                    data: asistencias,
+                    backgroundColor: '#bee493a8',
+                    borderColor: '#809963',
+                    borderWidth: 2,
+                    borderRadius: 10
+                },
+                {
+                    label: 'Retardos',
+                    data: retardos,
+                    backgroundColor: '#f7de92a8',
+                    borderColor: '#ad9d67',
+                    borderWidth: 2,
+                    borderRadius: 10
+                },
+                {
+                    label: 'Ausencias',
+                    data: ausencias,
+                    backgroundColor: '#fa839dad',
+                    borderColor: '#a05767',
+                    borderWidth: 2,
+                    borderRadius: 10
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    stacked: false
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+}
+
+export async function attendanceReport(event) {
+    event.preventDefault();
+
+    const btn = event.target.closest('#btn-generate');
+
+    try {
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = 'Generando...';
+        }
+
+        const filtered = await attendanceReportFilter();
+
+        renderAttendanceGraphic(filtered);
+
+    } catch (error) {
+        if (error.message === 'NO_DATE') {
+            Swal.fire({
+                title: 'Atención',
+                text: 'Seleccione al menos una fecha para generar el reporte.',
+                icon: 'warning'
+            });
+        } else {
+            console.error(error);
+        }
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = 'Generar';
+        }
+    }
 }

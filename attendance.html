@@ -177,7 +177,7 @@
 
     <!-- Modal para la generación de reporte -->
     <div class="modal fade" id="report-modal" tabindex="-1" aria-labelledby="report-modalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content pt-3 pb-3">
                 <div class="modal-header">
                     <div class="row">
@@ -193,36 +193,42 @@
                     <button type="button" class="btn-close me-3" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="container">
-                        <form id="report-form" class="pb-3">
-                            <div class="row ms-2 me-2 mt-3">
-                                <div class="col-md-6 label-over-border filter">
-                                    <label for="date-report" class="form-label m-2">Filtrar por Día</label>
-                                    <input type="text" id="date-report" class="form-control" placeholder="Fecha a mostrar">
-                                </div>
-                                <div class="col-md-6 label-over-border filter">
-                                    <label for="status-report" class="form-label m-2">Tipo</label>
-                                    <select class="form-select" id="status-report">
-                                        <option value="Total">Todos</option>
-                                        <option value="Presentes">Presentes</option>
-                                        <option value="Retardos">Retardos</option>
-                                        <option value="Ausencias">Ausencias</option>
-                                    </select>
-                                </div>
+                    <div id="report-filter-container" class="container pb-2">
+                        <div class="row ms-2 me-2 mt-3">
+                            <div class="col-md-6 col-lg-4 label-over-border">
+                                <label for="date-report" class="form-label m-2">Filtrar por Día</label>
+                                <input type="text" id="date-report" class="form-control" placeholder="Fecha a mostrar">
                             </div>
-                        </form>
-                        <hr>
-                        <p id="attendance-results" class="ms-2">0 Registros generados</p>
+                            <div class="col-md-6 col-lg-4 label-over-border">
+                                <label for="status-report" class="form-label m-2">Tipo</label>
+                                <select class="form-select" id="status-report">
+                                    <option value="Total">Todos</option>
+                                    <option value="Presentes">Presentes</option>
+                                    <option value="Retardos">Retardos</option>
+                                    <option value="Ausencias">Ausencias</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div id="graphic-report-container" class="p-5">
+                        <div id="report-container" class="h-100 container d-flex justify-content-center align-items-center">
+                            <div id="logo-info" class="text-center">
+                                <h4 class="fw-light mb-4">Seleccione el periodo de tiempo para generar.</h4>
+                                <img src="/assets/images/logo-letras-420x187.png" alt="Logo Pallets Alfa" class="w-75 img-fluid">
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer me-4">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button id="btn-report" class="btn btn-primary d-flex align-items-center ps-3 pe-3 ms-2 me-2">
+                    <button id="btn-report" class="btn btn-primary d-flex align-items-center me-auto ps-3 pe-3 ms-4">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
                             <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 2h-4v3h4zm0 4h-4v3h4zm0 4h-4v3h3a1 1 0 0 0 1-1zm-5 3v-3H6v3zm-5 0v-3H1v2a1 1 0 0 0 1 1zm-4-4h4V8H1zm0-4h4V4H1zm5-3v3h4V4zm4 4H6v3h4z"/>
                         </svg>
-                        <p class="ps-2">Generar</p>
+                        <p class="ps-2">Guardar</p>
                     </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button id="btn-generate" class="btn btn-primary ms-2 me-2">Generar</button>
                 </div>
             </div>
         </div>
@@ -237,6 +243,8 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="/src/js/pages/attendance.js"></script>
 </body>

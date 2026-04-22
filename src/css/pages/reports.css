@@ -1,0 +1,124 @@
+/* Estilos de la página y estructura */
+#reports-header {
+    margin-top: 0;
+}
+
+#reports-header-container {
+    background-color: var(--background-light) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#reports, #reports-filter-container, .report-btn, input, select {
+    background-color: var(--background-light);
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#reports, #reports-container, #reports-filter-container {
+    transition: transform 0.3s ease;
+    animation: fadeInUp 1s ease-in-out;
+}
+
+.graphic-report-container {
+    position: relative;
+    height: 335px;
+    width: 100%;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }   
+}
+
+#logo-info {
+    opacity: 0.5;
+}
+
+/* Estilos para la sección de filtros */
+.filter-text {
+    color: var(--secondary);
+}
+
+#title-icon {
+    color: var(--primary);
+}
+
+#search-filter {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%23000' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: calc(0% + 12px) center;
+    background-size: 14px 14px;
+    padding-left: 40px;
+}
+
+/* Estilos de los botones del tipo de reporte */
+.general-report-cant {
+    font-size: 30px;
+    font-weight: bold;
+    margin-left: 0;
+}
+
+.btn-container {
+    height: 100px;
+}
+
+.report-btn {
+    border: 1px solid var(--secondary-light);
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.report-btn:hover {
+    background-color: var(--primary-dark) !important;
+    color: var(--primary-light) !important;
+    border-color: var(--primary) !important;
+    border-width: 2px;
+    transform: translateY(-3px);
+    cursor: pointer;
+}
+
+.report-btn:active {
+    transform: scale(0.98);
+    box-shadow: var(--primary-dark);
+}
+
+.btn-check:checked + .report-btn {
+    background-color: var(--primary-light);
+    border-color: var(--primary);
+    border-width: 2px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-check:checked + .report-btn .icon-circle {
+    background-color: var(--primary);
+    color: var(--primary-light);
+}
+
+.report-btn.is-invalid {
+    border: 1px solid #dc3545;
+}
+
+.report-btn.is-valid {
+    border: 1px solid #198754;
+}
+
+input:disabled {
+    background-color: var(--background-light) !important;
+    color: var(--primary-dark) !important;
+}
+
+/* Estilos para la sección del contenido */
+#reports-container {
+    position: relative;
+    width: 100%;
+}

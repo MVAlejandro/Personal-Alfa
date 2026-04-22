@@ -14,7 +14,7 @@ import '../components/attendance/generate-form.js'
 import { initPage } from '../utils/session-validate.js';
 import { addExcelAttendances } from '../components/attendance/attendance-form.js'; 
 import { attendanceFilter } from '../components/attendance/attendance-filter.js';
-import { attendanceReportFilter } from '../components/attendance/attendance-report.js';
+import { attendanceReport, attendanceReportFilter } from '../components/attendance/attendance-report.js';
 
 let report = []
 
@@ -47,61 +47,90 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Declarar el botón de exportación a Excel
-document.addEventListener('click', async function (e) {
-    if (e.target.id === 'btn-report' || e.target.closest('#btn-report')) {
-
-        // Obtener los registros para el reporte
-        const report = await attendanceReportFilter();
-
-        if (!report || !report.length) {
-            Swal.fire({
-                title: 'Atención',
-                text: 'No hay datos para exportar.',
-                icon: 'warning',
-                confirmButtonText: 'OK'
-            });
-            return;
-        }
-
-        // Transformar los datos para Excel
-        const dataForExcel = report.map(r => ({
-            "No. Emp": r.numero_empleado,
-            "Nombre": r.nombre,
-            "Puesto": r.puesto,
-            "Fecha": r.fecha,
-            "Detalle": r.detalle,
-            "Día": r.detalle !== "Presente" ? r.tipo_dia : r.dia,
-            "Entrada": r.entrada,
-            "Variación E": r.variacion_entrada,
-            "Salida": r.salida,
-            "Variación S": r.variacion_salida,
-            "Verificación": r.verificacion,
-            "Tiempo extra": r.tiempo_extra
-        }));
-
-        const resultsText = document.getElementById('attendance-results');
-        const filterValue = document.getElementById('status-report').value;
-        // Actualizar texto de resultados
-        if (!dataForExcel.length) {
-            resultsText.textContent = `0 Registros generados`;
-            return;
-        }
-        resultsText.textContent = `${dataForExcel.length} Registros generados`;
-
-        // Generar Excel
-        
-        const ws = XLSX.utils.json_to_sheet(dataForExcel);
-        const wb = XLSX.utils.book_new();
-
-        XLSX.utils.book_append_sheet(wb, ws, `Reporte`);
-        XLSX.writeFile(wb, `rep_asistencia_${new Date().toISOString().split('T')[0]}_${filterValue}.xlsx`);
-        
+// Declarar el botón para la generación del gráfico
+document.addEventListener('click', function(e) {
+    if (e.target.id === 'btn-generate' || e.target.closest('#btn-generate')) {
+        attendanceReport(e);
     }
 });
 
-// Al cerrar modal formatear el texto
+// Declarar el botón para generación del reporte
+document.addEventListener('click', async function (e) {
+    if (e.target.id === 'btn-report' || e.target.closest('#btn-report')) {
+
+        const btn = e.target.closest('#btn-report');
+
+        try {
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = 'Exportando...';
+            }
+
+            const report = await attendanceReportFilter();
+
+            if (!report.length) {
+                Swal.fire({
+                    title: 'Atención',
+                    text: 'No hay datos para exportar.',
+                    icon: 'warning'
+                });
+                return;
+            }
+
+            const dataForExcel = report.map(r => ({
+                "No. Emp": r.numero_empleado,
+                "Nombre": r.nombre,
+                "Puesto": r.puesto,
+                "Fecha": r.fecha,
+                "Detalle": r.detalle,
+                "Día": r.detalle !== "Presente" ? r.tipo_dia : r.dia,
+                "Entrada": r.entrada,
+                "Variación E": r.variacion_entrada,
+                "Salida": r.salida,
+                "Variación S": r.variacion_salida,
+                "Verificación": r.verificacion,
+                "Tiempo extra": r.tiempo_extra
+            }));
+
+            const ws = XLSX.utils.json_to_sheet(dataForExcel);
+            const wb = XLSX.utils.book_new();
+
+            XLSX.utils.book_append_sheet(wb, ws, `Reporte`);
+
+            XLSX.writeFile(
+                wb,
+                `rep_asistencia_${new Date().toISOString().split('T')[0]}.xlsx`
+            );
+
+        } catch (error) {
+            if (error.message === 'NO_DATE') {
+                Swal.fire({
+                    title: 'Atención',
+                    text: 'Seleccione al menos una fecha.',
+                    icon: 'warning'
+                });
+            }
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = 
+                    `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
+                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 2h-4v3h4zm0 4h-4v3h4zm0 4h-4v3h3a1 1 0 0 0 1-1zm-5 3v-3H6v3zm-5 0v-3H1v2a1 1 0 0 0 1 1zm-4-4h4V8H1zm0-4h4V4H1zm5-3v3h4V4zm4 4H6v3h4z"/>
+                    </svg>
+                    <p class="ps-2">Guardar</p>`;
+            }
+        }
+    }
+});
+
+// Al cerrar modal formatear el modal
 document.getElementById('report-modal').addEventListener('hidden.bs.modal', () => {
-    const resultsText = document.getElementById('attendance-results');
-    resultsText.textContent = `0 Registros generados`;
+    const container = document.getElementById('graphic-report-container');
+    container.innerHTML = 
+        `<div id="report-container" class="container d-flex justify-content-center align-items-center p-5">
+            <div id="logo-info" class="text-center">
+                <h4 class="fw-light mb-4">Seleccione el periodo de tiempo para generar.</h4>
+                <img src="./assets/images/logo-letras-420x187.png" alt="Logo Pallets Alfa" class="w-75 img-fluid">
+            </div>
+        </div>`;
 });

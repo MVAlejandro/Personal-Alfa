@@ -14,6 +14,16 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+#graphic-report-container {
+    position: relative;
+    height: 500px;
+    width: 100%;
+}
+
+#logo-info {
+    opacity: 0.5;
+}
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
