@@ -151,6 +151,9 @@ export function renderAttendanceGraphic(fullAttendances) {
     container.innerHTML = '<canvas id="attendance-graphic"></canvas>';
     const ctx = document.getElementById('attendance-graphic').getContext('2d');
 
+    // Registrar plugin
+    Chart.register(ChartDataLabels);
+
     new Chart(ctx, {
         type: 'bar',
         data: {
@@ -186,13 +189,22 @@ export function renderAttendanceGraphic(fullAttendances) {
             responsive: true,
             scales: {
                 x: {
-                    stacked: false
+                    stacked: true
                 },
                 y: {
+                    stacked: true,
                     beginAtZero: true,
                     ticks: {
                         precision: 0
                     }
+                }
+            },
+            plugins: {
+                datalabels: {
+                    anchor: 'center',
+                    align: 'center',
+                    color: '#000',
+                    formatter: value => value
                 }
             }
         }

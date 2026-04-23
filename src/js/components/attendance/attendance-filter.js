@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Función de filtrado por valores seleccionados
 export async function attendanceFilter() {
     // Obtener el filtro de fecha
+    const searchInput = document.getElementById('search-filter');
+    const searchText = searchInput.value.trim().toLowerCase();
+
     const dayFilterEl = document.getElementById('day-filter');
     const dayFilter = dayFilterEl.value ? dayFilterEl.value.split(', ').map(d => d.trim()) : [];
 
@@ -30,6 +33,26 @@ export async function attendanceFilter() {
     
     // Agrupar los registros de asistencia por empleado con sus horas de checado
     const fullAttendances = await getCalendarEvents(activeStaff, allAttendances, allAbsences);
+
+    // Si se realiza la búsqueda por texto mantener la información de las cards y solo mostrar las coincidencias
+    if (searchText !== "") {
+        const filteredBySearch = fullAttendances.filter(a => {
+            return (
+                a.numero_empleado?.toString().toLowerCase().includes(searchText) ||
+                a.nombre?.toString().toLowerCase().includes(searchText)
+            );
+        });
+
+        renderAttendancesTable(filteredBySearch);
+
+        // limpiar input
+        searchInput.value = "";
+
+        // mantener cards con data original
+        createResumeCards(dayFilter, fullAttendances);
+
+        return filteredBySearch;
+    }
 
     // Filtrar por el estado seleccionado
     const filtered = fullAttendances.filter(a => {

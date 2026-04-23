@@ -11,7 +11,7 @@ export async function createResumeCards(date, fullAttendances) {
     allStaff = await getActiveStaff(date);
 
     // Filtrar presentes (aquellos que tienen al menos una entrada)
-    const presentAttendances = fullAttendances.filter(a => !!a.entrada);
+    const presentAttendances = fullAttendances.filter(a => !!a.entrada || !!a.salida);
 
     // Obtener solicitudes de vacaciones
     allPermissions = await getPermission();
