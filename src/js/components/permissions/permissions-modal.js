@@ -1,10 +1,10 @@
 // Servicios Supabase
 import { updatePermission } from '../../services/permissions-service.js'; 
 import { createAbsence } from '../../services/absences-service.js';
-import { renderPermissionsTable } from './permissions-table.js'; 
 // Utilidades
 import { textValidate, inputValidate, selectValidate } from '../../utils/form-validations.js';
 import { createVacation } from '../../services/vacations-service.js';
+import { permissionsFilter } from './permissions-filter.js';
 
 // Función para agregar una fecha visualmente en la lista
 async function addDateRow(dateValue = '') {
@@ -127,6 +127,8 @@ document.getElementById('btn-edit-entry').addEventListener('click', async functi
                     confirmButtonText: 'OK'
                 });
 
+                await permissionsFilter();
+
                 return
             }
 
@@ -154,7 +156,7 @@ document.getElementById('btn-edit-entry').addEventListener('click', async functi
         });
 
         // Recarga la tabla con los datos actualizados
-        await renderPermissionsTable();
+        await permissionsFilter();
     } catch (err) {
         console.error('Error al actualizar el permiso:', err);
         Swal.fire({
@@ -164,7 +166,7 @@ document.getElementById('btn-edit-entry').addEventListener('click', async functi
             confirmButtonText: 'OK'
         });
         
-        await renderPermissionsTable();
+        await permissionsFilter();
     }
 });
 

@@ -43,5 +43,5 @@ export async function schedulesFilter() {
 
     renderSchedulesTable(filtered);
     
-    return staffSchedules;
+    return filtered;
 }

@@ -31,5 +31,5 @@ export async function permissionsFilter() {
 
     renderPermissionsTable(filtered);
 
-    return allPermissions;
+    return filtered;
 }

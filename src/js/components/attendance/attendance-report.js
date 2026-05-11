@@ -66,25 +66,16 @@ export async function attendanceReportFilter() {
     const filtered = fullAttendances.filter(a => {
         if (statusFilter === 'Total') return true;
         if (statusFilter === 'Ausencias') {
-            return !a.entrada && !a.salida;
+            return a.tipo_dia == "Falta";
         }
         if (statusFilter === 'Presentes') {
-            return !!a.entrada || !!a.salida;
+            return a.tipo_dia == "Laborado";
         }
         if (statusFilter === 'Retardos') {
-        if (!a.entrada || !a.variacion_entrada) return false;
-            // Extraer los minutos positivos de variacion_entrada
-            const match = a.variacion_entrada.match(/([+-])(\d{2}):(\d{2})/);
-            if (!match) return false;
-
-            const sign = match[1]; // + o -
-            const hours = parseInt(match[2], 10);
-            const minutes = parseInt(match[3], 10);
-
-            const totalMinutes = hours * 60 + minutes;
-
-            // Retardo: solo positivos y más de 5 minutos
-            return sign === '+' && totalMinutes > 5;
+            return a.tipo_dia === "Laborado" && a.detalle === "Retardo";
+        }
+        if (statusFilter === 'Permisos') {
+            return a.tipo_dia == "Permiso" || a.tipo_dia == "Vacaciones";
         }
 
         return true;
@@ -105,7 +96,8 @@ export function renderAttendanceGraphic(fullAttendances) {
 
     // Agrupar por tipo de evento
     function getStatus(a) {
-        if (!a.entrada && !a.salida) return 'Ausencias';
+        if (a.tipo_dia == "Falta") return 'Ausencias';
+        if (a.tipo_dia == "Permiso" || a.tipo_dia == "Vacaciones") return 'Permisos';
 
         if (a.entrada && a.variacion_entrada) {
             const match = a.variacion_entrada.match(/([+-])(\d{2}):(\d{2})/);
@@ -114,7 +106,7 @@ export function renderAttendanceGraphic(fullAttendances) {
                 const sign = match[1];
                 const minutes = parseInt(match[2]) * 60 + parseInt(match[3]);
 
-                if (sign === '+' && minutes > 5) {
+                if (sign === '+' && minutes > 2) {
                     return 'Retardos';
                 }
             }
@@ -133,7 +125,8 @@ export function renderAttendanceGraphic(fullAttendances) {
             groupedByDay[date] = {
                 Asistencias: 0,
                 Retardos: 0,
-                Ausencias: 0
+                Ausencias: 0,
+                Permisos: 0
             };
         }
 
@@ -146,6 +139,7 @@ export function renderAttendanceGraphic(fullAttendances) {
     const asistencias = labels.map(d => groupedByDay[d].Asistencias);
     const retardos = labels.map(d => groupedByDay[d].Retardos);
     const ausencias = labels.map(d => groupedByDay[d].Ausencias);
+    const permisos = labels.map(d => groupedByDay[d].Permisos);
 
     // Crear canvas para insertar el gráfico
     container.innerHTML = '<canvas id="attendance-graphic"></canvas>';
@@ -180,6 +174,14 @@ export function renderAttendanceGraphic(fullAttendances) {
                     data: ausencias,
                     backgroundColor: '#fa839dad',
                     borderColor: '#a05767',
+                    borderWidth: 2,
+                    borderRadius: 10
+                },
+                {
+                    label: 'Permisos',
+                    data: permisos,
+                    backgroundColor: '#83d4faad',
+                    borderColor: '#578ba0',
                     borderWidth: 2,
                     borderRadius: 10
                 }

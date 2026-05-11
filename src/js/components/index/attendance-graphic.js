@@ -1,6 +1,8 @@
 // Servicios Supabase
 import { getActiveStaff } from "../../services/staff-service";
-import { getFormatedAttendances, getRangeAttendances } from "../../services/attendance-service"; 
+import { getRangeAttendances } from "../../services/attendance-service"; 
+import { getCalendarEvents } from "../../services/calendar-service";
+import { getRangeAbsences } from "../../services/absences-service";
 
 // Función para crear el gráfico por departamentos
 export async function renderStaffGraphic(date) {
@@ -79,8 +81,9 @@ export async function renderStaffGraphic(date) {
 export async function renderAttendanceGraphic(start, end, activeStaff) {
     // Obtener todos los registros
     const allAttendances = await getRangeAttendances(start, end);
+    const allAbsences = await getRangeAbsences(start, end);
     // Agrupar los registros de asistencia por empleado con sus horas de checado
-    const fullAttendances = await getFormatedAttendances(activeStaff, allAttendances);
+    const fullAttendances = await getCalendarEvents(activeStaff, allAttendances, allAbsences);
 
     const container = document.getElementById("graphic-attendance-container");
     // Limpiar antes de insertar
@@ -93,7 +96,8 @@ export async function renderAttendanceGraphic(start, end, activeStaff) {
 
     // Organizar por tipo de evento
     function getStatus(a) {
-        if (!a.entrada && !a.salida) return 'Ausencias';
+        if (a.tipo_dia == "Falta") return 'Ausencias';
+        if (a.tipo_dia == "Permiso" || a.tipo_dia == "Vacaciones") return 'Permisos';
 
         if (a.entrada && a.variacion_entrada) {
             const match = a.variacion_entrada.match(/([+-])(\d{2}):(\d{2})/);
@@ -102,7 +106,7 @@ export async function renderAttendanceGraphic(start, end, activeStaff) {
                 const sign = match[1];
                 const minutes = parseInt(match[2]) * 60 + parseInt(match[3]);
 
-                if (sign === '+' && minutes > 5) {
+                if (sign === '+' && minutes > 2) {
                     return 'Retardos';
                 }
             }
@@ -115,7 +119,8 @@ export async function renderAttendanceGraphic(start, end, activeStaff) {
     const counts = {
         Asistencias: 0,
         Retardos: 0,
-        Ausencias: 0
+        Ausencias: 0,
+        Permisos: 0
     };
 
     fullAttendances.forEach(a => {
@@ -128,7 +133,7 @@ export async function renderAttendanceGraphic(start, end, activeStaff) {
     // Calcular porcentajes
     const labels = Object.keys(counts);
     const data = labels.map(label => {
-        return ((counts[label] / total) * 100).toFixed(2);
+        return ((counts[label] / total) * 100).toFixed(1);
     });
 
     // Generar gráfico
@@ -150,9 +155,42 @@ export async function renderAttendanceGraphic(start, end, activeStaff) {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
+                // Ocultar labels dentro del gráfico
                 datalabels: {
-                    color: '#fff',
-                    formatter: value => value + '%'
+                    display: false
+                },
+                legend: {
+                    position: 'left',
+                    labels: {
+                        generateLabels(chart) {
+                            const data = chart.data;
+                            return data.labels.map((label, index) => {
+                                const value = data.datasets[0].data[index];
+                                return {
+                                    text: `${label}: ${value}%`,
+                                    fillStyle:
+                                        data.datasets[0].backgroundColor[index],
+                                    strokeStyle:
+                                        data.datasets[0].backgroundColor[index],
+                                    lineWidth: 1,
+                                    hidden: false,
+                                    index
+                                };
+                            });
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label;
+                            // Cantidad real
+                            const quantity = counts[label];
+                            // Porcentaje
+                            const percentage = context.raw;
+                            return `${label}: ${quantity} (${percentage}%)`;
+                        }
+                    }
                 }
             }
         },

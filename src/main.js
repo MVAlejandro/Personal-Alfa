@@ -12,9 +12,11 @@ import './js/components/navbar.js';
 // Servicios Supabase
 import { initPage } from './js/utils/session-validate.js';
 import { createResumeCards } from './js/components/index/resume-cards.js';
-import { getFormatedAttendances, getSingleAttendances } from './js/services/attendance-service.js';
+import { getSingleAttendances } from './js/services/attendance-service.js';
 import { renderAttendanceGraphic, renderStaffGraphic } from './js/components/index/attendance-graphic.js';
 import { getActiveStaff } from './js/services/staff-service.js';
+import { getRangeAbsences } from './js/services/absences-service.js';
+import { getCalendarEvents } from './js/services/calendar-service.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     // Obtener la fecha actual
@@ -22,8 +24,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const todayStr = today.toISOString().split("T")[0] || "-"
 
     const allAttendances = await getSingleAttendances(todayStr);
+    const allAbsences = await getRangeAbsences(todayStr);
     const activeStaff = await getActiveStaff(todayStr);
-    const fullAttendances = await getFormatedAttendances(activeStaff, allAttendances);
+    const fullAttendances = await getCalendarEvents(activeStaff, allAttendances, allAbsences);
 
     const dayText = document.getElementById('dayHeader');
     dayText.innerHTML = `${todayStr}`;

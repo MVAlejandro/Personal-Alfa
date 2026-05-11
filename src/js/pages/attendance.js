@@ -32,10 +32,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Declarar el botón de filtrado
 document.addEventListener('click', async function (e) {
     if (e.target.id === 'filter-btn' || e.target.closest('#filter-btn')) {
-        // Seleccionar por defecto el filtro de Total
-        const defaultRadio = document.querySelector('input[name="attendance-select"][value="Total"]');
-        if (defaultRadio) defaultRadio.checked = true;
-        // Ejecutar el filtro
+        // Quitar selección de todos los radios
+        document.querySelectorAll('input[name="attendance-select"]').forEach(radio => radio.checked = false);
+        // Ejecutar filtro
         await attendanceFilter();
     }
 });
@@ -83,7 +82,7 @@ document.addEventListener('click', async function (e) {
                 "Puesto": r.puesto,
                 "Fecha": r.fecha,
                 "Detalle": r.detalle,
-                "Día": r.detalle !== "Presente" ? r.tipo_dia : r.dia,
+                "Día": r.detalle !== "Presente" && r.detalle !== "Retardo" ? r.tipo_dia : r.dia,
                 "Entrada": r.entrada,
                 "Variación E": r.variacion_entrada,
                 "Salida": r.salida,
@@ -127,7 +126,7 @@ document.addEventListener('click', async function (e) {
 document.getElementById('report-modal').addEventListener('hidden.bs.modal', () => {
     const container = document.getElementById('graphic-report-container');
     container.innerHTML = 
-        `<div id="report-container" class="container d-flex justify-content-center align-items-center p-5">
+        `<div id="report-container" class="h-100 container d-flex justify-content-center align-items-center">
             <div id="logo-info" class="text-center">
                 <h4 class="fw-light mb-4">Seleccione el periodo de tiempo para generar.</h4>
                 <img src="./assets/images/logo-letras-420x187.png" alt="Logo Pallets Alfa" class="w-75 img-fluid">

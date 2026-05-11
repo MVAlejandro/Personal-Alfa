@@ -5,95 +5,104 @@ export async function createResumeCards(date, fullAttendances) {
     // Obtener todos los empleados activos
     const allStaff = await getActiveStaff(date);
     if (!allStaff) return;
+console.log(fullAttendances);
 
-    // Filtrar presentes (aquellos que tienen al menos una entrada o salida)
-    const presentAttendances = fullAttendances.filter(a => !!a.entrada || !!a.salida);
+    // Presentes normales
+    const attendanceCount = fullAttendances.filter(a => a.tipo_dia === "Laborado" && a.detalle === "Presente");
+    // Retardos
+    const lateCount = fullAttendances.filter(a => a.tipo_dia === "Laborado" && a.detalle === "Retardo");
+    // Faltas
+    const absentCount = fullAttendances.filter(a => a.tipo_dia === "Falta");
+    // Permisos y vacaciones
+    const permissionCount = fullAttendances.filter(a => a.tipo_dia === "Permiso" || a.tipo_dia === "Vacaciones");
 
-    // Filtrar retardos (entrada con variacion_entrada > +00:05)
-    const lateAttendances = presentAttendances.filter(a => {
-        const variacion = a.variacion_entrada;
-        if (!variacion) return false;
+    // Calcular porcentajes
+    const attendancePercent = fullAttendances.length ? (attendanceCount.length / fullAttendances.length) * 100 : 0;
+    const absentPercent = fullAttendances.length ? (absentCount.length / fullAttendances.length) * 100 : 0;
+    const permissionPercent = fullAttendances.length ? (permissionCount.length / fullAttendances.length) * 100 : 0;
+    const latePercent = fullAttendances.length ? (lateCount.length / fullAttendances.length) * 100 : 0;
 
-        const match = variacion.match(/([+-])(\d{2}):(\d{2})/);
-        if (!match) return false;
-
-        const sign = match[1];
-        const hours = parseInt(match[2], 10);
-        const minutes = parseInt(match[3], 10);
-        const totalMinutes = hours * 60 + minutes;
-
-        return sign === '+' && totalMinutes > 5;
-    });
-
-    // Filtrar ausentes (aquellos que no tienen al entrada o salida)
-    const absentCount = fullAttendances.filter(a => !a.entrada && !a.salida);
+    // Mostrar el total de empleados activos
+    document.getElementById("total-text").innerHTML = "Total Personal: -";
+    document.getElementById("total-text").innerHTML = `Total Personal: ${allStaff.length}`;
 
     // Renderizar las cards
-    renderStaffCard(allStaff);
-    renderPresentCard(presentAttendances);
-    renderLateCard(lateAttendances);
-    renderAbsentCard(absentCount);
-}
-
-// Función para crear la card de empleados activos
-export async function renderStaffCard(allStaff) {
-    const element = document.getElementById("total-text");
-    // Limpiar elemento antes de insertar
-    element.textContent = "";
-    
-    if (!allStaff.length) {
-        element.textContent = `-`;
-        element.className = "general-report-cant text-muted";
-        return;
-    }
-
-    // Generar el contenido
-    element.textContent = `${allStaff.length.toLocaleString('en-US')}`;
-    element.className = `general-report-cant`;
+    renderPresentCard(attendanceCount, attendancePercent);
+    renderLateCard(lateCount, latePercent);
+    renderAbsentCard(absentCount, absentPercent);
+    renderPermissionCard(permissionCount, permissionPercent);
 }
 
 // Función para crear la card de empleados presentes
-export async function renderPresentCard(firstAttendances) {
+export async function renderPresentCard(attendanceCount, attendancePercent) {
     const element = document.getElementById("present-text");
     // Limpiar elemento antes de insertar
     element.textContent = "";
 
-    if (!firstAttendances.length) {
-        element.textContent = `-`;
-        element.className = "general-report-cant text-muted";
+    if (!attendanceCount.length) {
+        element.innerHTML = 
+            `<p class="general-report-cant text-muted">-</p>`;
         return;
     }
 
-    element.textContent = `${firstAttendances.length.toLocaleString('en-US')}`;
-    element.className = "general-report-cant text-success";
+    // Generar el contenido
+    element.innerHTML = 
+        `<p class="general-report-cant text-success">
+            ${attendanceCount.length.toLocaleString('en-US')} <small>(${attendancePercent.toFixed(1)}%)</small>
+        </p>`;
 }
 
 // Función para crear la card de empleados con retardo
-export async function renderLateCard(lateAttendances) {
+export async function renderLateCard(lateCount, latePercent) {
     const element = document.getElementById("late-text");
     element.textContent = "";
 
-    if (!lateAttendances.length) {
-        element.textContent = `-`;
-        element.className = "general-report-cant text-muted";
+    if (!lateCount.length) {
+        element.innerHTML = 
+            `<p class="general-report-cant text-muted">-</p>`;
         return;
     }
 
-    element.textContent = `${lateAttendances.length.toLocaleString('en-US')}`;
-    element.className = `general-report-cant text-warning`;
+    // Generar el contenido
+    element.innerHTML = 
+        `<p class="general-report-cant text-warning">
+            ${lateCount.length.toLocaleString('en-US')} <small>(${latePercent.toFixed(1)}%)</small>
+        </p>`;
 }
 
 // Función para crear la card de empleados ausentes
-export async function renderAbsentCard(absentCount) {
+export async function renderAbsentCard(absentCount, absentPercent) {
     const element = document.getElementById("absence-text");
     element.textContent = "";
 
     if (!absentCount.length) {
-        element.textContent = `-`;
-        element.className = "general-report-cant text-muted";
+        element.innerHTML = 
+            `<p class="general-report-cant text-muted">-</p>`;
         return;
     }
 
-    element.textContent = `${absentCount.length.toLocaleString('en-US')}`;
-    element.className = `general-report-cant text-danger`;
+    // Generar el contenido
+    element.innerHTML = 
+        `<p class="general-report-cant text-danger">
+            ${absentCount.length.toLocaleString('en-US')} <small>(${absentPercent.toFixed(1)}%)</small>
+        </p>`;
+}
+
+// Función para crear la card de empleados con permiso
+export async function renderPermissionCard(permissionCount, permissionPercent) {
+    const element = document.getElementById("permission-text");
+    // Limpiar elemento antes de insertar
+    element.textContent = "";
+    
+    if (!permissionCount.length) {
+        element.innerHTML = 
+            `<p class="general-report-cant text-muted">-</p>`;
+        return;
+    }
+
+    // Generar el contenido
+    element.innerHTML = 
+        `<p class="general-report-cant text-primary">
+            ${permissionCount.length.toLocaleString('en-US')} <small>(${permissionPercent.toFixed(1)}%)</small>
+        </p>`;
 }

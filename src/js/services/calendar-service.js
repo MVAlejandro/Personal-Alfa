@@ -2,6 +2,21 @@ import supabase from '../supabase/supabase-client.js'
 // Utilidades
 import { findExtraTimeDay } from './extra-time-service.js';
 
+// Función auxiliar para determinar si un empleado tiene retardo
+function isLate(variacion) {
+    if (!variacion) return false;
+
+    const match = variacion.match(/([+-])(\d{2}):(\d{2})/);
+    if (!match) return false;
+
+    const sign = match[1];
+    const hours = parseInt(match[2], 10);
+    const minutes = parseInt(match[3], 10);
+    const totalMinutes = hours * 60 + minutes;
+
+    return sign === '+' && totalMinutes > 2;
+}
+
 // Función para obtener toda la lista de asistencia y ausencias en base a empleados activos y registros
 export async function getCalendarEvents(staffList, allAttendances, allAbsences) {
     const grouped = {};
@@ -116,9 +131,11 @@ export async function getCalendarEvents(staffList, allAttendances, allAbsences) 
             };
 
             // Catalogar el registro dependiendo la información
-            if (asistencia && asistencia.entrada) {
+            if (asistencia && asistencia.entrada || asistencia && asistencia.salida) {
+                const tieneRetardo = isLate(asistencia?.variacion_entrada);
+
                 registro.tipo_dia = "Laborado";
-                registro.detalle = "Presente";
+                registro.detalle = tieneRetardo ? "Retardo" : "Presente";
             } else if (ausencia) {
                 registro.tipo_dia = ausencia.tipo; // Vacaciones, Permiso, etc.
                 registro.detalle = "Ausencia";

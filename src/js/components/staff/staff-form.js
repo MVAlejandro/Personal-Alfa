@@ -45,12 +45,6 @@ export function validateForm() {
     selectValidate(departamentoIn, departamentoError)
     textValidate(puestoIn, puestoError)
     dateValidate(fecha_ingresoIn, fecha_ingresoError)
-    dateValidate(fecha_nacimientoIn, fecha_nacimientoError)
-    nssValidate(nssIn, nssError)
-    rfcValidate(rfcIn, rfcError)
-    curpValidate(curpIn, curpError)
-    phoneValidate(telefonoIn, telefonoError)
-    textValidate(direccionIn, direccionError)
     
     const campos = form.querySelectorAll('input, select')
 

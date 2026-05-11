@@ -83,7 +83,9 @@ export async function determinateType(id, day, time) {
 
 // Funciones para obtener el color dependiendo la variación de tiempo
 export function entryColor(data) {
-    if (data[0] == "+") {
+    if (data == "+00:00") {
+        return 'black';
+    } else if (data[0] == "+") {
         return 'red';
     } else if (data[0] == '-') {
         return 'green';
@@ -93,7 +95,9 @@ export function entryColor(data) {
 }
 
 export function exitColor(data) {
-    if (data[0] == "-") {
+    if (data == "+00:00") {
+        return 'black';
+    } else if (data[0] == "-") {
         return 'red';
     } else if (data[0] == '+') {
         return 'green';

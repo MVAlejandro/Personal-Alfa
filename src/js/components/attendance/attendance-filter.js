@@ -58,25 +58,16 @@ export async function attendanceFilter() {
     const filtered = fullAttendances.filter(a => {
         if (statusFilter === 'Total') return true;
         if (statusFilter === 'Ausencias') {
-            return !a.entrada && !a.salida;
+            return a.tipo_dia == "Falta";
         }
         if (statusFilter === 'Presentes') {
-            return !!a.entrada || !!a.salida;
+            return a.tipo_dia == "Laborado";
         }
         if (statusFilter === 'Retardos') {
-        if (!a.entrada || !a.variacion_entrada) return false;
-            // Extraer los minutos positivos de variacion_entrada
-            const match = a.variacion_entrada.match(/([+-])(\d{2}):(\d{2})/);
-            if (!match) return false;
-
-            const sign = match[1]; // + o -
-            const hours = parseInt(match[2], 10);
-            const minutes = parseInt(match[3], 10);
-
-            const totalMinutes = hours * 60 + minutes;
-
-            // Retardo: solo positivos y más de 5 minutos
-            return sign === '+' && totalMinutes > 5;
+            return a.tipo_dia === "Laborado" && a.detalle === "Retardo";
+        }
+        if (statusFilter === 'Permisos') {
+            return a.tipo_dia == "Permiso" || a.tipo_dia == "Vacaciones";
         }
 
         return true;
