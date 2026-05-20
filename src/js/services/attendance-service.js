@@ -20,48 +20,8 @@ export async function createAttendance(attendanceData) {
     return { inserted: true, duplicate: false, data };
 }
 
-// Función para obtener asistencias de una fecha especificada
-export async function getSingleAttendances(date) {
-    const { data, error } = await supabase
-        .from('rh_asistencias')
-        .select(`
-            id_asistencia,
-            fecha_asistencia,
-            hora_asistencia,
-            tipo,
-            variacion,
-            dia,
-            verificación,
-            
-            id_empleado,
-            rh_empleados (numero_empleado, nombre, puesto)
-            `)
-        .eq('fecha_asistencia', date)
-        .order('fecha_asistencia', { ascending: true })
-        .order('hora_asistencia', { ascending: true })
-    
-    if (error) {
-        console.error('Error obteniendo asistencias:', error);
-        throw error;
-    }
-    
-    return data.map(asistencia => ({
-        id_asistencia: asistencia.id_asistencia,
-        fecha_asistencia: asistencia.fecha_asistencia,
-        hora_asistencia: asistencia.hora_asistencia,
-        tipo: asistencia.tipo,
-        variacion: asistencia.variacion,
-        dia: asistencia.dia,
-        verificación: asistencia.verificación,
-        id_empleado: asistencia.id_empleado,
-        numero_empleado: asistencia.rh_empleados?.numero_empleado,
-        nombre: asistencia.rh_empleados?.nombre,
-        puesto: asistencia.rh_empleados?.puesto
-    }));
-}
-
-// Función para obtener asistencias de una fecha especificada
-export async function getRangeAttendances(startDate, endDate) {
+// Función para obtener asistencias de una fecha especificada con posibilidad de rango
+export async function getAttendances(startDate, endDate = null) {
     let query = supabase
         .from('rh_asistencias')
         .select(`
@@ -73,17 +33,23 @@ export async function getRangeAttendances(startDate, endDate) {
             dia,
             verificación,
             id_empleado,
-            rh_empleados (numero_empleado, nombre, puesto)
+            rh_empleados (
+                numero_empleado,
+                nombre,
+                puesto
+            )
         `);
 
-    if (startDate) {
-        query = query.gte('fecha_asistencia', startDate);
+    // Si solo mandan una fecha
+    if (startDate && !endDate) {
+        query = query.eq('fecha_asistencia', startDate);
+    }
 
-        if (endDate) {
-            query = query.lte('fecha_asistencia', endDate);
-        } else {
-            query = query.lte('fecha_asistencia', startDate);
-        }
+    // Si mandan rango
+    if (startDate && endDate) {
+        query = query
+            .gte('fecha_asistencia', startDate)
+            .lte('fecha_asistencia', endDate);
     }
 
     const { data, error } = await query
@@ -95,7 +61,7 @@ export async function getRangeAttendances(startDate, endDate) {
         console.error('Error obteniendo asistencias:', error);
         throw error;
     }
-    
+
     return data.map(asistencia => ({
         id_asistencia: asistencia.id_asistencia,
         fecha_asistencia: asistencia.fecha_asistencia,

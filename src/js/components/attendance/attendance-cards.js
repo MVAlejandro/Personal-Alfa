@@ -5,7 +5,6 @@ export async function createResumeCards(date, fullAttendances) {
     // Obtener todos los empleados activos
     const allStaff = await getActiveStaff(date);
     if (!allStaff) return;
-console.log(fullAttendances);
 
     // Presentes normales
     const attendanceCount = fullAttendances.filter(a => a.tipo_dia === "Laborado" && a.detalle === "Presente");
@@ -14,7 +13,7 @@ console.log(fullAttendances);
     // Faltas
     const absentCount = fullAttendances.filter(a => a.tipo_dia === "Falta");
     // Permisos y vacaciones
-    const permissionCount = fullAttendances.filter(a => a.tipo_dia === "Permiso" || a.tipo_dia === "Vacaciones");
+    const permissionCount = fullAttendances.filter(a => a.tipo_dia === "Permiso" || a.tipo_dia === "Vacaciones" || a.tipo_dia == "Descanso");
 
     // Calcular porcentajes
     const attendancePercent = fullAttendances.length ? (attendanceCount.length / fullAttendances.length) * 100 : 0;

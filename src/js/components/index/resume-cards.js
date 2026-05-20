@@ -6,10 +6,8 @@ let allPermissions = [];
 export async function createResumeCards(date, fullAttendances) {
     // Total de registros
     const total = fullAttendances.length;
-
     // Filtrar presentes
-    const attendanceCount = fullAttendances.filter(a => a.tipo_dia == "Laborado");
-
+    const attendanceCount = fullAttendances.filter(a => a.tipo_dia == "Laborado" && a.detalle === "Presente");
     // Filtrar ausentes
     const absentCount = fullAttendances.filter(a => a.tipo_dia == "Falta");
 

@@ -99,7 +99,7 @@ document.getElementById("export-btn").addEventListener('click', async function()
     }
 
     const dataForExcel = register.map(r => ({
-        "No. Empleado": r.numero_empleado, "Nombre": r.nombre, "Puesto": r.puesto,
+        "No. Empleado": r.numero_empleado, "Nombre": r.nombre, "Departamento": r.departamento, "Puesto": r.puesto,
         "Estatus": r.estatus, "F Ingreso": r.fecha_ingreso, "F Baja": r.fecha_baja,
         "F Nacimiento": r.fecha_nacimiento, "NSS": r.nss, "RFC": r.rfc,
         "CURP": r.curp, "Télefono": r.telefono, "T Sangre": r.tipo_sangre,

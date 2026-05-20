@@ -1,6 +1,6 @@
 // Servicios Supabase
 import { createStaff } from '../../services/staff-service.js';
-import { renderStaffList } from './staff-list.js';
+import { staffFilter } from './staff-filter.js';
 // Utilidades
 import { validateForm } from './staff-form.js';
 
@@ -47,7 +47,7 @@ export async function addStaff(event) {
         });
         
         // Recarga la lista con los datos actualizados
-        await renderStaffList();
+        await staffFilter();
     } catch (err) {
         console.error('Error al agregar al empleado:', err);
         Swal.fire({

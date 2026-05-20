@@ -1,8 +1,11 @@
 // Servicios Supabase
 import { createRemove } from '../../services/staff-removed-service.js';
 import { findStaff, updateStaff } from '../../services/staff-service.js';
-import { renderStaffList } from './staff-list.js';
+import { renderStaffEditForm } from './staff-edit.js';
+import { staffFilter } from './staff-filter.js';
+// Utilidades
 import { inputValidate, selectValidate, textValidate } from '../../utils/form-validations.js';
+
 
 export async function removeStaff(event) {
     event.preventDefault()
@@ -14,13 +17,19 @@ export async function removeStaff(event) {
     // Referencias para validación
     const motivoIn = document.getElementById("remove-motive");
     const descripcionIn = document.getElementById("remove-description");
+    const recontratacionIn = document.getElementById("remove-rehiring");
+    const razonIn = document.getElementById("remove-reason");
     // Referencias para errores
     const motivoError = document.getElementById("error-remove-motive");
     const descripcionError = document.getElementById("error-remove-description");
+    const recontratacionError = document.getElementById("error-remove-rehiring");
+    const razonError = document.getElementById("error-remove-reason");
 
     // Validaciones
     selectValidate(motivoIn, motivoError)
     textValidate(descripcionIn, descripcionError)
+    selectValidate(recontratacionIn, recontratacionError)
+    textValidate(razonIn, razonError)
 
     const campos = form.querySelectorAll('input, select')
     if (!inputValidate(campos)) {
@@ -43,7 +52,9 @@ export async function removeStaff(event) {
         id_empleado: id_staff,
         motivo: motivoIn.value,
         fecha_baja: new Date().toISOString().split('T')[0],
-        descripcion: descripcionIn.value
+        descripcion: descripcionIn.value,
+        recontratacion: recontratacionIn.value,
+        razon: razonIn.value
     };
 
     try {
@@ -68,7 +79,7 @@ export async function removeStaff(event) {
         // Recarga el contenedor con los datos actualizados
         await renderStaffEditForm(updatedStaffData);
         // Recarga la lista con los datos actualizados
-        await renderStaffList();
+        await staffFilter();
     } catch (err) {
         console.error('Error al dar de baja al empleado:', err);
         Swal.fire({

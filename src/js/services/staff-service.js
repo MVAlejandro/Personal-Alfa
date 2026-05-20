@@ -30,8 +30,11 @@ export async function getStaff() {
     }));
 }
 
-// Función para obtener empleados activos
-export async function getActiveStaff(fecha) {
+// Función para obtener empleados activos a partir de una fecha establecida y con la posibilidad de usar rango
+export async function getActiveStaff(fechaInicio, fechaFin = null) {
+    // Si no viene fechaFin, usar la misma fecha
+    const fechaFinal = fechaFin || fechaInicio;
+
     const { data, error } = await supabase
         .from('rh_empleados')
         .select(`
@@ -43,58 +46,51 @@ export async function getActiveStaff(fecha) {
             fecha_baja,
             estatus,
             id_departamento,
-            rh_departamentos (nombre)
+            rh_departamentos (nombre),
+            rh_horarios (
+                dia,
+                entrada,
+                salida
+            ),
+            rh_permisos_ausencia (estado, fechas_solicitadas)
         `)
-        .lte('fecha_ingreso', fecha)
-        .or(`fecha_baja.is.null,fecha_baja.gte.${fecha}`)
-        .neq('estatus', 'Pendiente')
-        .order('numero_empleado', { ascending: true });
+        // Entró antes de terminar el periodo
+        .lte('fecha_ingreso', fechaFinal)
 
-    if (error) {
-        console.error('Error obteniendo empleados por fecha:', error);
-        throw error;
-    }
-
-    return data.map(empleado => ({
-        id_empleado: empleado.id_empleado,
-        numero_empleado: empleado.numero_empleado,
-        nombre: empleado.nombre,
-        puesto: empleado.puesto,
-        fecha_ingreso: empleado.fecha_ingreso,
-        fecha_baja: empleado.fecha_baja,
-        estatus: empleado.estatus,
-        id_departamento: empleado.id_departamento,
-        departamento: empleado?.rh_departamentos?.nombre
-    }));
-}
-
-// Función para obtener empleados activos con un rango de fechas
-export async function getActiveStaffRange(fechaInicio, fechaFin) {
-    const { data, error } = await supabase
-        .from('rh_empleados')
-        .select(`
-            id_empleado,
-            numero_empleado,
-            nombre,
-            puesto,
-            fecha_ingreso,
-            fecha_baja,
-            id_departamento,
-            rh_departamentos (nombre)
-        `)
-        // Entró antes de que termine el rango
-        .lte('fecha_ingreso', fechaFin)
-        // No salió antes de que empezara el rango
+        // No salió antes de iniciar el periodo
         .or(`fecha_baja.is.null,fecha_baja.gte.${fechaInicio}`)
+
         .neq('estatus', 'Pendiente')
         .order('numero_empleado', { ascending: true });
 
     if (error) {
-        console.error('Error obteniendo empleados por rango:', error);
+        console.error('Error obteniendo empleados activos:', error);
         throw error;
     }
 
-    return data;
+    return data.map(empleado => {
+        const diasDescanso = empleado.rh_horarios
+            ?.filter(h => h.entrada === '00:00:00' || h.salida === '00:00:00')
+            .map(h => h.dia) || [];
+
+        const permisos = empleado.rh_permisos_ausencia
+            ?.filter(p => p.estado === "Pendiente")
+            ?.flatMap(p => p.fechas_solicitadas || []) || [];
+
+        return {
+            id_empleado: empleado.id_empleado,
+            numero_empleado: empleado.numero_empleado,
+            nombre: empleado.nombre,
+            puesto: empleado.puesto,
+            fecha_ingreso: empleado.fecha_ingreso,
+            fecha_baja: empleado.fecha_baja,
+            estatus: empleado.estatus,
+            id_departamento: empleado.id_departamento,
+            departamento: empleado?.rh_departamentos?.nombre,
+            dias_descanso: diasDescanso,
+            permisos: permisos
+        };
+    });
 }
 
 //Función para obtener toda la información de un empleado por id

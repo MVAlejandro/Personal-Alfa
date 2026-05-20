@@ -1,7 +1,7 @@
 // Servicios Supabase
-import { getActiveStaffRange } from '../../services/staff-service.js';  
-import { getRangeAttendances } from '../../services/attendance-service.js'; 
-import { getRangeAbsences } from '../../services/absences-service.js';
+import { getActiveStaff } from '../../services/staff-service.js';  
+import { getAttendances } from '../../services/attendance-service.js'; 
+import { getAbsences } from '../../services/absences-service.js';
 import { getCalendarEvents } from '../../services/calendar-service.js';
 
 let allAttendances = [];
@@ -56,9 +56,9 @@ export async function attendanceReportFilter() {
     }
 
     // Obtener registros filtrados por fecha
-    allAttendances = await getRangeAttendances(start, end);
-    allAbsences = await getRangeAbsences(start, end);
-    const activeStaff = await getActiveStaffRange(start, end);
+    allAttendances = await getAttendances(start, end);
+    allAbsences = await getAbsences(start, end);
+    const activeStaff = await getActiveStaff(start, end);
     // Agrupar los registros de asistencia por empleado con sus horas de checado
     const fullAttendances = await getCalendarEvents(activeStaff, allAttendances, allAbsences);
 
@@ -96,20 +96,20 @@ export function renderAttendanceGraphic(fullAttendances) {
 
     // Agrupar por tipo de evento
     function getStatus(a) {
-        if (a.tipo_dia == "Falta") return 'Ausencias';
-        if (a.tipo_dia == "Permiso" || a.tipo_dia == "Vacaciones") return 'Permisos';
+        if (a.tipo_dia === "Falta") {
+            return 'Ausencias';
+        }
 
-        if (a.entrada && a.variacion_entrada) {
-            const match = a.variacion_entrada.match(/([+-])(\d{2}):(\d{2})/);
+        if (a.tipo_dia === "Permiso" || a.tipo_dia === "Vacaciones" || a.tipo_dia === "Descanso") {
+            return 'Permisos';
+        }
 
-            if (match) {
-                const sign = match[1];
-                const minutes = parseInt(match[2]) * 60 + parseInt(match[3]);
+        if (a.tipo_dia === "Laborado" && a.detalle === "Retardo") {
+            return 'Retardos';
+        }
 
-                if (sign === '+' && minutes > 2) {
-                    return 'Retardos';
-                }
-            }
+        if (a.tipo_dia === "Laborado") {
+            return 'Asistencias';
         }
 
         return 'Asistencias';

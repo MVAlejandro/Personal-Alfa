@@ -1,8 +1,8 @@
 // Servicios Supabase
 import { getActiveStaff } from "../../services/staff-service";
-import { getRangeAttendances } from "../../services/attendance-service"; 
+import { getAttendances } from "../../services/attendance-service"; 
 import { getCalendarEvents } from "../../services/calendar-service";
-import { getRangeAbsences } from "../../services/absences-service";
+import { getAbsences } from "../../services/absences-service";
 
 // Función para crear el gráfico por departamentos
 export async function renderStaffGraphic(date) {
@@ -80,8 +80,8 @@ export async function renderStaffGraphic(date) {
 // Función para crear el gráfico de asistencias
 export async function renderAttendanceGraphic(start, end, activeStaff) {
     // Obtener todos los registros
-    const allAttendances = await getRangeAttendances(start, end);
-    const allAbsences = await getRangeAbsences(start, end);
+    const allAttendances = await getAttendances(start, end);
+    const allAbsences = await getAbsences(start, end);
     // Agrupar los registros de asistencia por empleado con sus horas de checado
     const fullAttendances = await getCalendarEvents(activeStaff, allAttendances, allAbsences);
 
@@ -96,20 +96,20 @@ export async function renderAttendanceGraphic(start, end, activeStaff) {
 
     // Organizar por tipo de evento
     function getStatus(a) {
-        if (a.tipo_dia == "Falta") return 'Ausencias';
-        if (a.tipo_dia == "Permiso" || a.tipo_dia == "Vacaciones") return 'Permisos';
+        if (a.tipo_dia === "Falta") {
+            return 'Ausencias';
+        }
 
-        if (a.entrada && a.variacion_entrada) {
-            const match = a.variacion_entrada.match(/([+-])(\d{2}):(\d{2})/);
+        if (a.tipo_dia === "Permiso" || a.tipo_dia === "Vacaciones" || a.tipo_dia === "Descanso") {
+            return 'Permisos';
+        }
 
-            if (match) {
-                const sign = match[1];
-                const minutes = parseInt(match[2]) * 60 + parseInt(match[3]);
+        if (a.tipo_dia === "Laborado" && a.detalle === "Retardo") {
+            return 'Retardos';
+        }
 
-                if (sign === '+' && minutes > 2) {
-                    return 'Retardos';
-                }
-            }
+        if (a.tipo_dia === "Laborado") {
+            return 'Asistencias';
         }
 
         return 'Asistencias';
@@ -148,7 +148,13 @@ export async function renderAttendanceGraphic(start, end, activeStaff) {
             labels,
             datasets: [{
                 label: 'Porcentaje',
-                data
+                data,
+                backgroundColor: [
+                    '#8FC74A',
+                    '#f3b737',
+                    '#f13b44',
+                    '#358ff5'
+                ]
             }]
         },
         options: {
@@ -168,10 +174,8 @@ export async function renderAttendanceGraphic(start, end, activeStaff) {
                                 const value = data.datasets[0].data[index];
                                 return {
                                     text: `${label}: ${value}%`,
-                                    fillStyle:
-                                        data.datasets[0].backgroundColor[index],
-                                    strokeStyle:
-                                        data.datasets[0].backgroundColor[index],
+                                    fillStyle: data.datasets[0].backgroundColor[index],
+                                    strokeStyle: data.datasets[0].backgroundColor[index],
                                     lineWidth: 1,
                                     hidden: false,
                                     index

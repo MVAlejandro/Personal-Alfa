@@ -45,6 +45,7 @@ export function validateForm() {
     selectValidate(departamentoIn, departamentoError)
     textValidate(puestoIn, puestoError)
     dateValidate(fecha_ingresoIn, fecha_ingresoError)
+    dateValidate(fecha_nacimientoIn, fecha_nacimientoError)
     
     const campos = form.querySelectorAll('input, select')
 

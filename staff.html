@@ -143,7 +143,7 @@
                     <div class="container">
                         <form id="remove-staff-form">
                             <div class="row ms-2 me-2 mt-4">
-                                <div class="col-md-9 col-lg-4 label-over-border">
+                                <div class="col-md-12 col-lg-4 label-over-border">
                                     <label for="remove-motive" class="form-label m-2">Motivo de Salida</label>
                                     <select class="form-select" id="remove-motive">
                                         <option value="0">Seleccione...</option>
@@ -157,10 +157,26 @@
                                     </select>
                                     <p class="error invalid-feedback" id="error-remove-motive" style="color: red;"></p>
                                 </div>
-                                <div class="col-md-12 col-lg-8 label-over-border">
+                                <div class="col-md-12 col-lg-8 label-over-border filter">
                                     <label for="remove-description" class="form-label m-2">Descripción</label>
-                                    <textarea id="remove-description" class="form-control" rows="4" placeholder="Describa a detalle el motivo de salida del colaborador."></textarea>
+                                    <textarea id="remove-description" class="form-control" rows="3" placeholder="Describa a detalle el motivo de salida del colaborador."></textarea>
                                     <p class="error invalid-feedback" id="error-remove-description" style="color: red;"></p>
+                                </div>
+                            </div>
+                            <div class="row ms-2 me-2 mt-4">
+                                <div class="col-md-12 col-lg-4 label-over-border">
+                                    <label for="remove-rehiring" class="form-label m-2">Recontratable</label>
+                                    <select class="form-select" id="remove-rehiring">
+                                        <option value="0">Seleccione...</option>
+                                        <option value="Sí">Sí</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                    <p class="error invalid-feedback" id="error-remove-rehiring" style="color: red;"></p>
+                                </div>
+                                <div class="col-md-12 col-lg-8 label-over-border filter">
+                                    <label for="remove-reason" class="form-label m-2">Razón</label>
+                                    <textarea id="remove-reason" class="form-control" rows="3" placeholder="Describa a detalle la razón de la decisión."></textarea>
+                                    <p class="error invalid-feedback" id="error-remove-reason" style="color: red;"></p>
                                 </div>
                             </div>
                         </form>

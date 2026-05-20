@@ -12,10 +12,10 @@ import './js/components/navbar.js';
 // Servicios Supabase
 import { initPage } from './js/utils/session-validate.js';
 import { createResumeCards } from './js/components/index/resume-cards.js';
-import { getSingleAttendances } from './js/services/attendance-service.js';
+import { getAttendances } from './js/services/attendance-service.js';
 import { renderAttendanceGraphic, renderStaffGraphic } from './js/components/index/attendance-graphic.js';
 import { getActiveStaff } from './js/services/staff-service.js';
-import { getRangeAbsences } from './js/services/absences-service.js';
+import { getAbsences } from './js/services/absences-service.js';
 import { getCalendarEvents } from './js/services/calendar-service.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -23,8 +23,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const today = new Date();
     const todayStr = today.toISOString().split("T")[0] || "-"
 
-    const allAttendances = await getSingleAttendances(todayStr);
-    const allAbsences = await getRangeAbsences(todayStr);
+    const allAttendances = await getAttendances(todayStr);
+    const allAbsences = await getAbsences(todayStr);
     const activeStaff = await getActiveStaff(todayStr);
     const fullAttendances = await getCalendarEvents(activeStaff, allAttendances, allAbsences);
 

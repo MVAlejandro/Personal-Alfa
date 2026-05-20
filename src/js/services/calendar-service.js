@@ -1,6 +1,7 @@
 import supabase from '../supabase/supabase-client.js'
 // Utilidades
 import { findExtraTimeDay } from './extra-time-service.js';
+import { getWeekDay } from '../utils/time-functions.js';
 
 // Función auxiliar para determinar si un empleado tiene retardo
 function isLate(variacion) {
@@ -20,6 +21,14 @@ function isLate(variacion) {
 // Función para obtener toda la lista de asistencia y ausencias en base a empleados activos y registros
 export async function getCalendarEvents(staffList, allAttendances, allAbsences) {
     const grouped = {};
+    const permissionMap = {};
+
+    staffList.forEach(emp => {
+        (emp.permisos || []).forEach(fecha => {
+            const key = `${emp.id_empleado}-${fecha}`;
+            permissionMap[key] = true;
+        });
+    });
 
     // Agrupar asistencias por empleado + fecha
     await Promise.all(allAttendances.map(async (a) => {
@@ -109,7 +118,39 @@ export async function getCalendarEvents(staffList, allAttendances, allAbsences) 
     uniqueDates.forEach(fecha => {
         staffList.forEach(emp => {
             const key = `${emp.id_empleado}-${fecha}`;
-
+            const permissionKey = `${emp.id_empleado}-${fecha}`;
+            const tienePermisoPendiente = !!permissionMap[permissionKey];
+            
+            // Obtener nombre del día
+            const weekDay = getWeekDay(fecha);
+            
+            // Verificar si es día de descanso
+            const esDescanso = emp.dias_descanso?.includes(weekDay) || false;
+            
+            // Si es descanso, registrarlo y evitar procesar asistencia/ausencia
+            if (esDescanso) {
+                const registro = {
+                    id_empleado: emp.id_empleado,
+                    numero_empleado: emp.numero_empleado,
+                    nombre: emp.nombre,
+                    puesto: emp.puesto,
+                    fecha,
+                    dia: weekDay,
+                    entrada: "",
+                    salida: "",
+                    variacion_entrada: "",
+                    variacion_salida: "",
+                    verificacion: "",
+                    tiempo_extra: "",
+                    tipo_dia: "Descanso",
+                    detalle: "Descanso",
+                    permiso_pendiente: tienePermisoPendiente
+                };
+                fullList.push(registro);
+                return;
+            }
+            
+            // Si no es descanso, continuar con el procesamiento
             const asistencia = attendanceMap[key];
             const ausencia = absenceMap[key];
 
@@ -127,7 +168,8 @@ export async function getCalendarEvents(staffList, allAttendances, allAbsences) 
                 verificacion: asistencia?.verificacion || "",
                 tiempo_extra: asistencia?.tiempo_extra || "",
                 tipo_dia: "",
-                detalle: ""
+                detalle: "",
+                permiso_pendiente: tienePermisoPendiente
             };
 
             // Catalogar el registro dependiendo la información

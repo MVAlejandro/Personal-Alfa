@@ -1,7 +1,7 @@
 // Servicios Supabase
 import { getActiveStaff } from '../../services/staff-service.js'; 
-import { getSingleAttendances } from '../../services/attendance-service.js'; 
-import { getRangeAbsences } from '../../services/absences-service.js';
+import { getAttendances } from '../../services/attendance-service.js'; 
+import { getAbsences } from '../../services/absences-service.js';
 import { getCalendarEvents } from '../../services/calendar-service.js';
 import { createResumeCards } from './attendance-cards.js';
 import { renderAttendancesTable } from './attendance-table.js';
@@ -27,12 +27,13 @@ export async function attendanceFilter() {
     const statusFilter = document.querySelector('input[name="attendance-select"]:checked')?.value || '0';
 
     // Obtener registros de asistencias y ausencias filtrados por fecha
-    allAttendances = await getSingleAttendances(dayFilter);
-    allAbsences = await getRangeAbsences(dayFilter);
+    allAttendances = await getAttendances(dayFilter);
+    allAbsences = await getAbsences(dayFilter);
     const activeStaff = await getActiveStaff(dayFilter);
     
     // Agrupar los registros de asistencia por empleado con sus horas de checado
     const fullAttendances = await getCalendarEvents(activeStaff, allAttendances, allAbsences);
+console.log(fullAttendances);
 
     // Si se realiza la búsqueda por texto mantener la información de las cards y solo mostrar las coincidencias
     if (searchText !== "") {
@@ -67,7 +68,7 @@ export async function attendanceFilter() {
             return a.tipo_dia === "Laborado" && a.detalle === "Retardo";
         }
         if (statusFilter === 'Permisos') {
-            return a.tipo_dia == "Permiso" || a.tipo_dia == "Vacaciones";
+            return a.tipo_dia == "Permiso" || a.tipo_dia == "Vacaciones" || a.tipo_dia == "Descanso";
         }
 
         return true;
