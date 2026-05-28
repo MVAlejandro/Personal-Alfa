@@ -98,8 +98,7 @@
                 <table id="permissions-table" class="table table-hover align-middle">
                     <thead>
                         <tr class="table-light">
-                            <th class="px-1 py-2 text-center">No</th>
-                            <th class="px-1 py-2">NOMBRE</th>
+                            <th class="px-1 py-2 ps-3">NOMBRE</th>
                             <th class="px-1 py-2">INGRESO</th>
                             <th class="px-1 py-2">TIPO</th>
                             <th class="px-1 py-2 text-center">DÍAS SOLICITADOS</th>
@@ -209,6 +208,7 @@
                 </div>
                 <div class="modal-footer me-4">
                     <button id="btn-save" class="btn btn-secondary me-auto ms-4">Generar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-target="#info-modal" data-bs-toggle="modal">Historial</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     <button id="btn-edit-entry" class="btn btn-primary d-none" data-dir-only>Guardar cambios</button>
                 </div>
@@ -216,7 +216,7 @@
         </div>
     </div>
 
-    <!-- Modal de confirmación para eliminar registro -->
+    <!-- Modal de confirmación para el historial de registros -->
     <div class="modal fade" id="info-modal" aria-hidden="true" aria-labelledby="info-modalLabel" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content pt-3 pb-2">
@@ -229,7 +229,7 @@
                                     <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
                                 </svg>
                             </div>
-                            <h5 class="modal-title" id="info-modalLabel">Detalles de Permisos</h5>
+                            <h5 class="modal-title" id="info-modalLabel">Historial de Permisos</h5>
                         </div>
                     </div>
                     <button type="button" class="btn-close me-3" data-bs-dismiss="modal" aria-label="Close"></button>

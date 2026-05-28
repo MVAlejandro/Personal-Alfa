@@ -55,7 +55,7 @@ export async function getExtraTime() {
 export async function findExtraTime(id_empleado) {
     const { data, error } = await supabase
         .from('rh_tiempo_extra')
-        .select("*")
+        .select(`*, rh_empleados (numero_empleado, nombre)`)
         .eq('id_empleado', id_empleado)
         .order('fecha', { ascending: true });
     
@@ -64,7 +64,11 @@ export async function findExtraTime(id_empleado) {
         throw error;
     }
     
-    return data;
+    return data.map(record  => ({
+        ...record ,
+        numero_empleado: record.rh_empleados?.numero_empleado,
+        nombre: record.rh_empleados?.nombre
+    }));
 }
 
 // Función para verificar si hay horas extra de un empleado en una fecha especificada

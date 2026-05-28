@@ -14,7 +14,7 @@ export async function renderPendingExtraTimeTable(idStaff) {
     tbody.innerHTML = '';
 
     if (!allExtraTimes || allExtraTimes.length === 0) {
-        tbody.innerHTML = `<tr><td class="text-center" colspan="5">Sin horas extra registradas</td></tr>`;
+        tbody.innerHTML = `<tr><td class="text-center" colspan="5">Sin horas extra pendientes</td></tr>`;
         return;
     }
 
@@ -64,7 +64,6 @@ export async function renderExtraTimeTable(idStaff) {
     for (const extraT of allExtraTimes) {
         tbody.innerHTML +=
         `<tr>
-            <td class="extra-id fw-bold p-1 text-center">${extraT.id_extra}</td>
             <td class="extra-date p-1 ps-2">${extraT.fecha}</td>
             <td class="extra-time p-1 ps-2">${extraT.tiempo.slice(0, 5)}</td>
             <td class="extra-observations p-1 ps-2">${extraT.observaciones}</td>

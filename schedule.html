@@ -197,7 +197,7 @@
                             </div>
                         </form>
                         <hr>
-                        <p class="fw-bold ps-2">Pendientes de aprovación</p>
+                        <p class="fw-bold ps-2">Pendientes de aprobación</p>
                         <div id="extraP-table-container" class="container table-responsive p-0 mt-2">
                             <table id="extraP-table" class="table table-hover align-middle">
                                 <thead>
@@ -216,13 +216,56 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+                <div class="modal-footer me-4">
+                    <button type="button" class="btn btn-secondary" data-bs-target="#info-modal" data-bs-toggle="modal">Historial</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button id="btn-add-extra" class="btn btn-primary d-none" data-rh-only>Registrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación para el historial de registros -->
+    <div class="modal fade" id="info-modal" aria-hidden="true" aria-labelledby="info-modalLabel" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content pt-3 pb-2">
+                <div class="modal-header">
+                    <div class="row">
+                        <div class="col d-flex align-items-center">
+                            <div class="ms-4 me-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                                </svg>
+                            </div>
+                            <h5 class="modal-title" id="info-modalLabel">Historial de Tiempo Extra</h5>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close me-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <form id="staff-info-form">
+                           <input type="hidden" id="info-id-staff">
+                            <div class="row ms-2 me-2 mt-3">
+                                <div class="col-md-4 col-lg-3 ms-auto label-over-border">
+                                    <label for="info-id" class="form-label m-2">Num Empleado</label>
+                                    <input type="text" class="form-control" id="info-id" disabled>
+                                </div>
+                                <div class="col-md-8 col-lg-9 label-over-border">
+                                    <label for="info-staff" class="form-label m-2">Empleado</label>
+                                    <input type="text" class="form-control" id="info-staff" disabled>
+                                </div>
+                            </div>
+                        </form>
                         <hr>
                         <p class="fw-bold ps-2">Revisadas</p>
                         <div id="extra-table-container" class="container table-responsive p-0 mt-2">
                             <table id="extra-table" class="table table-hover align-middle">
                                 <thead>
                                     <tr class="table-light">
-                                        <th class="p-1 pt-2 text-center">No</th>
                                         <th class="p-1 pt-2">FECHA</th>
                                         <th class="p-1 pt-2">TIEMPO</th>
                                         <th class="p-1 pt-2">OBSERVACIONES</th>
@@ -239,8 +282,8 @@
                     </div>
                 </div>
                 <div class="modal-footer me-4">
+                    <button id="btn-save" class="btn btn-secondary me-auto ms-4">Exportar</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button id="btn-add-extra" class="btn btn-primary d-none" data-rh-only>Registrar</button>
                 </div>
             </div>
         </div>

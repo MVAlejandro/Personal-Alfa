@@ -22,6 +22,16 @@ export async function absencesReport() {
             "Observaciones": r.observaciones
         }));
 
+        if (!dataForExcel.length) {
+            Swal.fire({
+                title: 'Atención',
+                text: 'No hay datos para exportar.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
         const ws = XLSX.utils.json_to_sheet(dataForExcel);
         const wb = XLSX.utils.book_new();
 
@@ -45,21 +55,21 @@ export async function absencesReport() {
             "Fechas tomadas": (r.fechas_tomadas || []).join(', ')
         }));
 
+        if (!dataForExcel.length) {
+            Swal.fire({
+                title: 'Atención',
+                text: 'No hay datos para exportar.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
         const ws = XLSX.utils.json_to_sheet(dataForExcel);
         const wb = XLSX.utils.book_new();
 
         XLSX.utils.book_append_sheet(wb, ws, `Vacaciones`);
         XLSX.writeFile(wb, `rep_vacaciones_${new Date().toISOString().split('T')[0]}.xlsx`);
-    }
-    
-    if (!dataForExcel.length) {
-        Swal.fire({
-            title: 'Atención',
-            text: 'No hay datos para exportar.',
-            icon: 'warning',
-            confirmButtonText: 'OK'
-        });
-        return;
     }
 
     resultsText.textContent = `${dataForExcel.length} Registros generados`;

@@ -20,8 +20,7 @@ import { getCalendarEvents } from './js/services/calendar-service.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     // Obtener la fecha actual
-    const today = new Date();
-    const todayStr = today.toISOString().split("T")[0] || "-"
+    const todayStr = new Date().toLocaleDateString('en-CA') || "-"
 
     const allAttendances = await getAttendances(todayStr);
     const allAbsences = await getAbsences(todayStr);

@@ -12,6 +12,15 @@ export async function renderExtraTimeModal(id, staff) {
 
     // Generar las tabla con sus registros
     await renderPendingExtraTimeTable(id);
+}
+
+// Función para cargar datos en el modal de historial
+export async function renderExtraHistoryModal(id, staff) {
+    // Insertar valores en los inputs
+    document.getElementById('info-id').value = id;
+    document.getElementById('info-staff').value = staff;
+
+    // Generar las tabla con sus registros
     await renderExtraTimeTable(id);
 }
 
@@ -58,7 +67,7 @@ document.getElementById('btn-add-extra').addEventListener('click', async functio
         form.querySelectorAll('.is-valid, .is-invalid').forEach(e => {
             e.classList.remove('is-valid', 'is-invalid');
         });
-        
+
         Swal.fire({
             title: 'Tiempo extra registrado correctamente.',
             icon: 'success',
@@ -80,7 +89,7 @@ document.getElementById('btn-add-extra').addEventListener('click', async functio
             });
             return;
         }
-        
+
         Swal.fire({
             title: 'Oops...',
             text: 'Ocurrió un error al registrar el tiempo extra.',
@@ -112,7 +121,6 @@ tbody.addEventListener('click', async (e) => {
 
     // Recarga el modal con los datos actualizados
     await renderPendingExtraTimeTable(staffId);
-    await renderExtraTimeTable(staffId);
 });
 
 tbody.addEventListener('click', async (e) => {
@@ -134,5 +142,4 @@ tbody.addEventListener('click', async (e) => {
 
     // Recarga el modal con los datos actualizados
     await renderPendingExtraTimeTable(staffId);
-    await renderExtraTimeTable(staffId);
 });

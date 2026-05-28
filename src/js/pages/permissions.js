@@ -40,29 +40,31 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Acciones del modal de edición
+// Declarar los modales de edición e información
 const editModal = document.getElementById('edit-modal');
-// Al abrir modal
+const infoModal = document.getElementById('info-modal');
+
+let currentPermissionData = null;
+
+// Edición - Apertura
 editModal.addEventListener('shown.bs.modal', event => {
     const button = event.relatedTarget;
-    const permissionData = JSON.parse(button.getAttribute('permission-data'));
-    renderPermissionsEditModal(permissionData);
+    currentPermissionData = JSON.parse(button.getAttribute('permission-data'));
+    renderPermissionsEditModal(currentPermissionData);
 
-    // Declarar el botón de guardado
     const btnSave = editModal.querySelector('#btn-save');
-    // Dependiendo el tipo del permiso generar su documento 
-    btnSave.onclick = async function () {
+    btnSave.onclick = async () => {
         let doc = "";
-        if(permissionData.tipo == "Vacaciones") {
-            doc = await vacationPDF(permissionData);
+        if (currentPermissionData.tipo == "Vacaciones") {
+            doc = await vacationPDF(currentPermissionData);
         } else {
-            doc = await permissionPDF(permissionData);
+            doc = await permissionPDF(currentPermissionData);
         }
 
         window.open(doc.output('bloburl'), '_blank');
     };
 });
-// Al cerrar modal
+// Edición - Cierre
 editModal.addEventListener('hidden.bs.modal', () => {
     editModal.querySelectorAll('.is-valid, .is-invalid').forEach(e => {
         e.classList.remove('is-valid', 'is-invalid');
@@ -73,22 +75,19 @@ editModal.addEventListener('hidden.bs.modal', () => {
     });
 });
 
-// Acciones del modal de información
-const infoModal = document.getElementById('info-modal');
-// Al abrir modal
-infoModal.addEventListener('shown.bs.modal', event => {
-    const button = event.relatedTarget;
-    const permissionData = JSON.parse(button.getAttribute('permission-data'));
-    renderPermissionsInfoModal(permissionData);
+// Información - Apertura
+infoModal.addEventListener('shown.bs.modal', () => {
+    renderPermissionsInfoModal(currentPermissionData);
 });
-// Al cerrar modal
+// Información - Cierre
 infoModal.addEventListener('hidden.bs.modal', () => {
     infoModal.querySelectorAll('input, select').forEach(el => {
         el.value = '';
     });
-    // Limpiar registros anteriores
+
     const tbody = document.querySelector('#permissions-resume-table tbody');
     tbody.innerHTML = `<td class="text-center" colspan="4">Sin registros</td>`;
+
     const container = document.getElementById('vacations-info-container');
     container.innerHTML = `<p class="text-center">Sin registros</p>`;
 });

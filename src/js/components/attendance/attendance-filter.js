@@ -10,7 +10,7 @@ let allAttendances = [];
 let allAbsences = [];
 
 document.addEventListener('DOMContentLoaded', async () => { 
-    const today = new Date().toISOString().split("T")[0]
+    const today = new Date().toLocaleDateString('en-CA')
     document.getElementById('day-filter').value = today;
  })
 
@@ -33,7 +33,6 @@ export async function attendanceFilter() {
     
     // Agrupar los registros de asistencia por empleado con sus horas de checado
     const fullAttendances = await getCalendarEvents(activeStaff, allAttendances, allAbsences);
-console.log(fullAttendances);
 
     // Si se realiza la búsqueda por texto mantener la información de las cards y solo mostrar las coincidencias
     if (searchText !== "") {

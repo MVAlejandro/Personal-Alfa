@@ -13,7 +13,8 @@ import '../components/navbar.js';
 import { initPage } from '../utils/session-validate.js';
 import { schedulesFilter } from '../components/schedule/schedule-filter.js';
 import { renderScheduleEditModal } from '../components/schedule/schedule-modal.js';
-import { renderExtraTimeModal } from '../components/extra-time/extra-modal.js';
+import { renderExtraHistoryModal, renderExtraTimeModal } from '../components/extra-time/extra-modal.js';
+import { extraTimeReport } from '../components/extra-time/extra-report.js';
 
 let register = []
 
@@ -30,15 +31,22 @@ document.addEventListener('click', async function(e) {
     }
 });
 
-// Acciones del modal de edición
+// Declarar los modales de edición, horas extra e historial
 const editModal = document.getElementById('edit-modal');
-// Al abrir modal
+const extraModal = document.getElementById('extra-modal');
+const infoModal = document.getElementById('info-modal');
+
+let scheduleData = null;
+let staffData = null;
+let idData = null;
+
+// Edición - Apertura
 editModal.addEventListener('shown.bs.modal', event => {
     const button = event.relatedTarget;
-    const scheduleData = JSON.parse(button.getAttribute('schedule-data'));
+    scheduleData = JSON.parse(button.getAttribute('schedule-data'));
     renderScheduleEditModal(scheduleData);
 });
-// Al cerrar modal
+// Edición - Cierre
 editModal.addEventListener('hidden.bs.modal', () => {
     editModal.querySelectorAll('.is-valid, .is-invalid').forEach(e => {
         e.classList.remove('is-valid', 'is-invalid');
@@ -49,16 +57,14 @@ editModal.addEventListener('hidden.bs.modal', () => {
     });
 });
 
-// Acciones del modal de horas extra
-const extraModal = document.getElementById('extra-modal');
-// Al abrir modal
+// Horas extra - Apertura
 extraModal.addEventListener('shown.bs.modal', event => {
     const button = event.relatedTarget;
-    const idData = button.getAttribute('staff-id');
-    const staffData = button.getAttribute('staff-data');
+    idData = button.getAttribute('staff-id');
+    staffData = button.getAttribute('staff-data');
     renderExtraTimeModal(idData, staffData);
 });
-// Al cerrar modal
+// Horas extra - Cierre
 extraModal.addEventListener('hidden.bs.modal', () => {
     extraModal.querySelectorAll('.is-valid, .is-invalid').forEach(e => {
         e.classList.remove('is-valid', 'is-invalid');
@@ -67,6 +73,25 @@ extraModal.addEventListener('hidden.bs.modal', () => {
     extraModal.querySelectorAll('input, select').forEach(el => {
         el.value = '';
     });
+});
+
+// Historial - Apertura
+infoModal.addEventListener('shown.bs.modal', event => {
+    renderExtraHistoryModal(idData, staffData);
+});
+// Historial - Cierre
+infoModal.addEventListener('hidden.bs.modal', () => {
+    infoModal.querySelectorAll('input, select').forEach(el => {
+        el.value = '';
+    });
+
+    const tbody = document.querySelector('#extra-table tbody');
+    tbody.innerHTML = `<td class="text-center" colspan="5">Sin horas extra registradas</td>`;
+});
+
+// Declarar el botón de exportación a Excel para horas extra
+document.getElementById("btn-save").addEventListener('click', async function() {
+    extraTimeReport(idData);
 });
 
 // Declarar el botón de exportación a Excel
